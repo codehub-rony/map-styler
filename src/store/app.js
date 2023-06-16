@@ -3,15 +3,26 @@ import { defineStore } from "pinia";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
-    selectedStyleAttribute: null,
+    selectedLayer: null,
+    styleLayer: null,
   }),
 
   actions: {
-    selectAttribute(attribute) {
-      this.selectedStyleAttribute = attribute;
+    selectLayer(layer) {
+      this.selectedLayer = layer;
     },
-    deselectAttribute() {
-      this.selectedStyleAttribute = null;
+    deselectLayer() {
+      this.selectedLayer = null;
+    },
+    addStyle(style) {
+      this.styleLayer = style;
+    },
+    updatelayer(updated_layer) {
+      this.styleLayer.layers.forEach((layer) => {
+        if (layer.id == updated_layer.layer_id) {
+          layer.paint = updated_layer.paint;
+        }
+      });
     },
   },
 });

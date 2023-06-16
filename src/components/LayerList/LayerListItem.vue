@@ -1,7 +1,6 @@
 <template>
   <v-list-item
-    v-if="item.type == 'item'"
-    :value="item"
+    :value="layer"
     density="compact"
     nav
     class="pl-5"
@@ -13,28 +12,31 @@
       <div class="textfields d-flex flex-row">
         <div
           class="layerlist-item-color"
-          v-bind:style="{ backgroundColor: item.value }"
+          v-bind:style="{ backgroundColor: layer.paint[colorAttribute] }"
         ></div>
       </div>
     </template>
 
-    <v-list-item-title v-text="item.title"></v-list-item-title
+    <v-list-item-title v-text="layer.type"></v-list-item-title
   ></v-list-item>
 </template>
 <script>
 export default {
   props: {
-    selected: Number,
-    item: { Object },
+    selected: String,
+    layer: { Object },
   },
   computed: {
     isSelected() {
-      return this.selected == this.item.id ? true : false;
+      return this.selected == this.layer.id ? true : false;
+    },
+    colorAttribute() {
+      return this.layer.type == "fill" ? "fill-color" : "line-color";
     },
   },
   methods: {
     handleClick: function () {
-      this.$emit("clicked", this.item);
+      this.$emit("clicked", this.layer);
     },
   },
 };

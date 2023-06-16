@@ -6,41 +6,42 @@
     show-swatches
     hide-inputs
     rounded="0"
-    @update:modelValue="rgbToText"
-    elevation="0  "
+    elevation="0"
+    @update:modelValue="handleColorSelection"
   ></v-color-picker>
 </template>
 
 <script>
-import mbjson from "../utils/mbjson.js";
-import { useAppStore } from "@/store/app.js";
-import { mapState } from "pinia";
+import mbjson from "@/utils/mbjson";
 export default {
-  computed: {
-    ...mapState(useAppStore, ["selectedStyleAttribute"]),
+  props: {
+    colorAttributes: Object,
   },
   data() {
     return {
       swatches: [
-        ["#FF0000", "#AA0000", "#550000"],
-        ["#FFFF00", "#AAAA00", "#555500"],
-        ["#00FF00", "#00AA00", "#005500"],
-        ["#00FFFF", "#00AAAA", "#005555"],
+        ["#a6611a", "#f5f5f5", "#c2a5cf "],
+        ["#fdae61", "#d7191c", "#dfc27d"],
+        ["#2c7bb6", "#abd9e9", "#bababa"],
+        ["#1a9641", "#a6d96a", "#ffffbf"],
       ],
-      color: null,
-      rgbaText: null,
-      select: null,
+      color: { r: 2, g: 3, b: 2, a: 0 },
     };
   },
-
   methods: {
-    rgbToText: function (color) {
-      this.rgbaText = mbjson.rgbaToText(color);
+    handleColorSelection: function (e) {
+      let update = { layer_id: this.colorAttributes.layer_id, paint: {} };
+      update["paint"][this.colorAttributes["key"]] = mbjson.rgbaToRgbText(
+        this.color
+      );
+      update["paint"]["fill-opacity"] = this.color.a;
+
+      this.$emit("update-colors", update);
     },
   },
   watch: {
-    selectedStyleAttribute(item) {
-      this.color = item.value;
+    colorAttributes(newVal) {
+      this.color = newVal.value;
     },
   },
 };

@@ -14,7 +14,7 @@
             class="mr-2"
           >
             <div class="app-nav-drawer-container">
-              <StylingPanel />
+              <StylingPanel v-if="selectedLayer" />
             </div>
           </v-navigation-drawer>
           <v-main class="bg-grey-lighten-3 app-main-content-container">
@@ -52,19 +52,14 @@ export default {
     LayerPanel,
   },
   computed: {
-    ...mapState(useAppStore, ["selectedStyleAttribute"]),
+    ...mapState(useAppStore, ["selectedLayer", "styleLayer"]),
     rail() {
-      return this.selectedStyleAttribute ? false : true;
+      return this.selectedLayer ? false : true;
     },
   },
   data() {
     return {};
   },
-  // mounted() {
-  //   setTimeout(() => {
-  //     this.rail = false;
-  //   }, 1000);
-  // },
 };
 </script>
 <style>

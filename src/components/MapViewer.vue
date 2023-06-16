@@ -13,84 +13,75 @@ import DragAndDrop from "ol/interaction/DragAndDrop.js";
 import { GeoJSON } from "ol/format.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
-import { Point, LineString, Polygon } from "ol/geom.js";
 
 import { applyStyle } from "ol-mapbox-style";
 
 // style
 import "../../node_modules/ol/ol.css";
 
+// store
+import { useAppStore } from "@/store/app.js";
+import { mapState } from "pinia";
+import mbjson from "@/utils/mbjson";
+
 export default {
+  computed: {
+    ...mapState(useAppStore, ["styleLayer", "addStyle"]),
+  },
   data() {
     return {
       map: null,
-      featureLayer: [],
-      newLayer: null,
+      vectorLayer: null,
+      dragAndDropInteraction: null,
     };
   },
   mounted() {
-    this.map = new Map({
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
-      target: "map_container",
-      view: new View({
-        center: [595074, 6829276],
-        zoom: 7,
-      }),
+    this.initMap();
+    this.initDragAndDrop();
+
+    this.dragAndDropInteraction.on("addfeatures", (event) => {
+      let style = mbjson.create_style_object(event);
+      this.addStyle(style);
+
+      this.vectorLayer.getSource().addFeatures(event.features);
+
+      this.map.getView().fit(this.vectorLayer.getSource().getExtent());
     });
-
-    let dragAndDropInteraction = new DragAndDrop({
-      formatConstructors: [GeoJSON],
-    });
-
-    dragAndDropInteraction.on("addfeatures", (event) => {
-      let geometry_type;
-      let feature_geom = event.features[0].getGeometry();
-
-      if (feature_geom instanceof Point) {
-        geometry_type = "Point";
-      } else if (feature_geom instanceof LineString) {
-        geometry_type = "Line";
-      } else if (feature_geom instanceof Polygon) {
-        geometry_type = "Polygon";
-      }
-
-      this.featureLayer = {
-        name: event.file.name.split(".")[0],
-        geometry_type: geometry_type,
-        source: event.file.name.split(".")[1],
-        feature_attributes: Object.keys(event.features[0].getProperties()),
-        features: event.features,
-      };
-
-      this.$emit("update-featureLayer", this.featureLayer);
-      const vectorSource = new VectorSource({
-        features: event.features,
-      });
-
-      this.newLayer = new VectorLayer({
-        source: vectorSource,
-      });
-      this.map.addLayer(this.newLayer);
-
-      // applyStyle(this.newLayer, "../../demo_data/buildings.json");
-      // applyStyle(this.newLayer, "../../demo_data/states.json");
-      this.map.getView().fit(vectorSource.getExtent());
-    });
-
-    this.map.addInteraction(dragAndDropInteraction);
 
     this.map.on("click", function (evt) {
       console.log(evt.coordinate, evt.map.getView().getZoom());
     });
   },
+  methods: {
+    initMap: function () {
+      this.map = new Map({
+        layers: [
+          new TileLayer({
+            source: new OSM(),
+          }),
+        ],
+        target: "map_container",
+        view: new View({
+          center: [595074, 6829276],
+          zoom: 7,
+        }),
+      });
+    },
+    initDragAndDrop: function () {
+      this.vectorLayer = new VectorLayer({
+        source: new VectorSource(),
+      });
+      this.map.addLayer(this.vectorLayer);
+      this.dragAndDropInteraction = new DragAndDrop({
+        formatConstructors: [GeoJSON],
+      });
+      this.map.addInteraction(this.dragAndDropInteraction);
+    },
+  },
   watch: {
-    styles: {
+    styleLayer: {
       handler(newVal) {
-        applyStyle(this.newLayer, newVal);
+        applyStyle(this.vectorLayer, JSON.stringify(newVal));
       },
       deep: true,
     },
