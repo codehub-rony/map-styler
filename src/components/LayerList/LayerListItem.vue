@@ -26,16 +26,15 @@ export default {
   props: {
     selected: Number,
     item: { Object },
-    id: Number,
   },
   computed: {
     isSelected() {
-      return this.selected == this.id ? true : false;
+      return this.selected == this.item.id ? true : false;
     },
   },
   methods: {
     handleClick: function () {
-      this.$emit("clicked", this.id);
+      this.$emit("clicked", this.item);
     },
   },
 };

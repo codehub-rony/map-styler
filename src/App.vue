@@ -20,18 +20,12 @@
           <v-main class="bg-grey-lighten-3 app-main-content-container">
             <v-container>
               <v-row dense>
-                <v-col cols="12" sm="2" class="move-forward">
-                  <LayerPanel
-                    :featureLayer="featureLayer"
-                    @update-style="updateStyle"
-                  />
+                <v-col cols="12" sm="2">
+                  <LayerPanel />
                 </v-col>
 
                 <v-col cols="12" sm="10">
-                  <MapViewer
-                    @update-featureLayer="updateFeatureLayer"
-                    :styles="styles"
-                  />
+                  <MapViewer />
                 </v-col>
               </v-row>
             </v-container>
@@ -47,6 +41,8 @@ import AppBar from "@/components/AppBar.vue";
 import MapViewer from "@/components/MapViewer.vue";
 import StylingPanel from "@/views/StylingPanel.vue";
 import LayerPanel from "@/views/LayerPanel.vue";
+import { useAppStore } from "@/store/app.js";
+import { mapState } from "pinia";
 
 export default {
   components: {
@@ -55,16 +51,20 @@ export default {
     StylingPanel,
     LayerPanel,
   },
+  computed: {
+    ...mapState(useAppStore, ["selectedStyleAttribute"]),
+    rail() {
+      return this.selectedStyleAttribute ? false : true;
+    },
+  },
   data() {
-    return {
-      rail: true,
-    };
+    return {};
   },
-  mounted() {
-    setTimeout(() => {
-      this.rail = false;
-    }, 1000);
-  },
+  // mounted() {
+  //   setTimeout(() => {
+  //     this.rail = false;
+  //   }, 1000);
+  // },
 };
 </script>
 <style>

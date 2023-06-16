@@ -13,7 +13,12 @@
 
 <script>
 import mbjson from "../utils/mbjson.js";
+import { useAppStore } from "@/store/app.js";
+import { mapState } from "pinia";
 export default {
+  computed: {
+    ...mapState(useAppStore, ["selectedStyleAttribute"]),
+  },
   data() {
     return {
       swatches: [
@@ -31,6 +36,11 @@ export default {
   methods: {
     rgbToText: function (color) {
       this.rgbaText = mbjson.rgbaToText(color);
+    },
+  },
+  watch: {
+    selectedStyleAttribute(item) {
+      this.color = item.value;
     },
   },
 };

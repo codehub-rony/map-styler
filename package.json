@@ -11,6 +11,7 @@
     "@mdi/font": "7.0.96",
     "ol": "^7.4.0",
     "ol-mapbox-style": "^10.6.0",
+    "pinia": "^2.1.4",
     "roboto-fontface": "*",
     "vue": "^3.2.0",
     "vuetify": "^3.0.0",

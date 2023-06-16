@@ -21,9 +21,6 @@ import { applyStyle } from "ol-mapbox-style";
 import "../../node_modules/ol/ol.css";
 
 export default {
-  props: {
-    styles: { Array },
-  },
   data() {
     return {
       map: null,
@@ -50,12 +47,6 @@ export default {
     });
 
     dragAndDropInteraction.on("addfeatures", (event) => {
-      console.log(
-        // event.features[0].getGeometry().getProperties(),
-        // event.features[0].getGeometryName()
-        Object.keys(event.features[0].getProperties())
-      );
-
       let geometry_type;
       let feature_geom = event.features[0].getGeometry();
 
