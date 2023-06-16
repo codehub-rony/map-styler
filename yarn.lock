@@ -919,7 +919,7 @@ nth-check@^2.0.1:
   dependencies:
     boolbase "^1.0.0"
 
-ol-mapbox-style@^10.1.0:
+ol-mapbox-style@^10.1.0, ol-mapbox-style@^10.6.0:
   version "10.6.0"
   resolved "https://registry.yarnpkg.com/ol-mapbox-style/-/ol-mapbox-style-10.6.0.tgz#89ac864160a374d936a59f7d1c969d4dc1d0a46b"
   integrity sha512-s86QhCoyyKVRsYkvPzzdWd///bhYh3onWrBq4lNXnCd9G/hS6AoK023kn4zlDESVlTBDTWLz8vhOistp0M3TXA==

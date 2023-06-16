@@ -1,0 +1,25 @@
+{
+  "version": 8,
+  "name": "buildings",
+  "sources": {
+    "buildings": {
+      "type": "geojson",
+      "data": "../../demo_data/buildings.geojson"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "rgba(0,0,0,1)"
+      }
+    },
+    {
+      "id": "buildings_all",
+      "type": "fill",
+      "source": "buildings",
+      "paint": { "fill-color": "#FFA07A", "fill-opacity": 1 }
+    }
+  ]
+}
