@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       swatches: [
-        ["#a6611a", "#f5f5f5", "#c2a5cf "],
+        ["#a6611a", "#f5f5f5", "#c2a5cf"],
         ["#fdae61", "#d7191c", "#dfc27d"],
         ["#2c7bb6", "#abd9e9", "#bababa"],
         ["#1a9641", "#a6d96a", "#ffffbf"],
