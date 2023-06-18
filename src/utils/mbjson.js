@@ -95,6 +95,10 @@ const generate_style_layers = function (geometry_type, layer_name) {
     layers.push(create_line_layer(layer_name));
   }
 
+  if (geometry_type == "Line") {
+    layers.push(create_line_layer(layer_name));
+  }
+
   return layers;
 };
 
@@ -110,7 +114,6 @@ const create_style_object = function (data) {
 };
 
 const create_styleJSON = function (style_object) {
-  // let style_json = style_object;
   let style_json = JSON.parse(JSON.stringify(style_object));
   style_json.layers.forEach((layer, i) => {
     if (layer.type == "fill" || layer.type == "line") {
