@@ -41,6 +41,7 @@ export default {
 
     this.dragAndDropInteraction.on("addfeatures", (event) => {
       let style = mbjson.create_style_object(event);
+
       this.addStyle(style);
 
       this.vectorLayer.getSource().addFeatures(event.features);
@@ -80,8 +81,8 @@ export default {
   },
   watch: {
     styleLayer: {
-      handler(newVal) {
-        applyStyle(this.vectorLayer, JSON.stringify(newVal));
+      handler(styleObject) {
+        applyStyle(this.vectorLayer, mbjson.create_styleJSON(styleObject));
       },
       deep: true,
     },

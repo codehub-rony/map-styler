@@ -12,7 +12,7 @@
       <div class="textfields d-flex flex-row">
         <div
           class="layerlist-item-color"
-          v-bind:style="{ backgroundColor: layer.paint[colorAttribute] }"
+          v-bind:style="{ backgroundColor: rgba }"
         ></div>
       </div>
     </template>
@@ -30,8 +30,8 @@ export default {
     isSelected() {
       return this.selected == this.layer.id ? true : false;
     },
-    colorAttribute() {
-      return this.layer.type == "fill" ? "fill-color" : "line-color";
+    rgba() {
+      return `rgba(${this.layer.paint.color.r}, ${this.layer.paint.color.g}, ${this.layer.paint.color.b}, ${this.layer.paint.color.a})`;
     },
   },
   methods: {

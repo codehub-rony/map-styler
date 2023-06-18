@@ -1,7 +1,7 @@
 <template>
   <v-sheet height="80vh">
     <ColorSelector
-      :colorAttributes="colorAttributes"
+      :rgba="this.selectedLayer.paint.color"
       @update-colors="handleUpdate"
       v-if="selectedLayer"
     />
@@ -13,51 +13,34 @@ import ColorSelector from "@/components/ColorSelector.vue";
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 
-//utils
-import mbjson from "../utils/mbjson.js";
 export default {
   components: {
     ColorSelector,
   },
   computed: {
-    ...mapState(useAppStore, ["selectedLayer", "updatelayer"]),
+    ...mapState(useAppStore, ["selectedLayer", "updatePaintAttribute"]),
   },
   data() {
     return {
-      colorAttributes: null,
+      rgba: null,
     };
   },
   mounted() {
-    this.parseColorAttr();
+    this.rgba = this.selectedLayer.paint.color;
   },
   methods: {
-    handleUpdate: function (layer) {
-      this.updatelayer(layer);
-    },
-    parseColorAttr: function () {
-      let obj = { layer_id: this.selectedLayer.id };
-      if (this.selectedLayer.paint.hasOwnProperty("fill-color")) {
-        obj["key"] = "fill-color";
-        obj["value"] = mbjson.rgbToObject(
-          this.selectedLayer.paint["fill-color"],
-          this.selectedLayer.paint["opacity"]
-        );
-      }
-      if (this.selectedLayer.paint.hasOwnProperty("line-color")) {
-        obj["key"] = "line-color";
-        obj["value"] = mbjson.rgbToObject(
-          this.selectedLayer.paint["line-color"],
-          this.selectedLayer.paint["opacity"]
-        );
-      }
-      this.colorAttributes = obj;
+    handleUpdate: function (updated_color) {
+      this.updatePaintAttribute({
+        attribute: "color",
+        value: updated_color,
+      });
     },
   },
   watch: {
     selectedLayer: {
       handler(layer) {
         if (layer) {
-          this.parseColorAttr();
+          this.rgba = layer.paint.color;
         }
       },
       deep: true,

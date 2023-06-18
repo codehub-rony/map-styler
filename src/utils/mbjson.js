@@ -1,17 +1,37 @@
-import { Point, LineString, Polygon } from "ol/geom.js";
-const rgbaToRgbText = function (color) {
-  return `rgb(${color.r}, ${color.g}, ${color.b})`;
+import { Point, LineString, Polygon, MultiPolygon } from "ol/geom.js";
+const rgbaToPaint = function (color) {
+  if (color) {
+    return {
+      color: `rgb(${color.r}, ${color.g}, ${color.b})`,
+      opacity: color.a,
+    };
+  }
 };
 
-const rgbToObject = function (text, opacity) {
-  let color = text
+const paintToColorObject = function (paint) {
+  let color_object;
+
+  for (const [key, value] of Object.entries(paint)) {
+    if (key.includes("color")) {
+      color_object = rgbToObject(value);
+    }
+
+    if (key.includes("opacity")) {
+      color_object.a = value;
+    }
+  }
+  return color_object;
+};
+
+const rgbToObject = function (rgb_string) {
+  let color = rgb_string
     .replace("rgb(", "")
     .replace(")", "")
     .replace(" ", "")
     .split(",");
 
   let int_color = color.map((x) => parseInt(x));
-  return { r: int_color[0], g: int_color[1], b: int_color[2], a: opacity };
+  return { r: int_color[0], g: int_color[1], b: int_color[2], a: 1 };
 };
 
 const create_root = function (properties) {
@@ -32,21 +52,20 @@ const create_root = function (properties) {
 const create_fill_layer = function (layer_name) {
   return {
     id: `${layer_name}_fill`,
-    source: "buildings",
+    source: layer_name,
     type: "fill",
-    paint: { "fill-color": "rgb(232, 227, 223)", "fill-opacoty": 0.7 },
+    paint: { color: { r: 232, g: 227, b: 223, a: 0.7 } },
   };
 };
 
 const create_line_layer = function (layer_name) {
   return {
     id: `${layer_name}_border`,
-    source: "buildings",
+    source: layer_name,
     type: "line",
     paint: {
-      "line-color": "rgb(54, 154, 204)",
+      color: { r: 54, g: 154, b: 204, a: 1 },
       "line-width": 1,
-      opacity: 1,
     },
   };
 };
@@ -58,7 +77,10 @@ const parse_geomtype = function (feature) {
     geom_type = "Point";
   } else if (feature_geom instanceof LineString) {
     geom_type = "Line";
-  } else if (feature_geom instanceof Polygon) {
+  } else if (
+    feature_geom instanceof Polygon ||
+    feature_geom instanceof MultiPolygon
+  ) {
     geom_type = "Polygon";
   }
 
@@ -87,8 +109,28 @@ const create_style_object = function (data) {
   return style_object;
 };
 
+const create_styleJSON = function (style_object) {
+  // let style_json = style_object;
+  let style_json = JSON.parse(JSON.stringify(style_object));
+  style_json.layers.forEach((layer, i) => {
+    if (layer.type == "fill" || layer.type == "line") {
+      let rgb = rgbaToPaint(layer.paint.color);
+      delete Object.assign(layer.paint, {
+        [`${layer.type}-color`]: layer.paint["color"],
+      })["color"];
+
+      layer.paint[`${layer.type}-color`] = rgb.color;
+      layer.paint[`${layer.type}-opacity`] = rgb.opacity;
+    }
+  });
+
+  return JSON.stringify(style_json, null, 2);
+};
+
 export default {
-  rgbaToRgbText,
+  rgbaToPaint,
+  create_styleJSON,
   rgbToObject,
   create_style_object,
+  paintToColorObject,
 };

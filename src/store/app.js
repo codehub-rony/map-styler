@@ -17,12 +17,8 @@ export const useAppStore = defineStore("app", {
     addStyle(style) {
       this.styleLayer = style;
     },
-    updatelayer(updated_layer) {
-      this.styleLayer.layers.forEach((layer) => {
-        if (layer.id == updated_layer.layer_id) {
-          layer.paint = updated_layer.paint;
-        }
-      });
+    updatePaintAttribute(update) {
+      this.selectedLayer.paint[update.attribute] = update.value;
     },
   },
 });
