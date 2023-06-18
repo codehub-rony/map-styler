@@ -1,11 +1,4 @@
 <template>
-  <!-- <v-list v-for="layer in styleLayer.layers" :key="item.id" rounded="0" class="pa-0">
-    <v-list-subheader v-if="item.type == 'subheader'">
-      {{ item.title }}</v-list-subheader
-    >
-    <LayerListItem :item="item" :selected="selected" @clicked="handleClick" />
-    <v-divider v-if="item.type == 'divider'"></v-divider>
-  </v-list> -->
   <v-list rounded="0" class="pa-0" v-if="styleLayer">
     <v-list-subheader> {{ styleLayer.name }}</v-list-subheader>
     <LayerListItem
@@ -15,8 +8,6 @@
       :selected="selected"
       @clicked="handleClick"
     />
-
-    <!-- <v-divider v-if="item.type == 'divider'"></v-divider> -->
   </v-list>
 </template>
 
@@ -40,7 +31,6 @@ export default {
     selected: null,
     item: null,
   }),
-
   methods: {
     handleClick: function (layer) {
       if (this.selected != layer.id) {
