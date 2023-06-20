@@ -1,11 +1,39 @@
 <template>
-  <v-btn color="primary" block @click="isOpen = true">import data</v-btn>
+  <v-sheet class="pa-4">
+    <div class="d-flex justify-center mb-4">
+      <v-img src="@/assets/logo_large.png" height="200px" class="pa-6" />
+    </div>
+    <h3 class="mb-3">Welcome to bla</h3>
+    <span class="text-body-2 mb-5"
+      >Use this tool to quickly create styles for your Vector Tiles based on the
+      Mapbox Style Specification. Create your own style by importing data,
+      styling it as you want and export it to JSON. <br /><br />
+      Curiuous to quickly see how it works? Hit the try button to load a demo
+      dataset</span
+    >
+
+    <v-btn
+      color="primary"
+      class="mt-5"
+      flat
+      block
+      @click="isOpen = true"
+      :loading="loading"
+      >create style</v-btn
+    >
+    <div class="d-flex justify-center">
+      <v-btn size="small" variant="plain" class="mt-3" @click="DownloadDemoData"
+        >try out
+      </v-btn>
+    </div>
+  </v-sheet>
+
   <div class="text-center">
     <v-dialog v-model="isOpen" width="500">
       <v-card rounded="0">
-        <v-card-title>Import data</v-card-title>
+        <v-card-title>Create style</v-card-title>
         <v-card-text class="text-body-2">
-          Currently only GeoJSON is supported
+          Import a file with data. Currently we only support GeoJSON.
           <v-form ref="form">
             <v-file-input
               v-model="file"
@@ -22,7 +50,9 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" block @click="validate">import</v-btn>
+          <v-btn color="primary" block @click="validate" :loading="loadingData"
+            >import</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -31,20 +61,25 @@
 
 <script>
 export default {
+  emits: ["datasource-added"],
   data() {
     return {
       isOpen: false,
       file: null,
       geojson: null,
+      loading: false,
       rules: [
         (v) => !!v || "Select a file",
         (v) => v[0].name.includes(".geojson") || "File is not a geojson",
       ],
       messages: [],
+      color: "#adced2",
+      loadingData: false,
     };
   },
   methods: {
     async validate() {
+      this.loading = true;
       const { valid } = await this.$refs.form.validate();
 
       if (valid) {
@@ -74,12 +109,32 @@ export default {
         }
       };
     },
+    async DownloadDemoData() {
+      let url = "../../demo_data/buildings.geojson";
+      // "https://github.com/codehub-rony/mapbox-style-editor/blob/main/demo_data/states.geojson";
+      let attr = {
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+      };
+
+      const response = await fetch(url, attr);
+
+      const jsonData = await response.json();
+
+      this.$emit("datasourceAdded", jsonData);
+    },
   },
   watch: {
     geojson(geojson) {
-      this.$emit("datasource-added", geojson);
+      this.$emit("datasourceAdded", geojson);
+      this.loading = false;
       this.isOpen = false;
     },
   },
 };
 </script>
+<style>
+.welcome-container {
+  width: 100%;
+}
+</style>

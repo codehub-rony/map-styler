@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-sheet id="map_container" height="90vh"> </v-sheet>
+    <v-sheet id="map_container" height="89vh"> </v-sheet>
   </div>
 </template>
 

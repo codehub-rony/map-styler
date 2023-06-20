@@ -2,7 +2,7 @@
   <v-btn
     v-if="styleLayer"
     block
-    color="indigo-darken-1"
+    color="primary"
     elevation="2"
     class="mt-2"
     @click="handleClick"

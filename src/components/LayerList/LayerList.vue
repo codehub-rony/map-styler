@@ -1,8 +1,11 @@
 <template>
-  <v-sheet rounded="0" max-height="90vh">
+  <v-sheet rounded="0">
     <h3 class="pa-3">Layers</h3>
+
     <v-list rounded="0" class="pa-0" v-if="styleLayer">
-      <v-list-subheader> {{ styleLayer.name }}</v-list-subheader>
+      <v-list-subheader style="height: 20px">
+        {{ styleLayer.name }}</v-list-subheader
+      >
       <LayerListItem
         v-for="layer in styleLayer.layers"
         :key="layer.id"
@@ -47,4 +50,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.testy {
+  height: 20px;
+}
+</style>

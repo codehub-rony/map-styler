@@ -7,6 +7,7 @@
     hide-inputs
     rounded="0"
     elevation="0"
+    width="100%"
     @update:modelValue="handleColorSelection"
   ></v-color-picker>
 </template>
@@ -47,8 +48,4 @@ export default {
 };
 </script>
 
-<style>
-.color-picker {
-  width: 100% !important;
-}
-</style>
+<style></style>
