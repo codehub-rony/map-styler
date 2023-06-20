@@ -13,7 +13,6 @@ import DragAndDrop from "ol/interaction/DragAndDrop.js";
 import { GeoJSON } from "ol/format.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
-
 import { applyStyle } from "ol-mapbox-style";
 
 // style
@@ -26,7 +25,7 @@ import mbjson from "@/utils/mbjson";
 
 export default {
   computed: {
-    ...mapState(useAppStore, ["styleLayer", "addStyle"]),
+    ...mapState(useAppStore, ["styleLayer", "addStyle", "dataSource"]),
   },
   data() {
     return {
@@ -85,6 +84,20 @@ export default {
         applyStyle(this.vectorLayer, mbjson.create_styleJSON(styleObject));
       },
       deep: true,
+    },
+    dataSource(data) {
+      let features = new GeoJSON().readFeatures(data, {
+        featureProjection: "EPSG:3857",
+      });
+
+      let layer = { file: { name: "buildings.geojson" }, features: features };
+      let style = mbjson.create_style_object(layer);
+
+      this.addStyle(style);
+
+      this.vectorLayer.getSource().addFeatures(features);
+
+      this.map.getView().fit(this.vectorLayer.getSource().getExtent());
     },
   },
 };

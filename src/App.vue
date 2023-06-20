@@ -57,9 +57,6 @@ export default {
       return this.selectedLayer ? false : true;
     },
   },
-  data() {
-    return {};
-  },
 };
 </script>
 <style>

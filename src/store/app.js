@@ -5,6 +5,7 @@ export const useAppStore = defineStore("app", {
   state: () => ({
     selectedLayer: null,
     styleLayer: null,
+    dataSource: null,
   }),
 
   actions: {
@@ -19,6 +20,9 @@ export const useAppStore = defineStore("app", {
     },
     updatePaintAttribute(update) {
       this.selectedLayer.paint[update.attribute] = update.value;
+    },
+    updateDataSource(data) {
+      this.dataSource = data;
     },
   },
 });

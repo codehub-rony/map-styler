@@ -1,14 +1,16 @@
 <template>
-  <v-list rounded="0" class="pa-0" v-if="styleLayer">
-    <v-list-subheader> {{ styleLayer.name }}</v-list-subheader>
-    <LayerListItem
-      v-for="layer in styleLayer.layers"
-      :key="layer.id"
-      :layer="layer"
-      :selected="selected"
-      @clicked="handleClick"
-    />
-  </v-list>
+  <v-sheet rounded="0" max-height="90vh">
+    <h3 class="pa-3">Layers</h3>
+    <v-list rounded="0" class="pa-0" v-if="styleLayer">
+      <v-list-subheader> {{ styleLayer.name }}</v-list-subheader>
+      <LayerListItem
+        v-for="layer in styleLayer.layers"
+        :key="layer.id"
+        :layer="layer"
+        :selected="selected"
+        @clicked="handleClick"
+      /> </v-list
+  ></v-sheet>
 </template>
 
 <script>
