@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-sheet id="map_container" height="89vh"> </v-sheet>
+    <v-sheet id="map_container" height="85vh"> </v-sheet>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ import { GeoJSON } from "ol/format.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
 import { applyStyle } from "ol-mapbox-style";
+import * as olExtent from "ol/extent";
 
 // style
 import "../../node_modules/ol/ol.css";
@@ -30,6 +31,7 @@ export default {
   data() {
     return {
       map: null,
+      view: null,
       vectorLayer: null,
       dragAndDropInteraction: null,
     };
@@ -54,18 +56,26 @@ export default {
   },
   methods: {
     initMap: function () {
-      this.map = new Map({
-        layers: [
-          new TileLayer({
-            source: new OSM(),
-          }),
-        ],
-        target: "map_container",
-        view: new View({
-          center: [595074, 6829276],
-          zoom: 7,
-        }),
-      });
+      (this.view = new View({
+        center: [595074, 6829276],
+        zoom: 7,
+      })),
+        (this.map = new Map({
+          layers: [
+            new TileLayer({
+              source: new OSM(),
+            }),
+          ],
+          target: "map_container",
+          view: this.view,
+        }));
+    },
+    animateZoom: function (extent) {
+      console.log(extent);
+      let resolution = this.view.getResolutionForExtent(extent);
+      let zoom = this.view.getZoomForResolution(resolution) - 1;
+      let center = olExtent.getCenter(extent);
+      this.view.animate({ zoom: zoom, center: center, duration: 1000 });
     },
     initDragAndDrop: function () {
       this.vectorLayer = new VectorLayer({
@@ -97,7 +107,7 @@ export default {
 
       this.vectorLayer.getSource().addFeatures(features);
 
-      this.map.getView().fit(this.vectorLayer.getSource().getExtent());
+      this.animateZoom(this.vectorLayer.getSource().getExtent());
     },
   },
 };
