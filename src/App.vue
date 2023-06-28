@@ -9,7 +9,7 @@
             <LayerPanel />
           </v-col>
 
-          <v-col cols="12" sm="9">
+          <v-col cols="12" sm="10">
             <MapViewer />
           </v-col>
         </v-row>
