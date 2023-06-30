@@ -96,11 +96,22 @@ export default {
       deep: true,
     },
     dataSource(data) {
+      console.log(data);
       let features = new GeoJSON().readFeatures(data, {
         featureProjection: "EPSG:3857",
       });
+      // to do: refactor. Apperently try out button retrieves a parsed json, where the load data button doesn't do that
+      let layername;
+      if (typeof data == "object") {
+        layername = `${data.name}.geojson`;
+      } else {
+        layername = `${JSON.parse(data)["name"]}.geojson`;
+      }
 
-      let layer = { file: { name: "buildings.geojson" }, features: features };
+      let layer = {
+        file: { name: layername },
+        features: features,
+      };
       let style = mbjson.create_style_object(layer);
 
       this.addStyle(style);

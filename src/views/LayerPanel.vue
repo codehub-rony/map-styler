@@ -16,6 +16,13 @@
       v-if="selectedLayer"
     />
   </v-scroll-y-transition>
+  <v-scroll-y-transition>
+    <LineWidthSlider
+      :width="this.selectedLayer.paint['line-width']"
+      @update-width="handleUpdateWidth"
+      v-if="selectedLayer && Object.hasOwn(selectedLayer.paint, 'line-width')"
+    />
+  </v-scroll-y-transition>
 </template>
 
 <script>
@@ -23,6 +30,7 @@ import DownloadBtn from "@/components/DownloadBtn.vue";
 import LayerList from "@/components/LayerList/LayerList.vue";
 import DataLoadDialog from "@/components/DataLoadDialog.vue";
 import ColorSelector from "@/components/ColorSelector.vue";
+import LineWidthSlider from "@/components/LineWidthSlider.vue";
 
 // store
 import { useAppStore } from "@/store/app.js";
@@ -34,6 +42,7 @@ export default {
     DataLoadDialog,
     DownloadBtn,
     LayerList,
+    LineWidthSlider,
   },
   computed: {
     ...mapState(useAppStore, [
@@ -60,6 +69,12 @@ export default {
       this.updatePaintAttribute({
         attribute: "color",
         value: updated_color,
+      });
+    },
+    handleUpdateWidth: function (width) {
+      this.updatePaintAttribute({
+        attribute: "line-width",
+        value: width,
       });
     },
   },

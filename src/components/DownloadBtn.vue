@@ -23,11 +23,11 @@ export default {
   },
   methods: {
     handleClick: function () {
-      console.log("clicked");
       let json = mbjson.create_styleJSON(this.styleLayer);
       const a = document.createElement("a");
       const file = new Blob([json], { type: "application/json" });
       a.href = URL.createObjectURL(file);
+      console.log(this.styleLayer);
       a.download = `${this.styleLayer.name}.json`;
       a.click();
     },
