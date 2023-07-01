@@ -76,8 +76,6 @@ class GeojsonStyle extends BaseStyle {
 const createStyleObject = function (geojson, data_source) {
   if (data_source == "geojson") {
     return new GeojsonStyle(geojson, data_source);
-  } else {
-    throw new Error("Data source should be a geojson");
   }
 };
 

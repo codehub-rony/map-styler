@@ -7,14 +7,6 @@ describe("StyleJSON", () => {
       const style = StyleJSON.createStyleObject(data.asString(), "geojson");
       expect(style instanceof StyleJSON.GeojsonStyle).toBe(true);
     });
-
-    it("throws error when data_source is invalid", () => {
-      const init_style = () => {
-        StyleJSON.createStyleObject("buildings", "shapefile");
-      };
-
-      expect(init_style).toThrow("Data source should be a geojson");
-    });
   });
 
   describe("GeojsonStyle initilization", () => {
