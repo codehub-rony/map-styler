@@ -24,17 +24,13 @@ describe("StyleJSON", () => {
 
     const style = StyleJSON.createStyleObject(geojsonAsText, source_type);
 
-    it("creates a layer source with name from geojson name", () => {
-      expect(style.sources.hasOwnProperty(name)).toBe(true);
-    });
-
-    it("source layer has type (with value geojson) and data attributes", () => {
+    it("source definition is set", () => {
       expect(style.sources[name].hasOwnProperty("type")).toBe(true);
       expect(style.sources[name].hasOwnProperty("data")).toBe(true);
       expect(style.sources[name].type).toBe(source_type);
     });
 
-    it("parses geometry from json object", () => {
+    it("geometry is parsed from geojson object", () => {
       const json = data.asObject();
       expect(style.parseGeometryFromFeature(json)).toBe("Polygon");
     });
@@ -45,7 +41,7 @@ describe("StyleJSON", () => {
   });
 
   describe("BaseStyle", () => {
-    describe("create default layers", () => {
+    describe("create_default_layers", () => {
       it("throws an error if geometry_type is not set", () => {
         const base_style = new StyleJSON.BaseStyle();
         const init_layers = () => {
