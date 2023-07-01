@@ -105,6 +105,16 @@ describe("BaseStyle", () => {
         }
       });
     });
+    it("getStyleAsJSON returns a valid json", () => {
+      const base_style = create_base_style(name);
+
+      let style = base_style.getStyleAsJSON();
+      const parse_json = () => {
+        JSON.parse(style);
+      };
+
+      expect(parse_json).not.toThrow();
+    });
   });
 });
 

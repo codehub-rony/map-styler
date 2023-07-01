@@ -52,6 +52,16 @@ class BaseStyle {
       }
     });
   }
+
+  getStyleAsJSON() {
+    let style = {
+      version: this.version,
+      name: this.name,
+      data_source: this.data_source,
+      layers: this.layers,
+    };
+    return JSON.stringify(style, null, 2);
+  }
 }
 
 class GeojsonStyle extends BaseStyle {
