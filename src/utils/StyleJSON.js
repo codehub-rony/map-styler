@@ -84,14 +84,3 @@ module.exports = {
   GeojsonStyle,
   createStyleObject,
 };
-
-// let layername = properties.file.name.split(".")[0];
-// let root = {};
-// // root["version"] = 8;
-// // root["name"] = layername;
-
-// root["sources"][layername] = {
-//   type: properties.file.name.split(".")[1],
-//   data: `./${properties.file.name}`,
-// };
-// // root["layers"] = null;
