@@ -15,7 +15,7 @@
 <script>
 export default {
   props: {
-    rgba: Object,
+    property: Object,
   },
   data() {
     return {
@@ -29,7 +29,7 @@ export default {
     };
   },
   mounted() {
-    this.color = this.rgba;
+    this.color = this.property.value;
   },
   methods: {
     handleColorSelection: function (e) {
@@ -37,7 +37,10 @@ export default {
         // selecting swatch sets a to undefined
         this.color.a = 1;
       }
-      this.$emit("update-colors", this.color);
+      this.$emit("update-colors", {
+        attribute: this.property.attribute,
+        value: this.color,
+      });
     },
   },
   watch: {

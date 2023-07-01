@@ -1,28 +1,23 @@
 // Utilities
 import { defineStore } from "pinia";
+import StyleJSON from "../utils/StyleJSON.js";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
     selectedLayer: null,
-    styleLayer: null,
     dataSource: null,
+    styleObject: null,
   }),
 
   actions: {
     selectLayer(layer) {
       this.selectedLayer = layer;
     },
-    deselectLayer() {
-      this.selectedLayer = null;
-    },
-    addStyle(style) {
-      this.styleLayer = style;
-    },
-    updatePaintAttribute(update) {
-      this.selectedLayer.paint[update.attribute] = update.value;
-    },
-    updateDataSource(data) {
-      this.dataSource = data;
+    addDataSource(geojson) {
+      this.styleObject = StyleJSON.createStyleObject(
+        JSON.parse(geojson),
+        "geojson"
+      );
     },
   },
 });

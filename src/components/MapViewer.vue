@@ -9,7 +9,6 @@ import Map from "ol/Map.js";
 import OSM from "ol/source/OSM.js";
 import TileLayer from "ol/layer/Tile.js";
 import View from "ol/View.js";
-import DragAndDrop from "ol/interaction/DragAndDrop.js";
 import { GeoJSON } from "ol/format.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import { Vector as VectorSource } from "ol/source.js";
@@ -22,12 +21,15 @@ import "../../node_modules/ol/ol.css";
 // store
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
-import mbjson from "@/utils/mbjson";
 
 export default {
-  computed: {
-    ...mapState(useAppStore, ["styleLayer", "addStyle", "dataSource"]),
+  props: {
+    geodata: Object,
   },
+  computed: {
+    ...mapState(useAppStore, ["styleObject"]),
+  },
+
   data() {
     return {
       map: null,
@@ -38,17 +40,10 @@ export default {
   },
   mounted() {
     this.initMap();
-    this.initDragAndDrop();
-
-    this.dragAndDropInteraction.on("addfeatures", (event) => {
-      let style = mbjson.create_style_object(event);
-
-      this.addStyle(style);
-
-      this.vectorLayer.getSource().addFeatures(event.features);
-
-      this.map.getView().fit(this.vectorLayer.getSource().getExtent());
+    this.vectorLayer = new VectorLayer({
+      source: new VectorSource(),
     });
+    this.map.addLayer(this.vectorLayer);
 
     this.map.on("click", function (evt) {
       console.log(evt.coordinate, evt.map.getView().getZoom());
@@ -71,54 +66,33 @@ export default {
         }));
     },
     animateZoom: function (extent) {
-      console.log(extent);
       let resolution = this.view.getResolutionForExtent(extent);
       let zoom = this.view.getZoomForResolution(resolution) - 1;
       let center = olExtent.getCenter(extent);
       this.view.animate({ zoom: zoom, center: center, duration: 1000 });
     },
-    initDragAndDrop: function () {
-      this.vectorLayer = new VectorLayer({
-        source: new VectorSource(),
-      });
-      this.map.addLayer(this.vectorLayer);
-      this.dragAndDropInteraction = new DragAndDrop({
-        formatConstructors: [GeoJSON],
-      });
-      this.map.addInteraction(this.dragAndDropInteraction);
+    addFeaturesToMap: function (features) {
+      this.vectorLayer.getSource().addFeatures(features);
+      this.animateZoom(this.vectorLayer.getSource().getExtent());
     },
   },
   watch: {
-    styleLayer: {
-      handler(styleObject) {
-        applyStyle(this.vectorLayer, mbjson.create_styleJSON(styleObject));
+    styleObject: {
+      handler() {
+        applyStyle(this.vectorLayer, this.styleObject.getStyleAsJSON());
       },
       deep: true,
     },
-    dataSource(data) {
-      console.log(data);
-      let features = new GeoJSON().readFeatures(data, {
-        featureProjection: "EPSG:3857",
-      });
-      // to do: refactor. Apperently try out button retrieves a parsed json, where the load data button doesn't do that
-      let layername;
-      if (typeof data == "object") {
-        layername = `${data.name}.geojson`;
-      } else {
-        layername = `${JSON.parse(data)["name"]}.geojson`;
-      }
-
-      let layer = {
-        file: { name: layername },
-        features: features,
-      };
-      let style = mbjson.create_style_object(layer);
-
-      this.addStyle(style);
-
-      this.vectorLayer.getSource().addFeatures(features);
-
-      this.animateZoom(this.vectorLayer.getSource().getExtent());
+    geodata: {
+      handler(data) {
+        if (data.type === "geojson") {
+          let features = new GeoJSON().readFeatures(data.json, {
+            featureProjection: "EPSG:3857",
+          });
+          this.addFeaturesToMap(features);
+        }
+      },
+      deep: true,
     },
   },
 };

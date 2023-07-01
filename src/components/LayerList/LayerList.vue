@@ -2,12 +2,12 @@
   <v-sheet rounded="0">
     <h3 class="pa-3">Layers</h3>
 
-    <v-list rounded="0" class="pa-0" v-if="styleLayer">
+    <v-list rounded="0" class="pa-0">
       <v-list-subheader style="height: 20px">
-        {{ styleLayer.name }}</v-list-subheader
+        {{ styleObject.name }}</v-list-subheader
       >
       <LayerListItem
-        v-for="layer in styleLayer.layers"
+        v-for="layer in styleObject.layers"
         :key="layer.id"
         :layer="layer"
         :selected="selected"
@@ -25,17 +25,13 @@ export default {
     LayerListItem,
   },
   computed: {
-    ...mapState(useAppStore, [
-      "selectedLayer",
-      "selectLayer",
-      "deselectLayer",
-      "styleLayer",
-    ]),
+    ...mapState(useAppStore, ["selectedLayer", "selectLayer", "styleObject"]),
   },
   data: () => ({
     selected: null,
     item: null,
   }),
+
   methods: {
     handleClick: function (layer) {
       if (this.selected != layer.id) {
@@ -43,7 +39,7 @@ export default {
         this.selectLayer(layer);
       } else {
         this.selected = null;
-        this.deselectLayer(null);
+        this.selectLayer(null);
       }
     },
   },

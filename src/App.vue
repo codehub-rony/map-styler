@@ -6,11 +6,11 @@
       <v-container>
         <v-row dense>
           <v-col cols="12" sm="2">
-            <LayerPanel />
+            <LayerPanel @geojson-data="handleData" />
           </v-col>
 
           <v-col cols="12" sm="10">
-            <MapViewer />
+            <MapViewer :geodata="geodata" />
           </v-col>
         </v-row>
       </v-container>
@@ -31,6 +31,16 @@ export default {
     AppFooter,
     MapViewer,
     LayerPanel,
+  },
+  data() {
+    return {
+      geodata: { type: null, json: null },
+    };
+  },
+  methods: {
+    handleData: function (geojson) {
+      this.geodata = { type: "geojson", json: geojson };
+    },
   },
 };
 </script>

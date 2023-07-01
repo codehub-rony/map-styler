@@ -5,7 +5,8 @@ class BaseStyle {
     }
     this.version = 8;
     this.name = name;
-    this.data_source = null;
+    this.features = null;
+    this.sources = {};
     this.layers = [];
     this.geometry_type = null;
   }
@@ -28,7 +29,7 @@ class BaseStyle {
       id: `${this.name}_fill`,
       source: this.name,
       type: "fill",
-      paint: { "fill-color": "rgb(232,227,223)", "fill-opaciy": 0.7 },
+      paint: { color: { r: 232, g: 227, b: 223, a: 0.7 } },
     });
   }
 
@@ -38,44 +39,63 @@ class BaseStyle {
       source: this.name,
       type: "line",
       paint: {
-        "line-color": "rgb(54, 154, 204)",
+        color: { r: 54, g: 154, b: 204, a: 1 },
         "line-width": 1,
-        "line-opacity": 1,
       },
     });
   }
 
-  updatePaint(layer_id, targetKey, targetValue) {
+  updatePaint(layer_id, attribute, value) {
     this.layers.forEach((layer) => {
       if (layer.id === layer_id) {
-        layer.paint[targetKey] = targetValue;
+        layer.paint[attribute] = value;
       }
     });
   }
+  rgbaToPaint = function (color) {
+    if (color) {
+      return {
+        color: `rgb(${color.r}, ${color.g}, ${color.b})`,
+        opacity: color.a,
+      };
+    }
+  };
 
   getStyleAsJSON() {
     let style = {
       version: this.version,
       name: this.name,
-      data_source: this.data_source,
+      sources: this.sources,
       layers: this.layers,
     };
-    return JSON.stringify(style, null, 2);
+
+    let style_json = JSON.parse(JSON.stringify(style));
+    style_json.layers.forEach((layer, i) => {
+      if (layer.type == "fill" || layer.type == "line") {
+        let rgb = this.rgbaToPaint(layer.paint.color);
+        delete Object.assign(layer.paint, {
+          [`${layer.type}-color`]: layer.paint["color"],
+        })["color"];
+
+        layer.paint[`${layer.type}-color`] = rgb.color;
+        layer.paint[`${layer.type}-opacity`] = rgb.opacity;
+      }
+    });
+    return JSON.stringify(style_json, null, 2);
   }
 }
 
 class GeojsonStyle extends BaseStyle {
-  constructor(geojson, data_source) {
-    super(data_source);
-    this.sources = {};
-    this.initialize(geojson, data_source);
+  constructor(geojson) {
+    super(geojson.name);
+    this.initialize(geojson);
   }
 
-  initialize(geojson, data_source) {
-    let json = JSON.parse(geojson);
-
-    this.sources[json.name] = { type: data_source, data: null };
-    this.geometry_type = this.parseGeometryFromFeature(json);
+  initialize(geojson) {
+    this.features = geojson.features;
+    this.sources[geojson.name] = { type: "geojson", data: "./data.geojson" };
+    this.geometry_type = this.parseGeometryFromFeature(geojson);
+    this.createDefaultLayers();
   }
 
   parseGeometryFromFeature(geojson) {
@@ -85,11 +105,11 @@ class GeojsonStyle extends BaseStyle {
 
 const createStyleObject = function (geojson, data_source) {
   if (data_source == "geojson") {
-    return new GeojsonStyle(geojson, data_source);
+    return new GeojsonStyle(geojson, "geojson");
   }
 };
 
-module.exports = {
+export default {
   BaseStyle,
   GeojsonStyle,
   createStyleObject,

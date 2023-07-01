@@ -18,7 +18,7 @@
 <script>
 export default {
   props: {
-    width: Number,
+    property: Object,
   },
   data() {
     return {
@@ -26,12 +26,14 @@ export default {
     };
   },
   mounted() {
-    this.value = this.width;
+    this.value = this.property.value;
   },
   watch: {
-    value: function (newVal) {
-      console.log(newVal);
-      this.$emit("update-width", this.value);
+    value: function () {
+      this.$emit("update-width", {
+        attribute: this.property.attribute,
+        value: this.value,
+      });
     },
   },
 };

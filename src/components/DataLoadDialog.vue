@@ -61,7 +61,7 @@
 
 <script>
 export default {
-  emits: ["datasource-added"],
+  emits: ["load-datasource"],
   data() {
     return {
       isOpen: false,
@@ -101,7 +101,9 @@ export default {
       reader.readAsText(this.file["0"]);
       reader.onload = () => {
         if (this.isValidJSON(reader.result)) {
-          this.geojson = reader.result;
+          this.loading = false;
+          this.isOpen = false;
+          this.$emit("load-datasource", reader.result);
         } else {
           this.messages.push(
             "Invalid JSON structrue. Could not parse the GeoJSON file"
@@ -118,17 +120,9 @@ export default {
       };
 
       const response = await fetch(url, attr);
-
       const jsonData = await response.json();
 
-      this.$emit("datasourceAdded", jsonData);
-    },
-  },
-  watch: {
-    geojson(geojson) {
-      this.$emit("datasourceAdded", geojson);
-      this.loading = false;
-      this.isOpen = false;
+      this.$emit("load-datasource", JSON.stringify(jsonData));
     },
   },
 };
