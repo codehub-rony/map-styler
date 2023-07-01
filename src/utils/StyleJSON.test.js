@@ -39,8 +39,47 @@ describe("StyleJSON", () => {
       expect(style.parseGeometryFromFeature(json)).toBe("Polygon");
     });
 
-    it("geometry_type of styleObject is set", () => {
+    it("geometry_type is set", () => {
       expect(style.geometry_type).toBe("Polygon");
+    });
+  });
+
+  describe("BaseStyle", () => {
+    describe("create default layers", () => {
+      it("throws an error if geometry_type is not set", () => {
+        const base_style = new StyleJSON.BaseStyle();
+        const init_layers = () => {
+          base_style.create_default_layers();
+        };
+        expect(init_layers).toThrow("Style has no geometry_type");
+      });
+
+      it("polygon geometry has line and fill layers", () => {
+        const base_style = new StyleJSON.BaseStyle();
+        base_style.geometry_type = "Polygon";
+        base_style.create_default_layers();
+
+        let created_layers = [];
+
+        base_style.layers.forEach((layer) => {
+          created_layers.push(layer.type);
+        });
+
+        expect(created_layers.sort()).toEqual(["fill", "line"].sort());
+      });
+      it("line geometry has line layers", () => {
+        const base_style = new StyleJSON.BaseStyle();
+        base_style.geometry_type = "Line";
+        base_style.create_default_layers();
+
+        let created_layers = [];
+
+        base_style.layers.forEach((layer) => {
+          created_layers.push(layer.type);
+        });
+
+        expect(created_layers.sort()).toEqual(["line"].sort());
+      });
     });
   });
 });

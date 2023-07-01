@@ -1,10 +1,44 @@
 class BaseStyle {
-  constructor(name, data_source, geom_type) {
+  constructor() {
     this.version = 8;
-    this.name = name;
-    this.data_source = data_source;
+    this.name = null;
+    this.data_source = null;
     this.layers = [];
-    this.geom_type = null;
+    this.geometry_type = null;
+  }
+
+  create_default_layers() {
+    if (!this.geometry_type) {
+      throw new Error("Style has no geometry_type");
+    }
+    if (this.geometry_type == "Polygon") {
+      this.create_fill_layer();
+      this.create_line_layer();
+    }
+    if (this.geometry_type == "Line") {
+      this.create_line_layer();
+    }
+  }
+
+  create_fill_layer() {
+    this.layers.push({
+      id: `${this.name}_fill`,
+      source: this.name,
+      type: "fill",
+      paint: { color: { r: 232, g: 227, b: 223, a: 0.7 } },
+    });
+  }
+
+  create_line_layer() {
+    this.layers.push({
+      id: `${this.name}_border`,
+      source: this.name,
+      type: "line",
+      paint: {
+        color: { r: 54, g: 154, b: 204, a: 1 },
+        "line-width": 1,
+      },
+    });
   }
 }
 
@@ -19,7 +53,7 @@ class GeojsonStyle extends BaseStyle {
     let json = JSON.parse(geojson);
 
     this.sources[json.name] = { type: data_source, data: null };
-    // type: this.data_source, data:
+    this.geometry_type = this.parseGeometryFromFeature(json);
   }
 
   parseGeometryFromFeature(geojson) {
