@@ -41,19 +41,28 @@ describe("StyleJSON", () => {
   });
 
   describe("BaseStyle", () => {
-    describe("create_default_layers", () => {
+    describe("initialization", () => {
+      it("throws error if name parameter is undefined", () => {
+        const create_base_style = () => {
+          base_style = new StyleJSON.BaseStyle();
+        };
+
+        expect(create_base_style).toThrow("Name parameter is required");
+      });
+    });
+    describe("createDefaultLayers", () => {
       it("throws an error if geometry_type is not set", () => {
-        const base_style = new StyleJSON.BaseStyle();
+        const base_style = new StyleJSON.BaseStyle("buildings");
         const init_layers = () => {
-          base_style.create_default_layers();
+          base_style.createDefaultLayers();
         };
         expect(init_layers).toThrow("Style has no geometry_type");
       });
 
-      it("polygon geometry has line and fill layers", () => {
-        const base_style = new StyleJSON.BaseStyle();
+      it("polygon geometry only has line and fill layers", () => {
+        const base_style = new StyleJSON.BaseStyle("buildings");
         base_style.geometry_type = "Polygon";
-        base_style.create_default_layers();
+        base_style.createDefaultLayers();
 
         let created_layers = [];
 
@@ -63,10 +72,10 @@ describe("StyleJSON", () => {
 
         expect(created_layers.sort()).toEqual(["fill", "line"].sort());
       });
-      it("line geometry has line layers", () => {
-        const base_style = new StyleJSON.BaseStyle();
+      it("line geometry only has line layer", () => {
+        const base_style = new StyleJSON.BaseStyle("buildings");
         base_style.geometry_type = "Line";
-        base_style.create_default_layers();
+        base_style.createDefaultLayers();
 
         let created_layers = [];
 
@@ -75,6 +84,56 @@ describe("StyleJSON", () => {
         });
 
         expect(created_layers.sort()).toEqual(["line"].sort());
+      });
+    });
+    describe("functions", () => {
+      let name = "buildings";
+      const layer_id = `${name}_border`;
+
+      const create_base_style = function (source_name) {
+        const base_style = new StyleJSON.BaseStyle(source_name);
+        base_style.geometry_type = "Polygon";
+        base_style.createDefaultLayers();
+        return base_style;
+      };
+      it("updates line-color aittribute based on layer id", () => {
+        const base_style = create_base_style(name);
+
+        const targetKey = "line-color";
+        const targetValue = "rgb(10, 10, 10)";
+
+        base_style.updatePaint(layer_id, targetKey, targetValue);
+
+        let expected_paint_after_update = {
+          "line-color": targetValue,
+          "line-width": 1,
+          "line-opacity": 1,
+        };
+
+        base_style.layers.forEach((layer) => {
+          if (layer.id === layer_id) {
+            expect(layer.paint).toEqual(expected_paint_after_update);
+          }
+        });
+      });
+      it("updates line-width aittribute based on layer id", () => {
+        const base_style = create_base_style(name);
+        const targetKey = "line-width";
+        const targetValue = 3;
+
+        base_style.updatePaint(layer_id, targetKey, targetValue);
+
+        let expected_paint_after_update = {
+          "line-color": "rgb(54, 154, 204)",
+          "line-width": targetValue,
+          "line-opacity": 1,
+        };
+
+        base_style.layers.forEach((layer) => {
+          if (layer.id === layer_id) {
+            expect(layer.paint).toEqual(expected_paint_after_update);
+          }
+        });
       });
     });
   });

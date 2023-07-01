@@ -1,43 +1,55 @@
 class BaseStyle {
-  constructor() {
+  constructor(name) {
+    if (name === undefined) {
+      throw new Error("Name parameter is required");
+    }
     this.version = 8;
-    this.name = null;
+    this.name = name;
     this.data_source = null;
     this.layers = [];
     this.geometry_type = null;
   }
 
-  create_default_layers() {
+  createDefaultLayers() {
     if (!this.geometry_type) {
       throw new Error("Style has no geometry_type");
     }
     if (this.geometry_type == "Polygon") {
-      this.create_fill_layer();
-      this.create_line_layer();
+      this.createFillLayer();
+      this.createLineLayer();
     }
     if (this.geometry_type == "Line") {
-      this.create_line_layer();
+      this.createLineLayer();
     }
   }
 
-  create_fill_layer() {
+  createFillLayer() {
     this.layers.push({
       id: `${this.name}_fill`,
       source: this.name,
       type: "fill",
-      paint: { color: { r: 232, g: 227, b: 223, a: 0.7 } },
+      paint: { "fill-color": "rgb(232,227,223)", "fill-opaciy": 0.7 },
     });
   }
 
-  create_line_layer() {
+  createLineLayer() {
     this.layers.push({
       id: `${this.name}_border`,
       source: this.name,
       type: "line",
       paint: {
-        color: { r: 54, g: 154, b: 204, a: 1 },
+        "line-color": "rgb(54, 154, 204)",
         "line-width": 1,
+        "line-opacity": 1,
       },
+    });
+  }
+
+  updatePaint(layer_id, targetKey, targetValue) {
+    this.layers.forEach((layer) => {
+      if (layer.id === layer_id) {
+        layer.paint[targetKey] = targetValue;
+      }
     });
   }
 }
