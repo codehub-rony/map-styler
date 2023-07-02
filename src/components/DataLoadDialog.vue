@@ -3,13 +3,18 @@
     <div class="d-flex justify-center mb-4">
       <v-img src="@/assets/asset 3.svg" height="200px" class="pa-6" />
     </div>
-    <h3 class="mb-3">Welcome to bla</h3>
+    <h3 class="mb-3">Welcome to MapStyler</h3>
+    <span class="text-body-2 mb-5"></span>
     <span class="text-body-2 mb-5"
-      >Use this tool to quickly create styles for your Vector Tiles based on the
-      Mapbox Style Specification. Create your own style by importing data,
-      styling it as you want and export it to JSON. <br /><br />
-      Curiuous to quickly see how it works? Hit the try button to load a demo
-      dataset</span
+      >Welcome to our powerful tool for creating styles for your vector geodata.
+      With our intuitive interface, you can effortlessly design styles based on
+      the Mapbox Style Specification. <br /><br />Simply import your data,
+      customize the styling to your preferences, and export it as a GL JSON
+      Style. <br /><br />
+      We're constantly developing the tool to bring you exciting new features
+      that will enhance your creative potential. <br /><br />Want to see it in
+      action? Hit the try button to load a demo dataset and experience the
+      possibilities firsthand. Join us on this journey of map styling.</span
     >
 
     <v-btn

@@ -9,7 +9,7 @@
       />
     </div>
     <v-container class="fill-height d-flex align-center ma-0">
-      <v-app-bar-title>Vectortile Style creator</v-app-bar-title>
+      <v-app-bar-title>MapStyler</v-app-bar-title>
 
       <v-spacer></v-spacer>
       <v-btn
