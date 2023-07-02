@@ -1,5 +1,11 @@
-const StyleJSON = require("./StyleJSON");
+import StyleJSON from "./StyleJSON.js";
 const data = require("./demo_data");
+
+jest.mock("./StyleJSON");
+
+beforeEach(() => {
+  StyleJSON.mockClear();
+});
 
 describe("StyleJSON", () => {
   describe("create style", () => {
@@ -121,7 +127,7 @@ describe("BaseStyle", () => {
 describe("GeojsonStyle", () => {
   const source_type = "geojson";
   const name = data.asObject().name;
-  const geojsonAsText = data.asString();
+  const geojsonAsText = data.asObject();
 
   const style = StyleJSON.createStyleObject(geojsonAsText, source_type);
 
@@ -138,5 +144,8 @@ describe("GeojsonStyle", () => {
 
   it("geometry_type is set", () => {
     expect(style.geometry_type).toBe("Polygon");
+  });
+  it("features are set", () => {
+    expect(style.features.length).toEqual(data.asObject().features.length);
   });
 });

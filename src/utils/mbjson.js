@@ -8,21 +8,23 @@ const rgbaToPaint = function (color) {
   }
 };
 
-const paintToColorObject = function (paint) {
-  let color_object;
+// unused function
+// const paintToColorObject = function (paint) {
+//   let color_object;
 
-  for (const [key, value] of Object.entries(paint)) {
-    if (key.includes("color")) {
-      color_object = rgbToObject(value);
-    }
+//   for (const [key, value] of Object.entries(paint)) {
+//     if (key.includes("color")) {
+//       color_object = rgbToObject(value);
+//     }
 
-    if (key.includes("opacity")) {
-      color_object.a = value;
-    }
-  }
-  return color_object;
-};
+//     if (key.includes("opacity")) {
+//       color_object.a = value;
+//     }
+//   }
+//   return color_object;
+// };
 
+// Unused function
 const rgbToObject = function (rgb_string) {
   let color = rgb_string
     .replace("rgb(", "")
@@ -34,6 +36,7 @@ const rgbToObject = function (rgb_string) {
   return { r: int_color[0], g: int_color[1], b: int_color[2], a: 1 };
 };
 
+// Refactored
 const create_root = function (properties) {
   let layername = properties.file.name.split(".")[0];
   let root = {};
@@ -49,6 +52,7 @@ const create_root = function (properties) {
   return root;
 };
 
+// Refactored
 const create_fill_layer = function (layer_name) {
   return {
     id: `${layer_name}_fill`,
@@ -58,6 +62,7 @@ const create_fill_layer = function (layer_name) {
   };
 };
 
+// Refactored
 const create_line_layer = function (layer_name) {
   return {
     id: `${layer_name}_border`,
@@ -70,6 +75,7 @@ const create_line_layer = function (layer_name) {
   };
 };
 
+// Refactored
 const parse_geomtype = function (feature) {
   let feature_geom = feature.getGeometry();
   let geom_type;
@@ -86,7 +92,7 @@ const parse_geomtype = function (feature) {
 
   return geom_type;
 };
-
+// Refactored
 const generate_style_layers = function (geometry_type, layer_name) {
   let layers = [];
 
@@ -102,6 +108,7 @@ const generate_style_layers = function (geometry_type, layer_name) {
   return layers;
 };
 
+// Refactored
 const create_style_object = function (data) {
   let geometry_type = parse_geomtype(data.features[0]);
   let layer_name = data.file.name.split(".")[0];
@@ -113,6 +120,7 @@ const create_style_object = function (data) {
   return style_object;
 };
 
+//Refactored
 const create_styleJSON = function (style_object) {
   let style_json = JSON.parse(JSON.stringify(style_object));
   style_json.layers.forEach((layer, i) => {
@@ -135,5 +143,5 @@ export default {
   create_styleJSON,
   rgbToObject,
   create_style_object,
-  paintToColorObject,
+  // paintToColorObject,
 };

@@ -1,25 +1,28 @@
 <template>
-  <DataLoadDialog v-if="!styleLayer" @datasource-added="addSource" />
+  <DataLoadDialog v-if="!styleObject" @load-datasource="loadData" />
   <v-scroll-y-transition>
-    <LayerList v-if="styleLayer" />
+    <LayerList v-if="styleObject" />
   </v-scroll-y-transition>
   <v-scroll-y-transition>
-    <DownloadBtn v-if="styleLayer" class="mt-4" />
+    <DownloadBtn v-if="styleObject" :styleObject="styleObject" class="mt-4" />
   </v-scroll-y-transition>
 
   <v-scroll-y-transition>
     <ColorSelector
       class="mt-5"
       v-show="expand"
-      :rgba="this.selectedLayer.paint.color"
+      :property="{ attribute: 'color', value: this.selectedLayer.paint.color }"
       @update-colors="handleUpdate"
       v-if="selectedLayer"
     />
   </v-scroll-y-transition>
   <v-scroll-y-transition>
     <LineWidthSlider
-      :width="this.selectedLayer.paint['line-width']"
-      @update-width="handleUpdateWidth"
+      :property="{
+        attribute: 'line-width',
+        value: this.selectedLayer.paint['line-width'],
+      }"
+      @update-width="handleUpdate"
       v-if="selectedLayer && Object.hasOwn(selectedLayer.paint, 'line-width')"
     />
   </v-scroll-y-transition>
@@ -37,6 +40,7 @@ import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 
 export default {
+  emits: ["geojson-data"],
   components: {
     ColorSelector,
     DataLoadDialog,
@@ -45,47 +49,23 @@ export default {
     LineWidthSlider,
   },
   computed: {
-    ...mapState(useAppStore, [
-      "styleLayer",
-      "selectedLayer",
-      "updateDataSource",
-      "updatePaintAttribute",
-    ]),
+    ...mapState(useAppStore, ["styleObject", "selectedLayer", "addDataSource"]),
     expand() {
       return this.selectedLayer ? true : false;
     },
   },
-  data() {
-    return {
-      rgba: null,
-    };
-  },
 
   methods: {
-    addSource: function (data) {
-      this.updateDataSource(data);
+    loadData: function (geojson) {
+      this.addDataSource(geojson);
+      this.$emit("geojson-data", geojson);
     },
-    handleUpdate: function (updated_color) {
-      this.updatePaintAttribute({
-        attribute: "color",
-        value: updated_color,
-      });
-    },
-    handleUpdateWidth: function (width) {
-      this.updatePaintAttribute({
-        attribute: "line-width",
-        value: width,
-      });
-    },
-  },
-  watch: {
-    selectedLayer: {
-      handler(layer) {
-        if (layer) {
-          this.rgba = layer.paint.color;
-        }
-      },
-      deep: true,
+    handleUpdate: function (update) {
+      this.styleObject.updatePaint(
+        this.selectedLayer.id,
+        update.attribute,
+        update.value
+      );
     },
   },
 };

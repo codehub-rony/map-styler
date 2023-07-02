@@ -18,7 +18,7 @@
         variant="flat"
         href="https://www.buymeacoffee.com/RonyNedkov"
         target="_blank"
-        ><span> &#9749; </span> Buy me a coffee</v-btn
+        ><span> &#9749; </span>Buy me a coffee</v-btn
       >
     </v-container>
   </v-app-bar>
