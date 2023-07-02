@@ -2,7 +2,7 @@
   <v-app-bar flat>
     <div class="d-flex align-center">
       <v-img
-        src="@/assets/asset 3.svg"
+        src="../assets/logo.svg"
         width="50px"
         class="pa-2 ml-2 app-bar-logo"
         @click="refresh"

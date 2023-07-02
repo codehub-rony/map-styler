@@ -1,7 +1,7 @@
 <template>
   <v-sheet class="pa-4">
     <div class="d-flex justify-center mb-4">
-      <v-img src="@/assets/asset 3.svg" height="200px" class="pa-6" />
+      <v-img src="../assets/logo.svg" height="200px" class="pa-6" />
     </div>
     <h3 class="mb-3">Welcome to MapStyler</h3>
     <span class="text-body-2 mb-5"></span>
