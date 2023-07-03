@@ -7,15 +7,15 @@
     <span class="text-body-2 mb-5"></span>
     <span class="text-body-2 mb-5"
       >Welcome to our powerful tool for creating styles for your vector geodata.
-      With our intuitive interface, you can effortlessly design styles based on
-      the Mapbox Style Specification. <br /><br />Simply import your data,
-      customize the styling to your preferences, and export it as a GL JSON
-      Style. <br /><br />
+      You can effortlessly design styles based on the Mapbox Style
+      Specification. <br /><br />Simply import your data, customize the styling
+      to your preferences, and export it as a GL JSON Style. <br /><br />
+      Want to see it in action? Hit the try button to load a demo dataset and
+      experience the possibilities firsthand. Join us on this journey of map
+      styling.<br /><br />
       We're constantly developing the tool to bring you exciting new features
-      that will enhance your creative potential. <br /><br />Want to see it in
-      action? Hit the try button to load a demo dataset and experience the
-      possibilities firsthand. Join us on this journey of map styling.</span
-    >
+      that will enhance your creative potential.
+    </span>
 
     <v-btn
       color="primary"
