@@ -117,7 +117,7 @@ export default {
       };
     },
     async DownloadDemoData() {
-      let url = "../../demo_data/buildings.geojson";
+      let url = "../assets/buildings.geojson";
       // "https://github.com/codehub-rony/mapbox-style-editor/blob/main/demo_data/states.geojson";
       let attr = {
         mode: "no-cors",
