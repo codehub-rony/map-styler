@@ -57,6 +57,7 @@ export default {
   border: 1px solid rgba(211, 211, 211);
   border-radius: 1px;
   box-sizing: border-box;
+  text-align: center;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -69,9 +70,5 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
-}
-
-input {
-  text-align: center;
 }
 </style>
