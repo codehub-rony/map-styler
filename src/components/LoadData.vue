@@ -60,7 +60,10 @@ export default {
         (v) => !!v || "Select a file",
         (v) => v[0].name.includes(".geojson") || "File is not a geojson",
       ],
-      nameRules: [(v) => !!v || "A name for you style is required"],
+      nameRules: [
+        (v) => !!v || "A name for you style is required",
+        (v) => /^[a-zA-Z]+$/.test(v) || "Name can only contain characters",
+      ],
       messages: [],
       color: "#adced2",
       loadingData: false,
