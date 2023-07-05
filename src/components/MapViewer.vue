@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-sheet id="map_container" height="85vh"> </v-sheet>
+    <v-sheet id="map_container"> </v-sheet>
   </div>
 </template>
 
@@ -29,7 +29,6 @@ export default {
   computed: {
     ...mapState(useAppStore, ["styleObject"]),
   },
-
   data() {
     return {
       map: null,
@@ -63,6 +62,7 @@ export default {
           ],
           target: "map_container",
           view: this.view,
+          controls: [],
         }));
     },
     animateZoom: function (extent) {
@@ -70,6 +70,12 @@ export default {
       let zoom = this.view.getZoomForResolution(resolution) - 1;
       let center = olExtent.getCenter(extent);
       this.view.animate({ zoom: zoom, center: center, duration: 1000 });
+    },
+    loadData: function (geojson) {
+      let features = new GeoJSON().readFeatures(geojson, {
+        featureProjection: "EPSG:3857",
+      });
+      this.addFeaturesToMap(features);
     },
     addFeaturesToMap: function (features) {
       this.vectorLayer.getSource().addFeatures(features);
@@ -99,6 +105,6 @@ export default {
 </script>
 <style>
 #map_container {
-  height: 100%;
+  height: 86vh;
 }
 </style>

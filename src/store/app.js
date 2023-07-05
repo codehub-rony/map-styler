@@ -14,10 +14,7 @@ export const useAppStore = defineStore("app", {
       this.selectedLayer = layer;
     },
     addDataSource(geojson) {
-      this.styleObject = StyleJSON.createStyleObject(
-        JSON.parse(geojson),
-        "geojson"
-      );
+      this.styleObject = StyleJSON.createStyleObject(geojson, "geojson");
     },
   },
 });

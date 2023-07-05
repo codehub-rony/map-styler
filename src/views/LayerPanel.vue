@@ -1,5 +1,6 @@
 <template>
-  <DataLoadDialog v-if="!styleObject" @load-datasource="loadData" />
+  <v-sheet height="30" rounded></v-sheet>
+
   <v-scroll-y-transition>
     <LayerList v-if="styleObject" />
   </v-scroll-y-transition>
@@ -31,7 +32,6 @@
 <script>
 import DownloadBtn from "@/components/DownloadBtn.vue";
 import LayerList from "@/components/LayerList/LayerList.vue";
-import DataLoadDialog from "@/components/DataLoadDialog.vue";
 import ColorSelector from "@/components/ColorSelector.vue";
 import LineWidthSlider from "@/components/LineWidthSlider.vue";
 
@@ -43,7 +43,6 @@ export default {
   emits: ["geojson-data"],
   components: {
     ColorSelector,
-    DataLoadDialog,
     DownloadBtn,
     LayerList,
     LineWidthSlider,
@@ -56,10 +55,6 @@ export default {
   },
 
   methods: {
-    loadData: function (geojson) {
-      this.addDataSource(geojson);
-      this.$emit("geojson-data", geojson);
-    },
     handleUpdate: function (update) {
       this.styleObject.updatePaint(
         this.selectedLayer.id,

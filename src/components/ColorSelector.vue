@@ -45,7 +45,11 @@ export default {
   },
   watch: {
     rgba(newValue) {
+      console.log(newVal);
       this.color = newValue;
+    },
+    property() {
+      this.color = this.property.value;
     },
   },
 };
