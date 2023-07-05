@@ -57,11 +57,6 @@ export default {
     LoadData,
   },
   emits: ["load-datasource"],
-  computed: {
-    imageHeight: function () {
-      return this.customData ? "default-image-height" : "smaller-image-height";
-    },
-  },
   data() {
     return {
       customData: false,
