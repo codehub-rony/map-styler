@@ -1,6 +1,4 @@
 <template>
-  <v-sheet height="30" rounded></v-sheet>
-
   <v-scroll-y-transition>
     <LayerList v-if="styleObject" />
   </v-scroll-y-transition>
