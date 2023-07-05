@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container max-width="100%" class="app-main-container">
     <v-row dense>
       <v-col cols="12" sm="2" xs="4">
         <LayerPanel />
@@ -46,3 +46,8 @@ export default {
   },
 };
 </script>
+<style>
+.app-main-container {
+  max-width: 100%;
+}
+</style>
