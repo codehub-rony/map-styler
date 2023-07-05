@@ -1,11 +1,11 @@
 <template>
   <v-container>
     <v-row dense>
-      <v-col cols="12" lg="2" md="3" sm="3">
+      <v-col cols="12" lg="3" md="3" sm="3">
         <LayerPanel />
       </v-col>
 
-      <v-col cols="12" lg="10" md="9" sm="9">
+      <v-col cols="12" lg="9" md="9" sm="9">
         <MapViewer :geodata="geodata" ref="map" />
       </v-col>
     </v-row>
