@@ -1,11 +1,10 @@
 <template>
   <v-app id="app_container">
     <AppBar />
-
-    <v-main class="bg-grey-lighten-3 app-main-content-container">
+    <v-main class="bg-grey-lighten-3">
       <router-view></router-view>
+      <!-- <AppFooter /> -->
     </v-main>
-    <AppFooter />
   </v-app>
 </template>
 

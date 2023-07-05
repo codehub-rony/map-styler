@@ -1,12 +1,12 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
 
-import MapPage from "@/views/MapPage.vue";
+import HomePage from "@/views/HomePage.vue";
 
 const routes = [
   {
     path: "/",
-    component: MapPage,
+    component: HomePage,
   },
 ];
 

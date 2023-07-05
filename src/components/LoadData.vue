@@ -4,43 +4,34 @@
       <span class="text-h5 font-weight-light">Import your data</span>
     </div>
 
-    <v-form ref="form" class="form-container d-flex flex-row mt-5">
+    <v-form ref="form" class="form-container d-flex flex-row mt-5 pa-4">
       <div class="d-flex flex-column form-input-item-container">
-        <div class="d-flex flex-row">
-          <span class="mr-3 form-input-item-label">style name</span>
+        <v-text-field
+          variant="outlined"
+          :rules="nameRules"
+          density="comfortable"
+          v-model="layerName"
+          label="Style name"
+          class="mb-2"
+        ></v-text-field>
 
-          <v-text-field
-            variant="outlined"
-            :rules="nameRules"
-            density="compact"
-            v-model="layerName"
-          ></v-text-field>
-        </div>
-        <div class="d-flex flex-row">
-          <span class="mr-3 form-input-item-label">file</span>
-          <v-file-input
-            v-model="file"
-            :rules="fileRules"
-            variant="outlined"
-            density="compact"
-            accept="application/geojson"
-            validate-on="submit-lazy"
-            append-icon="mdi-paperclip"
-            prepend-icon
-            :error-messages="messages"
-            @update:focused="messages = []"
-          ></v-file-input>
-        </div>
+        <v-file-input
+          v-model="file"
+          :rules="fileRules"
+          variant="outlined"
+          density="comfortable"
+          accept="application/geojson"
+          validate-on="submit-lazy"
+          append-icon="mdi-paperclip"
+          label="GeoJSON file"
+          prepend-icon
+          :error-messages="messages"
+          @update:focused="messages = []"
+        ></v-file-input>
       </div>
     </v-form>
-    <span class="text-caption mb-6"> Currently we only support GeoJSON</span>
 
-    <v-btn
-      color="primary"
-      size="large"
-      flat
-      @click="validate"
-      :loading="loadingData"
+    <v-btn color="primary" flat @click="validate" :loading="loadingData"
       >import</v-btn
     >
   </div>
@@ -58,7 +49,8 @@ export default {
       loading: false,
       fileRules: [
         (v) => !!v || "Select a file",
-        (v) => v[0].name.includes(".geojson") || "File is not a geojson",
+        (v) =>
+          v[0].name.includes(".geojson") || "Currently we only support GeoJSON",
       ],
       nameRules: [
         (v) => !!v || "A name for you style is required",
@@ -111,14 +103,14 @@ export default {
 </script>
 <style>
 .form-container {
-  width: 400px;
+  width: 100%;
 }
 .form-input-item-container {
   width: 100%;
 }
 
 .form-input-item-label {
-  width: 20%;
+  width: 30%;
   margin-top: 5px;
 }
 </style>

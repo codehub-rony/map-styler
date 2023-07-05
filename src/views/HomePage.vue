@@ -1,11 +1,11 @@
 <template>
-  <v-container max-width="100%" class="app-main-container">
+  <v-container>
     <v-row dense>
-      <v-col cols="12" sm="2" xs="4">
+      <v-col cols="12" lg="2" md="3" sm="3">
         <LayerPanel />
       </v-col>
 
-      <v-col cols="12" sm="10">
+      <v-col cols="12" lg="10" md="9" sm="9">
         <MapViewer :geodata="geodata" ref="map" />
       </v-col>
     </v-row>
@@ -46,8 +46,4 @@ export default {
   },
 };
 </script>
-<style>
-.app-main-container {
-  max-width: 100%;
-}
-</style>
+<style></style>

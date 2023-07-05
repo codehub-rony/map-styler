@@ -9,7 +9,7 @@
       />
     </div>
 
-    <v-app-bar-title>MapStyler</v-app-bar-title>
+    <v-app-bar-title class="d-sm-flex d-none">MapStyler</v-app-bar-title>
 
     <v-spacer></v-spacer>
     <v-btn

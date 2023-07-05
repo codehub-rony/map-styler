@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isOpen" max-width="500" persistent>
+  <v-dialog v-model="isOpen" max-width="400" persistent>
     <v-sheet>
       <v-container class="mb-4">
         <v-row justify-content="center" dense
@@ -13,7 +13,7 @@
                 }"
               />
               <div v-if="!customData" class="d-flex flex-column align-center">
-                <span class="text-h4 mt-4 font-weight-black">MapStyler</span>
+                <span class="text-h5 mt-4 font-weight-black">MapStyler</span>
                 <span class="text-h6 mt-4 font-weight-light text-center"
                   >A powerful tool to design styles for your vector geodata.
                 </span>
@@ -23,12 +23,7 @@
         ><v-row v-if="!customData" dense class="mt-5"
           ><v-col cols="12">
             <div class="mt-4 d-flex flex-column align-center">
-              <v-btn
-                color="primary"
-                size="large"
-                flat
-                @click="customData = true"
-                width="250"
+              <v-btn color="primary" flat @click="customData = true" width="250"
                 >create style</v-btn
               >
 
@@ -78,20 +73,22 @@ export default {
 
 <style>
 .smaller-image-height {
-  margin: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
   animation-name: shrink;
   animation-duration: 0.3s;
   animation-fill-mode: forwards;
 }
 
 .default-image-height {
-  margin: 20px;
-  height: 260px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  height: 200px;
 }
 
 @keyframes shrink {
   from {
-    height: 260px;
+    height: 200px;
   }
   to {
     height: 0px;

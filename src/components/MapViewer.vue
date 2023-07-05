@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-sheet id="map_container"> </v-sheet>
+    <v-sheet :height="height" id="map_container"> </v-sheet>
   </div>
 </template>
 
@@ -35,9 +35,13 @@ export default {
       view: null,
       vectorLayer: null,
       dragAndDropInteraction: null,
+      height: null,
     };
   },
   mounted() {
+    this.setHeight();
+    console.log();
+
     this.initMap();
     this.vectorLayer = new VectorLayer({
       source: new VectorSource(),
@@ -81,6 +85,11 @@ export default {
       this.vectorLayer.getSource().addFeatures(features);
       this.animateZoom(this.vectorLayer.getSource().getExtent());
     },
+    setHeight: function () {
+      this.height =
+        window.innerHeight < 950 ? window.innerHeight * 0.5 : "85vh";
+      console.log(this.height);
+    },
   },
   watch: {
     styleObject: {
@@ -105,6 +114,6 @@ export default {
 </script>
 <style>
 #map_container {
-  height: 86vh;
+  height: 85vh;
 }
 </style>
