@@ -14,13 +14,19 @@ class BaseStyle {
   createDefaultLayers() {
     if (!this.geometry_type) {
       throw new Error("Style has no geometry_type");
-    }
-    if (this.geometry_type == "Polygon") {
+    } else if (
+      this.geometry_type === "Polygon" ||
+      this.geometry_type === "MultiPolygon"
+    ) {
       this.createFillLayer();
       this.createLineLayer();
-    }
-    if (this.geometry_type == "Line") {
+    } else if (
+      this.geometry_type === "Line" ||
+      this.geometry_type === "MultiLine"
+    ) {
       this.createLineLayer();
+    } else {
+      throw new Error("Couldn't parse geometry type from geoJSON");
     }
   }
 
@@ -93,7 +99,7 @@ class GeojsonStyle extends BaseStyle {
 
   initialize(geojson) {
     this.features = geojson.features;
-    this.sources[geojson.name] = { type: "geojson", data: "./data.geojson" };
+    this.sources[this.name] = { type: "geojson", data: "./data.geojson" };
     this.geometry_type = this.parseGeometryFromFeature(geojson);
     this.createDefaultLayers();
   }
