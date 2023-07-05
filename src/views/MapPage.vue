@@ -40,7 +40,7 @@ export default {
 
   methods: {
     loadData: function (geojson) {
-      this.geodata = { type: "geojson", json: geojson };
+      this.geodata = { type: "geojson", json: JSON.stringify(geojson) };
       this.addDataSource(geojson);
     },
   },

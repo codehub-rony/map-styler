@@ -1,10 +1,10 @@
 <template>
-  <v-dialog v-model="isOpen" width="600" persistent>
+  <v-dialog v-model="isOpen" max-width="500" persistent>
     <v-sheet>
-      <v-container max-width="600" class="mb-6">
+      <v-container class="mb-4">
         <v-row justify-content="center" dense
           ><v-col cols="12">
-            <div class="mb-4 d-flex flex-column align-center">
+            <div class="d-flex flex-column align-center">
               <v-img
                 src="../assets/logo.svg"
                 :class="{
@@ -20,9 +20,9 @@
               </div>
             </div>
           </v-col></v-row
-        ><v-row v-if="!customData" dense
+        ><v-row v-if="!customData" dense class="mt-5"
           ><v-col cols="12">
-            <div class="d-flex flex-column align-center mt-3">
+            <div class="mt-4 d-flex flex-column align-center">
               <v-btn
                 color="primary"
                 size="large"
@@ -94,7 +94,10 @@ export default {
     height: 260px;
   }
   to {
-    height: 130px;
+    height: 0px;
   }
+}
+.testy {
+  display: hidden;
 }
 </style>
