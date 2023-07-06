@@ -25,6 +25,8 @@ class BaseStyle {
       this.geometry_type === "MultiLine"
     ) {
       this.createLineLayer();
+    } else if ((this.geometry_type = "Point")) {
+      this.createCircleLayer();
     } else {
       throw new Error("Couldn't parse geometry type from geoJSON");
     }
@@ -47,6 +49,18 @@ class BaseStyle {
       paint: {
         color: { r: 54, g: 154, b: 204, a: 1 },
         "line-width": 1,
+      },
+    });
+  }
+
+  createCircleLayer() {
+    this.layers.push({
+      id: `${this.name}_circle`,
+      source: this.name,
+      type: "circle",
+      paint: {
+        color: { r: 54, g: 154, b: 204, a: 1 },
+        "circle-radius": 4,
       },
     });
   }
@@ -77,7 +91,11 @@ class BaseStyle {
 
     let style_json = JSON.parse(JSON.stringify(style));
     style_json.layers.forEach((layer, i) => {
-      if (layer.type == "fill" || layer.type == "line") {
+      if (
+        layer.type == "fill" ||
+        layer.type == "line" ||
+        layer.type == "circle"
+      ) {
         let rgb = this.rgbaToPaint(layer.paint.color);
         delete Object.assign(layer.paint, {
           [`${layer.type}-color`]: layer.paint["color"],

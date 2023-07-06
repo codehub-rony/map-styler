@@ -40,7 +40,6 @@ export default {
   },
   mounted() {
     this.setHeight();
-    console.log();
 
     this.initMap();
     this.vectorLayer = new VectorLayer({
@@ -88,7 +87,6 @@ export default {
     setHeight: function () {
       this.height =
         window.innerHeight < 950 ? window.innerHeight * 0.5 : "85vh";
-      console.log(this.height);
     },
   },
   watch: {
