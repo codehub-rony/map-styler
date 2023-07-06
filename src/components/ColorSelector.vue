@@ -29,6 +29,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.property);
     this.color = this.property.value;
   },
   methods: {

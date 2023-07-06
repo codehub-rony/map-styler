@@ -71,7 +71,7 @@ export default {
     },
     animateZoom: function (extent) {
       let resolution = this.view.getResolutionForExtent(extent);
-      let zoom = this.view.getZoomForResolution(resolution) - 1;
+      let zoom = this.view.getZoomForResolution(resolution) - 0.3;
       let center = olExtent.getCenter(extent);
       this.view.animate({ zoom: zoom, center: center, duration: 1000 });
     },
@@ -88,7 +88,6 @@ export default {
     setHeight: function () {
       this.height =
         window.innerHeight < 950 ? window.innerHeight * 0.5 : "85vh";
-      console.log(this.height);
     },
   },
   watch: {

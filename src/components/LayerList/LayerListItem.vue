@@ -10,10 +10,7 @@
   >
     <template v-slot:append>
       <div class="textfields d-flex flex-row">
-        <div
-          class="layerlist-item-color"
-          v-bind:style="{ backgroundColor: rgba }"
-        ></div>
+        <div class="layerlist-item-color"></div>
       </div>
     </template>
 
@@ -30,9 +27,9 @@ export default {
     isSelected() {
       return this.selected == this.layer.id ? true : false;
     },
-    rgba() {
-      return `rgba(${this.layer.paint.color.r}, ${this.layer.paint.color.g}, ${this.layer.paint.color.b}, ${this.layer.paint.color.a})`;
-    },
+    // rgba() {
+    //   return `rgba(${this.layer.paint.color.r}, ${this.layer.paint.color.g}, ${this.layer.paint.color.b}, ${this.layer.paint.color.a})`;
+    // },
   },
   methods: {
     handleClick: function () {
