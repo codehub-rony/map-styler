@@ -1,14 +1,13 @@
 class BaseLayer {
   constructor(layer_name, type) {
-    (this.id = `${layer_name}_${type}`),
-      (this.source = layer_name),
-      (this.type = type);
+    this.id = `${layer_name}_${type}`;
+    this.source = layer_name;
+    this.type = type;
   }
   getPaint(property_groups) {
     let paint = {};
     property_groups.forEach((group) => {
       group.attributes.forEach((attribute) => {
-        console.log(attribute.component.type);
         if (attribute.component.type === "color_picker") {
           let op = attribute.name.slice(0, attribute.name.lastIndexOf("-"));
           paint[
@@ -32,3 +31,5 @@ class BaseLayer {
     };
   }
 }
+
+export default BaseLayer;

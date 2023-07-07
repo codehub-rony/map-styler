@@ -23,7 +23,8 @@ class LineLayer extends BaseLayer {
     ];
   }
 
-  getStyleLayerObject() {
+  getStyleAsObject() {
     return this.getStyleObject(this.property_groups);
   }
 }
+export default LineLayer;

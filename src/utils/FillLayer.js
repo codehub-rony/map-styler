@@ -1,5 +1,4 @@
 import BaseLayer from "./BaseLayer.js";
-
 class FillLayer extends BaseLayer {
   constructor(layer_name) {
     super(layer_name, "fill");
@@ -17,7 +16,9 @@ class FillLayer extends BaseLayer {
     ];
   }
 
-  getStyleLayerObject() {
+  getStyleAsObject() {
     return this.getStyleObject(this.property_groups);
   }
 }
+
+export default FillLayer;
