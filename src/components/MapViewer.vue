@@ -40,7 +40,6 @@ export default {
   },
   mounted() {
     this.setHeight();
-    console.log();
 
     this.initMap();
     this.vectorLayer = new VectorLayer({
@@ -49,7 +48,7 @@ export default {
     this.map.addLayer(this.vectorLayer);
 
     this.map.on("click", function (evt) {
-      console.log(evt.coordinate, evt.map.getView().getZoom());
+      // console.log(evt.coordinate, evt.map.getView().getZoom());
     });
   },
   methods: {

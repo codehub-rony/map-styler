@@ -25,14 +25,14 @@ class BaseStyle {
       this.layers.push(new FillLayer(this.name));
       this.layers.push(new LineLayer(this.name));
     } else if (
-      this.geometry_type === "Line" ||
-      this.geometry_type === "MultiLine"
+      this.geometry_type === "LineString" ||
+      this.geometry_type === "MultiLineString"
     ) {
       this.layers.push(new LineLayer(this.name));
     } else if (this.geometry_type === "Point") {
       this.layers.push(new CircleLayer(this.name));
     } else {
-      throw new Error("Couldn't parse geometry type from geoJSON");
+      throw new Error("Unkown geometry type from geoJSON");
     }
   }
 
