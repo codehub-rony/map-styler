@@ -48,7 +48,7 @@ export default {
     this.map.addLayer(this.vectorLayer);
 
     this.map.on("click", function (evt) {
-      console.log(evt.coordinate, evt.map.getView().getZoom());
+      // console.log(evt.coordinate, evt.map.getView().getZoom());
     });
   },
   methods: {
@@ -70,7 +70,7 @@ export default {
     },
     animateZoom: function (extent) {
       let resolution = this.view.getResolutionForExtent(extent);
-      let zoom = this.view.getZoomForResolution(resolution) - 1;
+      let zoom = this.view.getZoomForResolution(resolution) - 0.3;
       let center = olExtent.getCenter(extent);
       this.view.animate({ zoom: zoom, center: center, duration: 1000 });
     },

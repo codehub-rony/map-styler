@@ -1,3 +1,7 @@
+import FillLayer from "./FillLayer.js";
+import LineLayer from "./LineLayer.js";
+import CircleLayer from "./CircleLayer.js";
+
 class BaseStyle {
   constructor(name) {
     if (name === undefined) {
@@ -18,51 +22,18 @@ class BaseStyle {
       this.geometry_type === "Polygon" ||
       this.geometry_type === "MultiPolygon"
     ) {
-      this.createFillLayer();
-      this.createLineLayer();
+      this.layers.push(new FillLayer(this.name));
+      this.layers.push(new LineLayer(this.name));
     } else if (
-      this.geometry_type === "Line" ||
-      this.geometry_type === "MultiLine"
+      this.geometry_type === "LineString" ||
+      this.geometry_type === "MultiLineString"
     ) {
-      this.createLineLayer();
-    } else if ((this.geometry_type = "Point")) {
-      this.createCircleLayer();
+      this.layers.push(new LineLayer(this.name));
+    } else if (this.geometry_type === "Point") {
+      this.layers.push(new CircleLayer(this.name));
     } else {
-      throw new Error("Couldn't parse geometry type from geoJSON");
+      throw new Error("Unkown geometry type from geoJSON");
     }
-  }
-
-  createFillLayer() {
-    this.layers.push({
-      id: `${this.name}_fill`,
-      source: this.name,
-      type: "fill",
-      paint: { color: { r: 232, g: 227, b: 223, a: 0.7 } },
-    });
-  }
-
-  createLineLayer() {
-    this.layers.push({
-      id: `${this.name}_border`,
-      source: this.name,
-      type: "line",
-      paint: {
-        color: { r: 54, g: 154, b: 204, a: 1 },
-        "line-width": 1,
-      },
-    });
-  }
-
-  createCircleLayer() {
-    this.layers.push({
-      id: `${this.name}_circle`,
-      source: this.name,
-      type: "circle",
-      paint: {
-        color: { r: 54, g: 154, b: 204, a: 1 },
-        "circle-radius": 4,
-      },
-    });
   }
 
   updatePaint(layer_id, attribute, value) {
@@ -72,40 +43,16 @@ class BaseStyle {
       }
     });
   }
-  rgbaToPaint = function (color) {
-    if (color) {
-      return {
-        color: `rgb(${color.r}, ${color.g}, ${color.b})`,
-        opacity: color.a,
-      };
-    }
-  };
 
   getStyleAsJSON() {
     let style = {
       version: this.version,
       name: this.name,
       sources: this.sources,
-      layers: this.layers,
+      layers: this.layers.map((x) => x.getStyleAsObject()),
     };
 
-    let style_json = JSON.parse(JSON.stringify(style));
-    style_json.layers.forEach((layer, i) => {
-      if (
-        layer.type == "fill" ||
-        layer.type == "line" ||
-        layer.type == "circle"
-      ) {
-        let rgb = this.rgbaToPaint(layer.paint.color);
-        delete Object.assign(layer.paint, {
-          [`${layer.type}-color`]: layer.paint["color"],
-        })["color"];
-
-        layer.paint[`${layer.type}-color`] = rgb.color;
-        layer.paint[`${layer.type}-opacity`] = rgb.opacity;
-      }
-    });
-    return JSON.stringify(style_json, null, 2);
+    return JSON.stringify(style, null, 2);
   }
 }
 

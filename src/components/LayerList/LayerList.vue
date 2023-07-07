@@ -1,53 +1,45 @@
 <template>
   <v-sheet rounded="0">
-    <h3 class="pa-3">Layers</h3>
+    <div class="pl-4 pb-1 pt-4 text-h6 font-weight-light">
+      {{ styleObject.name }}
+    </div>
 
-    <v-list rounded="0" class="pa-0">
-      <v-list-subheader style="height: 20px">
-        {{ styleObject.name }}</v-list-subheader
+    <div v-for="(layer, i) in styleObject.layers" :id="i" class="">
+      <div
+        v-for="(attribute, h) in layer.attributes"
+        :id="h"
+        class="text-subtitle-2 pl-7 pr-4 pt-1 pb-2 d-flex flex-row justify-space-between"
       >
-      <LayerListItem
-        v-for="layer in styleObject.layers"
-        :key="layer.id"
-        :layer="layer"
-        :selected="selected"
-        @clicked="handleClick"
-      /> </v-list
-  ></v-sheet>
+        <ColorField
+          :attribute="attribute"
+          v-if="attribute.component.type === 'color_picker'"
+        />
+
+        <InputField
+          :attribute="attribute"
+          v-if="attribute.component.type === 'input_field'"
+        />
+      </div>
+      <v-divider class="pb-2" v-if="styleObject.layers.length - 1 !== i">
+      </v-divider>
+    </div>
+  </v-sheet>
 </template>
 
 <script>
-import LayerListItem from "@/components/LayerList/LayerListItem.vue";
+import InputField from "./InputField.vue";
+import ColorField from "./ColorField.vue";
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 export default {
   components: {
-    LayerListItem,
+    InputField,
+    ColorField,
   },
   computed: {
-    ...mapState(useAppStore, ["selectedLayer", "selectLayer", "styleObject"]),
-  },
-  data: () => ({
-    selected: null,
-    item: null,
-  }),
-
-  methods: {
-    handleClick: function (layer) {
-      if (this.selected != layer.id) {
-        this.selected = layer.id;
-        this.selectLayer(layer);
-      } else {
-        this.selected = null;
-        this.selectLayer(null);
-      }
-    },
+    ...mapState(useAppStore, ["styleObject"]),
   },
 };
 </script>
 
-<style>
-.testy {
-  height: 20px;
-}
-</style>
+<style></style>
