@@ -9,8 +9,9 @@ Current features:
 -  Basic styling for point, line and polygon features
 -  export style as GL JS JSON
 
-##### Roadmap
+#### Roadmap
 The tool is in development and many more features are to come:
 - Add support for vectortile URL's as data source
-- Add option to export a basemap
-- Attribute filter based styling
+- Advanced styling with filters on data attributes
+- Add option to export a basemap layer
+- Click interaction for map features
