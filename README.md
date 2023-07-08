@@ -15,3 +15,5 @@ The tool is in development and many more features are to come:
 - Advanced styling with filters on data attributes
 - Add option to export a basemap layer
 - Click interaction for map features
+
+Suggestions and ideas for futher development are welcome. 
