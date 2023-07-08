@@ -4,7 +4,7 @@ A web application for designing vector data styles and interactive webmaps based
 
 Visit [MapStyler](https://mapstyler.com) and try it.
 
-Current features:
+#### Current features:
 -  Support for geoJSON files
 -  Basic styling for point, line and polygon features
 -  export style as GL JS JSON
