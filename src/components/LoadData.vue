@@ -14,6 +14,23 @@
           label="Style name"
           class="mb-2"
         ></v-text-field>
+        <div class="d-flex flex-column align-center">
+          <p class="mt-2 mb-1">Choose datasource</p>
+
+          <v-btn-toggle
+            density="compact"
+            v-model="dataType"
+            rounded="0"
+            color="primary"
+            group
+            variant="text"
+            class="ma-2 mb-4"
+          >
+            <v-btn value="geojson"> GeoJSON </v-btn>
+
+            <v-btn value="vectortile"> VectorTile URL </v-btn>
+          </v-btn-toggle>
+        </div>
 
         <v-file-input
           v-model="file"
@@ -27,7 +44,19 @@
           prepend-icon
           :error-messages="messages"
           @update:focused="messages = []"
+          v-if="dataType === 'geojson'"
         ></v-file-input>
+        <v-text-field
+          v-model="url"
+          variant="outlined"
+          density="comfortable"
+          validate-on="submit-lazy"
+          append-icon="mdi-web"
+          label="url"
+          prepend-icon
+          :error-messages="messages"
+          v-if="dataType === 'vectortile'"
+        ></v-text-field>
       </div>
     </v-form>
 
@@ -38,12 +67,16 @@
 </template>
 
 <script>
+import StyleJSON from "../utils/StyleJSON.js";
 export default {
-  emits: ["open-file"],
+  emits: ["import-data"],
   data() {
     return {
       isOpen: false,
+      dataType: "vectortile",
       file: null,
+      // url: "http://localhost:7080/rest/services/schiphol/collections/ctr/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
+      url: "https://demo.ldproxy.net/vineyards/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
       geojson: null,
       layerName: null,
       loading: false,
@@ -57,7 +90,6 @@ export default {
         (v) => /^[a-zA-Z]+$/.test(v) || "Name can only contain characters",
       ],
       messages: [],
-      color: "#adced2",
       loadingData: false,
     };
   },
@@ -67,7 +99,23 @@ export default {
       const { valid } = await this.$refs.form.validate();
 
       if (valid) {
-        this.openFile();
+        let styleObject;
+        let layer_name = this.layerName.replace(" ", "_");
+
+        if (this.dataType === "geojson") {
+          this.openFile().then((json) => {
+            styleObject = new StyleJSON.GeojsonStyle(
+              layer_name,
+              JSON.parse(json)
+            );
+            this.$emit("import-data", styleObject);
+          });
+        }
+
+        if (this.dataType === "vectortile") {
+          styleObject = new StyleJSON.VectorTileStyle(layer_name, this.url);
+          this.$emit("import-data", styleObject);
+        }
       }
     },
 
@@ -80,23 +128,26 @@ export default {
       return true;
     },
 
-    openFile: function (e) {
-      var reader = new FileReader();
-      reader.readAsText(this.file["0"]);
-      reader.onload = () => {
-        if (this.isValidJSON(reader.result)) {
-          this.loading = false;
-          this.isOpen = false;
+    openFile: async function (e) {
+      let reader = new FileReader();
+      const promise = new Promise((resolve, reject) => {
+        reader.readAsText(this.file["0"]);
+        reader.onload = () => {
+          if (this.isValidJSON(reader.result)) {
+            this.loading = false;
+            this.isOpen = false;
 
-          let jsonObject = JSON.parse(reader.result);
-          jsonObject["name"] = this.layerName.replace(" ", "_");
-          this.$emit("open-file", jsonObject);
-        } else {
-          this.messages.push(
-            "Invalid JSON structrue. Could not parse the GeoJSON file"
-          );
-        }
-      };
+            resolve(reader.result);
+          } else {
+            this.messages.push(
+              "Invalid JSON structrue. Could not parse the GeoJSON file"
+            );
+            reject();
+          }
+        };
+      });
+
+      return promise;
     },
   },
 };
