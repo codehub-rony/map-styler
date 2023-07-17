@@ -6,22 +6,30 @@
 
 <script>
 import Map from "ol/Map.js";
-import OSM from "ol/source/OSM.js";
-import TileLayer from "ol/layer/Tile.js";
 import View from "ol/View.js";
-
-import { applyStyle } from "ol-mapbox-style";
+import { unByKey } from "ol/Observable.js";
 import * as olExtent from "ol/extent";
 
-// style
+// basemap
+import OSM from "ol/source/OSM.js";
+import TileLayer from "ol/layer/Tile.js";
+
+import { stylefunction } from "ol-mapbox-style";
+
+// OGC Tile layer
+import VectorTileLayer from "ol/layer/VectorTile.js";
+import OGCVectorTile from "ol/source/OGCVectorTile.js";
+import { GeoJSON, MVT } from "ol/format.js";
+
+// Goejson
+import { Vector as VectorLayer } from "ol/layer.js";
+import { Vector as VectorSource } from "ol/source.js";
+
 import "../../node_modules/ol/ol.css";
 
 // store
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
-
-// utils
-import mapUtils from "../utils/mapUtils.js";
 
 export default {
   props: {
@@ -34,18 +42,13 @@ export default {
     return {
       map: null,
       view: null,
-      layerObject: null,
       height: null,
+      vectorLayer: null,
     };
   },
   mounted() {
     this.setHeight();
-
     this.initMap();
-
-    // testSource.on("tileloadend", function (evt) {
-    //   console.log(evt.tile.getFeatures()[0].getType());
-    // });
 
     this.map.on("click", (evt) => {
       // console.log(evt.coordinate, evt.map.getView().getZoom());
@@ -55,7 +58,8 @@ export default {
     initMap: function () {
       this.view = new View({
         center: [595074, 6829276],
-        zoom: 10,
+
+        zoom: 6,
       });
       this.map = new Map({
         layers: [
@@ -67,22 +71,38 @@ export default {
         view: this.view,
         controls: [],
       });
-
-      let map = new Map({
-        layers: [
-          new TileLayer({
-            source: new OSM(),
-          }),
-        ],
-        target: "map_container",
-        view: new View({
-          center: [595074, 6829276],
-          zoom: 10,
-        }),
-        controls: [],
-      });
     },
-    zoomToFeatures: function (extent) {
+    createVectorLayer: function () {
+      if (this.styleObject.source_type === "geojson") {
+        this.vectorLayer = new VectorLayer({
+          source: new VectorSource(),
+        });
+        let features = new GeoJSON().readFeatures(this.styleObject.geojson, {
+          featureProjection: "EPSG:3857",
+        });
+        this.vectorLayer.getSource().addFeatures(features);
+        this.map.addLayer(this.vectorLayer);
+        this.zoomToExtent(this.vectorLayer.getSource().getExtent());
+      }
+      if (this.styleObject.source_type === "ogc_vector_tile") {
+        const source = new OGCVectorTile({
+          url: this.styleObject.tile_url,
+          format: new MVT(),
+        });
+        this.vectorLayer = new VectorTileLayer({
+          source: source,
+        });
+        this.map.addLayer(this.vectorLayer);
+        const key = source.on("change", () => {
+          if (source.getState() === "ready") {
+            const extent = source.getTileGrid().getExtent();
+            this.zoomToExtent(extent);
+            unByKey(key);
+          }
+        });
+      }
+    },
+    zoomToExtent: function (extent) {
       let resolution = this.view.getResolutionForExtent(extent);
       let zoom = this.view.getZoomForResolution(resolution) - 0.3;
       let center = olExtent.getCenter(extent);
@@ -97,34 +117,12 @@ export default {
   watch: {
     styleObject: {
       handler() {
-        // applyStyle(this.vectorLayer, this.styleObject.getStyleAsJSON());
-      },
-      deep: true,
-    },
-
-    geodataSource: {
-      handler(styleObject) {
-        this.layerObject = mapUtils.createVectorLayer(styleObject);
-        console.log(this.layerObject.geometry_type);
-        styleObject.createDefaultLayers(this.layerObject.geometry_type);
-
-        let extent = this.layerObject.getExtent();
-
-        if (extent) {
-          this.zoomToFeatures(extent);
-        }
-
-        if (Object.values(styleObject.sources)[0].type === "vector") {
-          let layer = this.layerObject.getVectorLayer();
-
-          layer.getSource().on("tileloadend", function (evt) {
-            console.log(evt.tile.getFeatures()[0].getType());
-          });
-
-          this.map.addLayer(layer);
-          console.log(layer.getExtent());
-        } else {
-          this.map.addLayer(this.layerObject.getVectorLayer());
+        if (this.vectorLayer) {
+          stylefunction(
+            this.vectorLayer,
+            this.styleObject.getStyleAsJSON(),
+            this.styleObject.source_id
+          );
         }
       },
       deep: true,

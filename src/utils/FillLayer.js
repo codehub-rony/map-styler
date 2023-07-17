@@ -1,7 +1,7 @@
 import BaseLayer from "./BaseLayer.js";
 class FillLayer extends BaseLayer {
-  constructor(layer_name) {
-    super(layer_name, "fill");
+  constructor(style_name, source_id) {
+    super(style_name, source_id, "fill");
     this.attributes = [
       {
         name: "fill-color",

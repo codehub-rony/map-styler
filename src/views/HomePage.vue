@@ -7,7 +7,7 @@
       </v-col>
 
       <v-col cols="12" lg="8" md="9" sm="9">
-        <MapViewer :geodataSource="styleObject" ref="map" />
+        <MapViewer ref="map" />
       </v-col>
     </v-row>
   </v-container>
@@ -43,6 +43,7 @@ export default {
   methods: {
     loadData: function (styleObject) {
       this.setStyleObject(styleObject);
+      this.$refs.map.createVectorLayer();
     },
   },
 };

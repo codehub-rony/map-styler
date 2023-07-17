@@ -62,7 +62,13 @@ export default {
   methods: {
     loadDemoData: function () {
       this.isOpen = false;
-      let styleObject = new StyleJSON.GeojsonStyle("buildings", demo_data);
+      let geometry_type = demo_data.features[0].geometry.type.toLowerCase();
+      let styleObject = new StyleJSON.GeojsonStyle(
+        "buildings",
+        "buildings",
+        geometry_type,
+        demo_data
+      );
 
       this.$emit("load-datasource", styleObject);
     },

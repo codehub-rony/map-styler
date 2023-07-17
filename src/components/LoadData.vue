@@ -28,7 +28,7 @@
           >
             <v-btn value="geojson"> GeoJSON </v-btn>
 
-            <v-btn value="vectortile"> VectorTile URL </v-btn>
+            <v-btn value="ogcvectortile"> OGC Vectorile URL </v-btn>
           </v-btn-toggle>
         </div>
 
@@ -55,7 +55,7 @@
           label="url"
           prepend-icon
           :error-messages="messages"
-          v-if="dataType === 'vectortile'"
+          v-if="dataType === 'ogcvectortile'"
         ></v-text-field>
       </div>
     </v-form>
@@ -68,17 +68,16 @@
 
 <script>
 import StyleJSON from "../utils/StyleJSON.js";
+
 export default {
   emits: ["import-data"],
   data() {
     return {
       isOpen: false,
-      dataType: "vectortile",
+      dataType: "ogcvectortile",
       file: null,
-      // url: "http://localhost:7080/rest/services/schiphol/collections/ctr/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
-      url: "https://demo.ldproxy.net/vineyards/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
-      geojson: null,
-      layerName: null,
+      url: "http://localhost:7080/rest/services/schiphol/collections/ctr/tiles/WebMercatorQuad/",
+      layerName: "ctr",
       loading: false,
       fileRules: [
         (v) => !!v || "Select a file",
@@ -100,20 +99,34 @@ export default {
 
       if (valid) {
         let styleObject;
-        let layer_name = this.layerName.replace(" ", "_");
+        let style_name = this.layerName.replace(" ", "_");
 
         if (this.dataType === "geojson") {
-          this.openFile().then((json) => {
+          this.openFile().then((geojson) => {
+            let json = JSON.parse(geojson);
+            let geometry_type = json.features[0].geometry.type.toLowerCase();
+            let source_id = style_name;
+
             styleObject = new StyleJSON.GeojsonStyle(
-              layer_name,
-              JSON.parse(json)
+              style_name,
+              source_id,
+              geometry_type,
+              geojson
             );
+
             this.$emit("import-data", styleObject);
           });
         }
 
-        if (this.dataType === "vectortile") {
-          styleObject = new StyleJSON.VectorTileStyle(layer_name, this.url);
+        if (this.dataType === "ogcvectortile") {
+          let tilejson = await this.parseTileJSON();
+          styleObject = new StyleJSON.OGCTileStyle(
+            style_name,
+            this.url,
+            tilejson.source_id,
+            tilejson.geometry_type
+          );
+
           this.$emit("import-data", styleObject);
         }
       }
@@ -127,7 +140,29 @@ export default {
       }
       return true;
     },
+    parseTileJSON: async function () {
+      const promise = new Promise((resolve, reject) => {
+        fetch(`${this.url}?f=tilejson`)
+          .then((res) => res.json())
+          .then((tilejson) => {
+            if (tilejson.vector_layers.length > 1) {
+              throw new Error(
+                "Tile provider as more than one vector layer. Mulitple vector layers are currently not supported"
+              );
+            }
 
+            let meta_data = {
+              geometry_type:
+                tilejson.vector_layers[0].geometry_type.toLowerCase(),
+              source_id: tilejson.vector_layers[0].id,
+            };
+
+            resolve(meta_data);
+          });
+      });
+
+      return promise;
+    },
     openFile: async function (e) {
       let reader = new FileReader();
       const promise = new Promise((resolve, reject) => {

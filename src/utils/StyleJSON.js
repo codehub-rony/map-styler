@@ -3,80 +3,94 @@ import LineLayer from "./LineLayer.js";
 import CircleLayer from "./CircleLayer.js";
 
 class BaseStyle {
-  constructor(layer_name) {
-    if (layer_name === undefined) {
+  constructor(style_name, source_id, geometry_type, source_type) {
+    if (style_name === undefined) {
       throw new Error("Name parameter is required");
     }
     this.version = 8;
-    this.name = layer_name;
+    this.style_name = style_name;
+    this.source_id = source_id;
+    this.source_type = source_type;
     this.sources = {};
     this.layers = [];
-    this.geometry_type = null;
+    this.geometry_type = geometry_type;
   }
 
-  createDefaultLayers(geometry_type) {
-    if (!geometry_type) {
+  createDefaultLayers() {
+    let polygon = ["polygon", "multipolygon", "polygons"];
+    let line = ["linestring", "multilinestring"];
+    if (!this.geometry_type) {
       throw new Error("Style has no geometry_type");
-    } else if (
-      geometry_type === "Polygon" ||
-      geometry_type === "MultiPolygon"
-    ) {
-      this.layers.push(new FillLayer(this.name));
-      this.layers.push(new LineLayer(this.name));
-    } else if (
-      geometry_type === "LineString" ||
-      geometry_type === "MultiLineString"
-    ) {
-      this.layers.push(new LineLayer(this.name));
-    } else if (geometry_type === "Point") {
-      this.layers.push(new CircleLayer(this.name));
+    } else if (polygon.includes(this.geometry_type)) {
+      this.layers.push(new FillLayer(this.style_name, this.source_id));
+      this.layers.push(new LineLayer(this.style_name, this.source_id));
+    } else if (line.includes(this.geometry_type)) {
+      this.layers.push(new LineLayer(this.style_name));
+    } else if (this.geometry_type === "Point") {
+      this.layers.push(new CircleLayer(this.style_name));
     } else {
       throw new Error("Unkown geometry type from geoJSON");
     }
+  }
+}
+
+class GeojsonStyle extends BaseStyle {
+  constructor(layer_name, source_id, geometry_type, geojson) {
+    super(layer_name, source_id, geometry_type, "geojson");
+    this.initialize(geojson);
+  }
+
+  initialize(geojson) {
+    this.sources[this.source_id] = { type: "geojson", data: "./data.geojson" };
+    this.geojson = geojson;
+    this.createDefaultLayers();
   }
 
   getStyleAsJSON() {
     let style = {
       version: this.version,
-      name: this.name,
+      name: this.style_name,
       sources: this.sources,
       layers: this.layers.map((x) => x.getStyleAsObject()),
     };
+
+    style.layers.forEach((layer) => {
+      layer["layer"] = this.source_id;
+    });
 
     return JSON.stringify(style, null, 2);
   }
 }
 
-class GeojsonStyle extends BaseStyle {
-  constructor(layer_name, geojson) {
-    super(layer_name);
-    this.initialize(geojson);
+class OGCTileStyle extends BaseStyle {
+  constructor(style_name, tile_url, source_id, geometry_type) {
+    super(style_name, source_id, geometry_type, "ogc_vector_tile");
+    this.tile_url = tile_url;
+    this.vector_layer = null;
+
+    this.init();
   }
 
-  initialize(geojson) {
-    this.sources[this.name] = { type: "geojson", data: "./data.geojson" };
-    this.geojson = geojson;
+  init() {
+    this.sources[this.source_id] = { type: "vector", tiles: [this.tile_url] };
+    this.createDefaultLayers();
+  }
+  getStyleAsJSON() {
+    let style = {
+      version: this.version,
+      name: this.style_name,
+      sources: this.sources,
+      layers: this.layers.map((x) => x.getStyleAsObject()),
+    };
+
+    style.layers.forEach((layer) => {
+      layer["source-layer"] = this.source_id;
+      layer["layout"] = {};
+      layer.layout["visibility"] = "visible";
+    });
+
+    return JSON.stringify(style, null, 2);
   }
 }
 
-class VectorTileStyle extends BaseStyle {
-  constructor(layer_name, tile_url) {
-    super(layer_name);
-    this.initialize(tile_url);
-  }
-
-  initialize(tile_url) {
-    this.sources[this.name] = { type: "vector", tiles: [`${tile_url}`] };
-  }
-}
-
-// const createStyleObject = function (geojson, data_source) {
-// const createStyleObject = function (layer_name, data_source) {
-//   if (data_source == "geojson") {
-//     return new GeojsonStyle(layer_name);
-//   } else if (data_source == "vector_tile") {
-//     return new VectorTileStyle(layer_name);
-//   }
-// };
-
-export default { GeojsonStyle, VectorTileStyle };
+export default { GeojsonStyle, OGCTileStyle };
