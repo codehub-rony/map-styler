@@ -11,7 +11,8 @@ Visit [MapStyler](https://mapstyler.com) and try it.
 
 #### Roadmap
 The tool is in development and many more features are to come:
-- Add support for vectortile URL's as data source
+- Add support for [OGC API Vectortile](https://github.com/opengeospatial/ogcapi-tiles)  as data source
+- Add support for [Maptiler GeoJSON layers](https://docs.maptiler.com/sdk-js/examples/geojson-polygon/) as data source
 - Advanced styling with filters on data attributes
 - Add option to export a basemap layer
 - Click interaction for map features
