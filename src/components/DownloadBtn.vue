@@ -15,7 +15,7 @@ export default {
       const a = document.createElement("a");
       const file = new Blob([json], { type: "application/json" });
       a.href = URL.createObjectURL(file);
-      a.download = `${this.styleObject.style_name}.json`;
+      a.download = `${this.styleObject.style_name}.mbs`;
       a.click();
     },
   },
