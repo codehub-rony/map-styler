@@ -5,7 +5,7 @@ class FillLayer extends BaseLayer {
     this.attributes = [
       {
         name: "fill-color",
-        value: { r: 232, g: 227, b: 223, a: 0.7 },
+        value: { r: 255, g: 255, b: 255, a: 0.7 },
         component: { label: "color", type: "color_picker" },
       },
     ];
