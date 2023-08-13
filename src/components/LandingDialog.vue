@@ -38,14 +38,17 @@
           ></v-row
         >
         <v-row v-if="customData" dense
-          ><v-col cols="12"> <LoadData @import-data="handleImportData" /></v-col
+          ><v-col cols="12">
+            <LoadData
+              @import-data="handleImportData"
+              @go-back="customData = false" /></v-col
         ></v-row>
       </v-container>
     </v-sheet>
   </v-dialog>
 </template>
 <script>
-import LoadData from "@/components/LoadData.vue";
+import LoadData from "@/components/DataImport/LoadData.vue";
 import demo_data from "../assets/buildings.json";
 import StyleJSON from "../utils/StyleJSON.js";
 export default {
