@@ -84,14 +84,16 @@ export default {
         this.map.addLayer(this.vectorLayer);
         this.zoomToExtent(this.vectorLayer.getSource().getExtent());
       }
+
       if (this.styleObject.source_type === "ogc_vector_tile") {
         const source = new OGCVectorTile({
-          url: this.styleObject.tile_url,
+          url: this.styleObject.tilejson_url,
           format: new MVT(),
         });
         this.vectorLayer = new VectorTileLayer({
           source: source,
         });
+
         this.map.addLayer(this.vectorLayer);
         const key = source.on("change", () => {
           if (source.getState() === "ready") {
@@ -111,7 +113,7 @@ export default {
 
     setHeight: function () {
       this.height =
-        window.innerHeight < 950 ? window.innerHeight * 0.5 : "85vh";
+        window.innerHeight < 950 ? window.innerHeight * 0.8 : "85vh";
     },
   },
   watch: {

@@ -63,16 +63,17 @@ class GeojsonStyle extends BaseStyle {
 }
 
 class OGCTileStyle extends BaseStyle {
-  constructor(style_name, tile_url, source_id, geometry_type) {
+  constructor(style_name, tilejson_url, source_id, geometry_type, tiles_url) {
     super(style_name, source_id, geometry_type, "ogc_vector_tile");
-    this.tile_url = tile_url;
+    this.tilejson_url = tilejson_url;
+    this.tiles_url = tiles_url;
     this.vector_layer = null;
 
     this.init();
   }
 
   init() {
-    this.sources[this.source_id] = { type: "vector", tiles: [this.tile_url] };
+    this.sources[this.source_id] = { type: "vector", tiles: [this.tiles_url] };
     this.createDefaultLayers();
   }
   getStyleAsJSON() {
