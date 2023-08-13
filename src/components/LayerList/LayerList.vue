@@ -39,9 +39,6 @@ export default {
   computed: {
     ...mapState(useAppStore, ["styleObject"]),
   },
-  mounted() {
-    console.log(this.styleObject);
-  },
 };
 </script>
 
