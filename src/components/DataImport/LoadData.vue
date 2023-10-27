@@ -204,6 +204,8 @@ export default {
             };
 
             resolve(meta_data);
+          }).catch(() => {
+            this.$refs.ogcTileInput.errorMessages.push("The URL seems to be invalid. Data can not be loaded");
           });
       });
 
