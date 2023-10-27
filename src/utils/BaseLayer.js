@@ -1,7 +1,7 @@
 class BaseLayer {
-  constructor(layer_name, type) {
+  constructor(layer_name, source_id, type) {
     this.id = `${layer_name}_${type}`;
-    this.source = layer_name;
+    this.source = source_id;
     this.type = type;
   }
   getPaint(attributes) {

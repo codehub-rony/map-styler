@@ -1,6 +1,5 @@
 // Utilities
 import { defineStore } from "pinia";
-import StyleJSON from "../utils/StyleJSON.js";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
@@ -9,8 +8,8 @@ export const useAppStore = defineStore("app", {
   }),
 
   actions: {
-    addDataSource(geojson) {
-      this.styleObject = StyleJSON.createStyleObject(geojson, "geojson");
+    setStyleObject(styleObject) {
+      this.styleObject = styleObject;
     },
   },
 });

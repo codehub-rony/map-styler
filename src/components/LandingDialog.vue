@@ -31,22 +31,26 @@
                 size="small"
                 variant="plain"
                 class="mt-3"
-                @click="load_demo_data()"
+                @click="loadDemoData()"
                 >try out
               </v-btn>
             </div></v-col
           ></v-row
         >
         <v-row v-if="customData" dense
-          ><v-col cols="12"> <LoadData @open-file="load_file_data" /></v-col
+          ><v-col cols="12">
+            <LoadData
+              @import-data="handleImportData"
+              @go-back="customData = false" /></v-col
         ></v-row>
       </v-container>
     </v-sheet>
   </v-dialog>
 </template>
 <script>
-import LoadData from "@/components/LoadData.vue";
-import jsonObject from "../assets/buildings.json";
+import LoadData from "@/components/DataImport/LoadData.vue";
+import demo_data from "../assets/buildings.json";
+import StyleJSON from "../utils/StyleJSON.js";
 export default {
   components: {
     LoadData,
@@ -59,13 +63,21 @@ export default {
     };
   },
   methods: {
-    load_demo_data: function () {
+    loadDemoData: function () {
       this.isOpen = false;
-      this.$emit("load-datasource", jsonObject);
+      let geometry_type = demo_data.features[0].geometry.type.toLowerCase();
+      let styleObject = new StyleJSON.GeojsonStyle(
+        "buildings",
+        "buildings",
+        geometry_type,
+        demo_data
+      );
+
+      this.$emit("load-datasource", styleObject);
     },
-    load_file_data: function (jsonObject) {
+    handleImportData: function (styleObject) {
       this.isOpen = false;
-      this.$emit("load-datasource", jsonObject);
+      this.$emit("load-datasource", styleObject);
     },
   },
 };

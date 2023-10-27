@@ -1,8 +1,8 @@
 import BaseLayer from "./BaseLayer.js";
 
 class LineLayer extends BaseLayer {
-  constructor(layer_name) {
-    super(layer_name, "line");
+  constructor(style_name, source_id) {
+    super(style_name, source_id, "line");
     this.attributes = [
       {
         name: "line-color",

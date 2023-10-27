@@ -27,16 +27,6 @@ export default {
       return this.selectedLayer ? true : false;
     },
   },
-
-  methods: {
-    handleUpdate: function (update) {
-      this.styleObject.updatePaint(
-        this.selectedLayer.id,
-        update.attribute,
-        update.value
-      );
-    },
-  },
 };
 </script>
 

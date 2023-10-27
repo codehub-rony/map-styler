@@ -7,7 +7,7 @@
       </v-col>
 
       <v-col cols="12" lg="8" md="9" sm="9">
-        <MapViewer :geodata="geodata" ref="map" />
+        <MapViewer ref="map" />
       </v-col>
     </v-row>
   </v-container>
@@ -31,19 +31,19 @@ export default {
     MapViewer,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObject", "addDataSource"]),
+    ...mapState(useAppStore, ["styleObject", "setStyleObject"]),
   },
   data() {
     return {
       customData: false,
-      geodata: { type: null, json: null },
+      geodataSource: { type: null, json: null },
     };
   },
 
   methods: {
-    loadData: function (geojson) {
-      this.geodata = { type: "geojson", json: JSON.stringify(geojson) };
-      this.addDataSource(geojson);
+    loadData: function (styleObject) {
+      this.setStyleObject(styleObject);
+      this.$refs.map.createVectorLayer();
     },
   },
 };

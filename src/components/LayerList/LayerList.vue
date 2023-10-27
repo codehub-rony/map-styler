@@ -1,7 +1,7 @@
 <template>
   <v-sheet rounded="0">
     <div class="pl-4 pb-1 pt-4 text-h6 font-weight-light">
-      {{ styleObject.name }}
+      {{ styleObject.style_name }}
     </div>
 
     <div v-for="(layer, i) in styleObject.layers" :id="i" class="">
