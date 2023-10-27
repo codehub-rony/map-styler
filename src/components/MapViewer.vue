@@ -9,6 +9,7 @@ import Map from "ol/Map.js";
 import View from "ol/View.js";
 import { unByKey } from "ol/Observable.js";
 import * as olExtent from "ol/extent";
+const VITE_APP_GEO_SERVICE = import.meta.env.VITE_APP_GEO_SERVICE;
 
 // basemap
 import OSM from "ol/source/OSM.js";
