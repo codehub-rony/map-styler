@@ -12,6 +12,8 @@
     <v-app-bar-title class="d-sm-flex d-none">MapStyler</v-app-bar-title>
 
     <v-spacer></v-spacer>
+    <template v-slot:append>
+    <v-btn icon="mdi-github" href="https://github.com/codehub-rony/map-styler" target="_blank"></v-btn>
     <v-btn
       color="#FFDD00"
       size="small"
@@ -21,6 +23,9 @@
       class="mr-4"
       ><span> &#9749; </span>Buy me a coffee</v-btn
     >
+
+  </template>
+
   </v-app-bar>
 </template>
 
