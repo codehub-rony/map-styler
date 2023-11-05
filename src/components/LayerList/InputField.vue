@@ -1,5 +1,5 @@
 <template>
-  {{ attribute.component.label }}
+   <span class="text-body-2" >{{ attribute.component.label }}</span>
   <input
     v-model="attribute.value"
     type="number"

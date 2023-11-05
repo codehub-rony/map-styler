@@ -1,5 +1,5 @@
 <template>
-  {{ attribute.component.label }}
+  <span class="text-body-2" >{{ attribute.component.label }}</span>
   <div
     v-if="attribute.component.type === 'color_picker'"
     class="layerlist-item-color"
