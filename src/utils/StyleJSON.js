@@ -54,11 +54,30 @@ class GeojsonStyle extends BaseStyle {
       layers: this.layers.map((x) => x.getStyleAsObject()),
     };
 
-    style.layers.forEach((layer) => {
-      layer["layer"] = this.source_id;
-    });
-
     return JSON.stringify(style, null, 2);
+  }
+  addFilter(layer_id, layer_label, filter) {
+    let new_layer = new FillLayer(this.style_name, this.source_id);
+    new_layer["id"] = layer_id;
+    new_layer["label"] = layer_label;
+    (new_layer.attributes[0].value = { r: 253, g: 174, b: 97, a: 0.7 }),
+      (new_layer["filter"] = filter);
+    let index = this.layers.length - 1;
+    this.layers.splice(index, 0, new_layer);
+  }
+
+  getFeatureAttributes() {
+    let keys = Object.keys(this.geojson.features[0].properties);
+    let attributes = {};
+
+    keys.forEach((key) => {
+      let datatype = typeof this.geojson.features[0].properties[key];
+
+      let attribute = {};
+      attribute[key] = datatype ? datatype : null;
+      attributes[key] = datatype ? datatype : null;
+    });
+    return attributes;
   }
 }
 
@@ -92,6 +111,15 @@ class OGCTileStyle extends BaseStyle {
 
     return JSON.stringify(style, null, 2);
   }
-}
 
+  addFilter(layer_id, layer_label, filter) {
+    console.log(layer_id, layer_label, filter);
+
+    let new_layer = new FillLayer(this.style_name, this.source_id);
+    (new_layer["id"] = layer_id), (new_layer["label"] = layer_label);
+    (new_layer.attributes[0].value = { r: 253, g: 174, b: 97, a: 0.7 }),
+      (new_layer["filter"] = filter),
+      this.layers.push(new_layer);
+  }
+}
 export default { GeojsonStyle, OGCTileStyle };
