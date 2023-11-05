@@ -1,8 +1,10 @@
 class BaseLayer {
   constructor(layer_name, source_id, type) {
     this.id = `${layer_name}_${type}`;
+    this.label = `default ${type}`
     this.source = source_id;
     this.type = type;
+    this.filter = [];
   }
   getPaint(attributes) {
     let paint = {};
@@ -20,14 +22,25 @@ class BaseLayer {
     return paint;
   }
 
+  hasFilter() {
+    return this.filter.length > 0
+  }
+
   getStyleObject(attributes) {
-    return {
+    let styleObject = {
       id: this.id,
       source: this.source,
       type: this.type,
       paint: this.getPaint(attributes),
-    };
+    }; 
+
+    if (this.filter.length > 0) {
+      styleObject['filter'] = this.filter
+    }
+
+    return styleObject 
   }
 }
 
 export default BaseLayer;
+// module.exports = BaseLayer
