@@ -50,7 +50,8 @@
 <script>
 import LoadData from "@/components/DataImport/LoadData.vue";
 import demo_data from "../assets/buildings.json";
-import StyleJSON from "../utils/StyleJSON.js";
+import GeojsonStyle  from "@/utils/ldproxy/GeojsonStyle.js";
+
 export default {
   components: {
     LoadData,
@@ -66,11 +67,11 @@ export default {
     loadDemoData: function () {
       this.isOpen = false;
       let geometry_type = demo_data.features[0].geometry.type.toLowerCase();
-      let styleObject = new StyleJSON.GeojsonStyle(
+      let styleObject = new GeojsonStyle(
         "buildings",
         "buildings",
         geometry_type,
-        demo_data
+        JSON.stringify(demo_data)
       );
 
       this.$emit("load-datasource", styleObject);
