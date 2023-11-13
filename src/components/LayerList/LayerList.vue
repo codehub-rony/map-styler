@@ -7,8 +7,6 @@
       <div class="d-flex flex-row align-center  pr-3 pl-1">
         <DeleteButton :callback="deleteLayer" :item="layer" class="mb-1" />
         <span class="text-subtitle-2">{{ layer.label }}</span>
-
-
       </div>
 
       <div
