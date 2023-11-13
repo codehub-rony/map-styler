@@ -69,7 +69,8 @@
 </template>
 
 <script>
-import StyleJSON from "@/utils/StyleJSON.js";
+import GeojsonStyle from "@/utils/ldproxy/GeojsonStyle.js";
+import OGCTileStyle from "@/utils/ldproxy/OGCTileStyle.js";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
@@ -129,7 +130,7 @@ export default {
             let geometry_type = json.features[0].geometry.type.toLowerCase();
             let source_id = style_name;
 
-            styleObject = new StyleJSON.GeojsonStyle(
+            styleObject = new GeojsonStyle(
               style_name,
               source_id,
               geometry_type,
@@ -160,7 +161,7 @@ export default {
       }
     },
     createTileStyleObject: function (tilejson, style_name) {
-      let styleObject = new StyleJSON.OGCTileStyle(
+      let styleObject = new OGCTileStyle(
         style_name,
         this.url,
         tilejson.source_id,
