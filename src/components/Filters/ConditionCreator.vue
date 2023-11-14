@@ -63,7 +63,9 @@ export default {
       this.$emit("remove-condition", this.filter);
     },
     parseIntIfNumber: function() {
-      return this.attributes[this.attribute] === 'number' ? parseInt(this.value) : this.value
+      const number_types = ['number', 'integer']
+      
+      return number_types.includes(this.attributes[this.attribute].toLowerCase())  ? parseInt(this.value) : this.value
 
     },
     updateFilter: function() {
