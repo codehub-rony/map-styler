@@ -22,16 +22,6 @@ class GeojsonStyle extends BaseStyle {
 
     return JSON.stringify(style, null, 2);
   }
-  addFilter(layer_id, layer_label, filter) {
-    let new_layer = this.createLayer();
-
-    new_layer["id"] = layer_id;
-    new_layer["label"] = layer_label;
-    new_layer.attributes[0].value = { r: 253, g: 174, b: 97, a: 0.7 }
-    new_layer["filter"] = filter
-    let index = this.layers.length - 1;
-    this.layers.splice(index, 0, new_layer);
-  }
 
   getFeatureAttributes() {
     let keys = Object.keys(this.geojson.features[0].properties);

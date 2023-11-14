@@ -62,6 +62,21 @@ class BaseStyle {
         return null;
     }
   }
+
+  addFilter(layer_id, layer_label, filter) {
+    let new_layer = this.createLayer();
+    new_layer["id"] = layer_id;
+    new_layer["label"] = layer_label;
+    new_layer.attributes[0].value = { r: 253, g: 174, b: 97, a: 0.7 };
+    new_layer["filter"] = filter;
+
+    if (new_layer instanceof FillLayer) {
+      let index = this.layers.length - 1;
+      this.layers.splice(index, 0, new_layer);
+    } else {
+      this.layers.push(new_layer);
+    }
+  }
 }
 
-export default BaseStyle
+export default BaseStyle;

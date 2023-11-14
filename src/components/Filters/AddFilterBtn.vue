@@ -138,7 +138,7 @@ export default {
       }
     },
     closeAndResetDialog: function () {
-      this.conditions = []  
+      this.conditions = [];
       this.label = "";
       this.dialog = false;
     },
