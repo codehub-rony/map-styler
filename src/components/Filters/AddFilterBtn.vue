@@ -144,11 +144,7 @@ export default {
     },
 
     deleteLayer: function (layer) {
-      this.styleObject.layers.forEach((item, i) => {
-        if (item.id === layer.id) {
-          this.styleObject.layers.splice(i, 1);
-        }
-      });
+      this.styleObject.deteLayer(layer.id)
     },
   },
 };

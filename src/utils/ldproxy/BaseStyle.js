@@ -77,6 +77,14 @@ class BaseStyle {
       this.layers.push(new_layer);
     }
   }
+
+  deleteLayer(layer_id) {
+    this.layers.forEach((layer, i) => {
+      if (layer.id === layer_id) {
+        this.layers.splice(i, 1);
+      }
+    })
+  }
 }
 
 export default BaseStyle;
