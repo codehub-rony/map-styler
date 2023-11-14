@@ -5,16 +5,21 @@ A web application for designing vector data styles and interactive webmaps based
 Visit [MapStyler](https://mapstyler.com) and try it. For more information on the how, what and why behind MapStyler, see my blogpost [Launching MapStyler](https://www.oneprojectatatime.nl/launching-mapstyler/).
 
 #### Current features:
--  Support for geoJSON files
+-  Support for various datasources:
+    - geoJSON files
+    - [OGC API Vectortile](https://github.com/opengeospatial/ogcapi-tiles) in WebMercator projection
 -  Basic styling for point, line and polygon features
 -  export style as GL JS JSON
 
 #### Roadmap
 The tool is in development and many more features are to come:
-- Add support for [OGC API Vectortile](https://github.com/opengeospatial/ogcapi-tiles)  as data source
 - Add support for [Maptiler GeoJSON layers](https://docs.maptiler.com/sdk-js/examples/geojson-polygon/) as data source
 - Advanced styling with filters on data attributes
 - Add option to export a basemap layer
 - Click interaction for map features
 
 Suggestions and ideas for futher development are welcome. 
+
+
+https://github.com/codehub-rony/map-styler/assets/10270049/59beff25-35cd-41a6-8163-95e448548701
+
