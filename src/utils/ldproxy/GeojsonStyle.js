@@ -39,9 +39,7 @@ class GeojsonStyle extends BaseStyle {
 
     keys.forEach((key) => {
       let datatype = typeof this.geojson.features[0].properties[key];
-
-      let attribute = {};
-      attribute[key] = datatype ? datatype : null;
+      attributes[key] = datatype ? datatype : null;
     });
 
     return attributes;
