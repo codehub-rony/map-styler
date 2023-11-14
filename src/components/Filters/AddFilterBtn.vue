@@ -91,9 +91,9 @@ export default {
     };
   },
   methods: {
-    openDialog: function () {
+    openDialog: async function () {
       this.dialog = true;
-      this.attributes = this.styleObject.getFeatureAttributes();
+      this.attributes = await this.styleObject.getFeatureAttributes();
       this.createCondition();
     },
     createCondition: function () {
