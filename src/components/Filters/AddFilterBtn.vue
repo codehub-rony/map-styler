@@ -54,7 +54,7 @@
           <v-btn variant="text" size="small" rounded="0" @click="dialog = false"
             >cancel</v-btn
           >
-          <v-btn color="primary" size="small" flat rounded="0" @click="create()"
+          <v-btn color="primary" size="small" flat rounded="0" @click="create"
             >create</v-btn
           >
         </div>
@@ -94,17 +94,16 @@ export default {
     openDialog: function () {
       this.dialog = true;
       this.attributes = this.styleObject.getFeatureAttributes();
-      this.createCondition(Object.keys(this.attributes)[0]);
+      this.createCondition();
     },
-    createCondition: function (attribute) {
-      let filter = { id: 0, condition: ["==", attribute, null] };
+    createCondition: function () {
+      let filter = { id: 0, condition: ["==", null, null] };
 
       if (this.conditions.length > 0) {
         filter.id = this.conditions[this.conditions.length - 1].id + 1;
         filter.condition[1] =
           this.conditions[this.conditions.length - 1].condition[1];
       }
-
       this.conditions.push(filter);
     },
     updateCondition: function (update) {
@@ -139,7 +138,7 @@ export default {
       }
     },
     closeAndResetDialog: function () {
-      this.conditions = [{ id: 0, condition: ["==", "bouwjaar", null] }];
+      this.conditions = []  
       this.label = "";
       this.dialog = false;
     },

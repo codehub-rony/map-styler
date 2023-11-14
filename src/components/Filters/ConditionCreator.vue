@@ -50,6 +50,7 @@ export default {
   },
   mounted() {
     this.properties = Object.keys(this.attributes)
+    this.attribute = this.filter.condition[1]
 
   },
   unmounted() {
