@@ -119,7 +119,6 @@ export default {
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
-      this.$refs.ogcTileInput.clearErrorMessages();
 
       if (valid) {
         let styleObject;
@@ -144,6 +143,7 @@ export default {
 
         if (this.selectedType === "ogcvectortile") {
           let tilejson;
+          this.$refs.ogcTileInput.clearErrorMessages();
           try {
             tilejson = await this.parseTileJSON(this.url);
 
