@@ -4,10 +4,11 @@ class BaseLayer {
       throw new Error("Missing parameter: source_id");
     }
     this.id = `${layer_name}_${type}`;
-    this.label = `default ${type}`
+    this.label = `default ${type}`;
     this.source = source_id;
     this.type = type;
     this.filter = [];
+    this.layout = { visibility: "visible" };
   }
   getPaint(attributes) {
     let paint = {};
@@ -26,7 +27,11 @@ class BaseLayer {
   }
 
   hasFilter() {
-    return this.filter.length > 0
+    return this.filter.length > 0;
+  }
+
+  setVisibility(isVisible) {
+    this.layout.visibility = isVisible ? "visible" : "none";
   }
 
   getStyleObject(attributes) {
@@ -35,13 +40,14 @@ class BaseLayer {
       source: this.source,
       type: this.type,
       paint: this.getPaint(attributes),
-    }; 
+      layout: this.layout,
+    };
 
     if (this.filter.length > 0) {
-      styleObject['filter'] = this.filter
+      styleObject["filter"] = this.filter;
     }
 
-    return styleObject 
+    return styleObject;
   }
 }
 

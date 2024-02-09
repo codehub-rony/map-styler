@@ -24,8 +24,6 @@ class OGCTileStyle extends BaseStyle {
 
     style.layers.forEach((layer) => {
       layer["source-layer"] = this.source_id;
-      layer["layout"] = {};
-      layer.layout["visibility"] = "visible";
     });
 
     return JSON.stringify(style, null, 2);

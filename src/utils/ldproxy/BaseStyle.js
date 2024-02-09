@@ -83,7 +83,7 @@ class BaseStyle {
       if (layer.id === layer_id) {
         this.layers.splice(i, 1);
       }
-    })
+    });
   }
 }
 

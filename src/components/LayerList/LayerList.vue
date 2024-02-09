@@ -4,9 +4,12 @@
       {{ styleObject.style_name }}
     </div>
     <div v-for="(layer, i) in styleObject.layers" :id="i" class="">
-      <div class="d-flex flex-row align-center  pr-3 pl-1">
-        <DeleteButton :callback="deleteLayer" :item="layer" class="mb-1" />
-        <span class="text-subtitle-2">{{ layer.label }}</span>
+      <div class="d-flex flex-row align-center justify-space-between pl-1">
+        <span class="text-subtitle-2 pl-3">{{ layer.label }}</span>
+        <div>
+          <DeleteButton :callback="deleteLayer" :item="layer" class="mb-1" />
+          <VisibilityButton :layer="layer" class="mb-1" />
+        </div>
       </div>
 
       <div
@@ -34,7 +37,8 @@
 <script>
 import InputField from "./InputField.vue";
 import ColorField from "./ColorField.vue";
-import DeleteButton from '@/components/DeleteButton.vue';
+import DeleteButton from "@/components/DeleteButton.vue";
+import VisibilityButton from "./VisibilityButton.vue";
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 export default {
@@ -42,6 +46,7 @@ export default {
     InputField,
     ColorField,
     DeleteButton,
+    VisibilityButton,
   },
   computed: {
     ...mapState(useAppStore, ["styleObject"]),
@@ -64,5 +69,4 @@ export default {
 .test {
   margin-left: 36px;
 }
-
 </style>
