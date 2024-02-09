@@ -50,6 +50,12 @@ export default {
     update: function () {
       this.$emit("update-input", { var: "url", value: this.url });
     },
+    clearErrorMessages: function () {
+      this.errorMessages = [];
+    },
+    addErrorMessage: function (error) {
+      this.errorMessages.push(error);
+    },
   },
 };
 </script>

@@ -119,6 +119,7 @@ export default {
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
+      this.$refs.ogcTileInput.clearErrorMessages();
 
       if (valid) {
         let styleObject;
@@ -155,7 +156,7 @@ export default {
               this.createTileStyleObject(tilejson, style_name);
             }
           } catch (error) {
-            this.$refs.ogcTileInput.errorMessages.push(error);
+            this.$refs.ogcTileInput.addErrorMessage(error.message);
           }
         }
       }
@@ -205,8 +206,11 @@ export default {
             };
 
             resolve(meta_data);
-          }).catch(() => {
-            this.$refs.ogcTileInput.errorMessages.push("The URL seems to be invalid. Data can not be loaded");
+          })
+          .catch(() => {
+            this.$refs.ogcTileInput.errorMessages.push(
+              "The URL seems to be invalid. Data can not be loaded"
+            );
           });
       });
 
@@ -225,7 +229,7 @@ export default {
             resolve(reader.result);
           } else {
             this.$refs.geoJSONInput.messages.push(
-              "Invalid JSON structrue. Could not parse the GeoJSON file"
+              "Invalid JSON structure. Could not parse the GeoJSON file"
             );
 
             reject();
