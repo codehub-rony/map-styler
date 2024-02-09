@@ -9,12 +9,13 @@ Visit [MapStyler](https://mapstyler.com) and try it. For more information on the
     - geoJSON files
     - [OGC API Vectortile](https://github.com/opengeospatial/ogcapi-tiles) in WebMercator projection
 -  Basic styling for point, line and polygon features
+-  Create new style layers based on conditional attribute formating
 -  export style as GL JS JSON
 
 #### Roadmap
 The tool is in development and many more features are to come:
 - Add support for [Maptiler GeoJSON layers](https://docs.maptiler.com/sdk-js/examples/geojson-polygon/) as data source
-- Advanced styling with filters on data attributes
+- Advanced styling using conditional formatting
 - Add option to export a basemap layer
 - Click interaction for map features
 
