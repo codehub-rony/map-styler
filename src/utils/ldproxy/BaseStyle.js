@@ -23,12 +23,13 @@ class BaseStyle {
 
     const polygon = ["polygon", "multipolygon", "polygons"];
     const line = ["linestring", "multilinestring"];
+    const point = ["point", "points"];
 
     if (polygon.includes(geom_type)) {
       return "polygon";
     } else if (line.includes(geom_type)) {
       return "line";
-    } else if (geom_type.toLowerCase() === "point") {
+    } else if (point.includes(geom_type)) {
       return "point";
     } else {
       throw new Error("Unknown geometry type");

@@ -1,5 +1,5 @@
 <template>
-  <span class="text-body-2" >{{ attribute.component.label }}</span>
+  <span class="text-body-2">{{ attribute.component.label }}</span>
   <div
     v-if="attribute.component.type === 'color_picker'"
     class="layerlist-item-color"
@@ -11,9 +11,8 @@
         <v-color-picker
           class="color-selector"
           v-model="this.attribute.value"
-          :swatches="swatches"
           show-swatches
-          hide-inputs
+          :modes="['rgba']"
           rounded="0"
           elevation="0"
           width="100%"
