@@ -11,12 +11,12 @@
 export default {
   props: {
     callback: Function,
-    item: Object,
+    layer: Object,
   },
   methods: {
     handleClick: function () {
       if (this.callback) {
-        this.callback(this.item);
+        this.callback(this.layer);
       } else {
         this.$emit("click");
       }
