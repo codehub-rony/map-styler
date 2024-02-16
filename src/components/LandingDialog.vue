@@ -50,7 +50,7 @@
 <script>
 import LoadData from "@/components/DataImport/LoadData.vue";
 import demo_data from "../assets/buildings.json";
-import GeojsonStyle  from "@/utils/ldproxy/GeojsonStyle.js";
+import GeojsonStyle from "@/utils/ldproxy/GeojsonStyle.js";
 
 export default {
   components: {
