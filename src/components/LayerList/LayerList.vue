@@ -6,7 +6,7 @@
     <div v-for="(layer, i) in styleObject.layers" :id="i" class="">
       <div class="d-flex flex-row align-center justify-space-between pl-1">
         <span class="text-subtitle-2 pl-3">{{ layer.label }}</span>
-        <div>
+        <div class="d-flex flex-row">
           <EditButton
             :layer="layer"
             :styleObject="styleObject"
