@@ -12,8 +12,6 @@ class Filter {
     let id = this.getMaxId();
     let condition = new Condition(id);
     this.conditions.push(condition);
-
-    return condition;
   }
 
   deleteCondition(condition_id) {
@@ -36,6 +34,14 @@ class Filter {
 
   getOperator() {
     return this.operator;
+  }
+
+  setConditions(update) {
+    this.conditions.forEach((condition) => {
+      if (condition.getId() === update.id) {
+        condition.update(update.properties);
+      }
+    });
   }
 
   getFilterAsArray() {
