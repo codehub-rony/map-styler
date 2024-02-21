@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     handleClick: async function () {
-      let attributes = await this.styleObject;
+      let attributes = await this.styleObject.getFeatureAttributes();
       this.$refs.LayerEditDialog.openDialog(this.layer, attributes, "edit");
     },
   },
