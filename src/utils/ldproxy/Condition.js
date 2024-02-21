@@ -30,6 +30,12 @@ class Condition {
     return this.value;
   }
 
+  update(properties) {
+    this.setAttribute(properties.attribute);
+    this.setValue(properties.value);
+    this.setOperator(properties.operator);
+  }
+
   setValue(value) {
     this.value = value;
   }
