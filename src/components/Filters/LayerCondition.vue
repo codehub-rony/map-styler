@@ -8,7 +8,7 @@
         size="x-small"
         @click="deleteCondition"
       ></v-btn>
-      <select v-model="attribute" class="add-filter-input-select">
+      <select v-model="test.attribute" class="add-filter-input-select">
         <option
           :value="attribute"
           v-for="(attribute, i) in properties"
@@ -18,7 +18,7 @@
         </option>
       </select>
 
-      <select class="custom-select" v-model="operator">
+      <select class="custom-select" v-model="test.operator">
         <option
           class="custom-select-option"
           :value="operator"
@@ -32,7 +32,7 @@
       <input
         class="add-filter-input-select"
         id="filter-input-type"
-        v-model="value"
+        v-model="test.value"
       />
     </div>
   </div>
@@ -51,6 +51,7 @@ export default {
       operator: null,
       value: null,
       operators: ["==", ">=", "<=", "<", ">"],
+      test: { attribute: null, operator: null, value: null },
     };
   },
   mounted() {
@@ -58,6 +59,13 @@ export default {
     this.operator = this.condition.getOperator();
     this.attribute = this.condition.getAttribute();
     this.value = this.condition.getValue();
+
+    this.test = {
+      operator: this.condition.getOperator(),
+      value: this.condition.getValue(),
+      attribute: this.condition.getAttribute(),
+    };
+    console.log(this.condition);
   },
   unmounted() {
     this.attribute = "";
@@ -82,16 +90,14 @@ export default {
     },
   },
   watch: {
-    operator(newVal) {
-      console.log(newVal);
-      this.condition.setOperator(newVal);
-    },
-    attribute(newVal) {
-      this.condition.setAttribute(newVal);
-    },
-    value(newVal) {
-      let value = this.attribute ? this.parseIntIfNumber(newVal) : newVal;
-      this.condition.setValue(value);
+    test: {
+      handler(newVal) {
+        this.$emit("update-condition", {
+          id: this.condition.id,
+          properties: newVal,
+        });
+      },
+      deep: true,
     },
   },
 };
