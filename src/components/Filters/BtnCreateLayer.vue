@@ -43,7 +43,6 @@ export default {
     },
     addLayer: function (new_layer) {
       this.styleObject.addLayer(new_layer);
-      console.log(this.styleObject.getStyleAsJSON());
     },
   },
 };
