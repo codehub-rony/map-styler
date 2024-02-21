@@ -16,22 +16,17 @@
               @update:modelValue="messages = []"
             ></v-text-field>
           </div>
-
-          <div
-            class="mt-4 text-body-2 font-weight-bold pb-1"
-            v-if="filter.conditions.length > 0"
-          >
-            Conditions
+          <div v-if="filter">
+            <div class="mt-4 text-body-2 font-weight-bold pb-1">Conditions</div>
+            <LayerCondition
+              v-for="condition in filter.conditions"
+              :key="condition.getId()"
+              :condition="condition"
+              :attributes="attributes"
+              @update-condition="updateCondition"
+              @delete-condition="deleteCondition"
+            />
           </div>
-
-          <LayerCondition
-            v-for="condition in filter.conditions"
-            :key="condition.getId()"
-            :condition="condition"
-            :attributes="attributes"
-            @update-condition="updateCondition"
-            @delete-condition="deleteCondition"
-          />
           <div class="d-flex justify-end mt-1">
             <v-btn flat size="x-small" rounded="0" @click="createCondition"
               >add condition</v-btn
@@ -71,8 +66,9 @@ export default {
       modes: { new: 1, edit: 2 },
       label: null,
       messages: [],
-      filter: [],
+      filter: null,
       attributes: [],
+      conditionUpdates: [],
     };
   },
   computed: {
@@ -83,6 +79,7 @@ export default {
   methods: {
     openDialog: async function (layer, attributes, mode) {
       this.layer = layer;
+      this.filter = layer.filter;
       this.attributes = attributes;
       this.mode = this.modes[mode];
       this.dialogIsOpen = true;
@@ -100,14 +97,33 @@ export default {
       this.filter.createCondition();
     },
     updateCondition: function (update) {
-      console.log("yayay update");
+      let index = this.conditionUpdates.findIndex(
+        (item) => item.id === update.id
+      );
+
+      if (index === -1) {
+        this.conditionUpdates.push(update);
+      } else {
+        this.conditionUpdates[index] = update;
+      }
     },
     deleteCondition: function (condition_id) {
       this.filter.deleteCondition(condition_id);
+      let index = this.conditionUpdates.findIndex(
+        (item) => item.id === condition_id
+      );
+
+      if (index !== -1) {
+        this.conditionUpdates.splice(index, 1);
+      }
     },
     save: function () {
       if (this.label) {
         this.layer.label = this.label;
+        this.conditionUpdates.forEach((update) => {
+          this.filter.setConditions(update);
+        });
+
         this.layer.setFilter(this.filter);
         this.dialogIsOpen = false;
         this.$emit("add-layer", this.layer);
