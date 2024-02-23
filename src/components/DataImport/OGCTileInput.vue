@@ -38,7 +38,8 @@
           density="compact"
           variant="outlined"
           @click="setGeometryManually"
-          ><v-btn value="polygon">polygon</v-btn><v-btn value="line">line</v-btn
+          ><v-btn value="polygon">polygon</v-btn
+          ><v-btn value="linestring">line</v-btn
           ><v-btn value="point">point</v-btn></v-btn-toggle
         >
       </div>
@@ -89,7 +90,6 @@ export default {
           ) {
             this.showToggle = true;
           } else {
-            console.log(tilejson, "go without check");
             this.acceptTileJson(tilejson);
           }
         })
@@ -106,6 +106,7 @@ export default {
     },
     setGeometryManually: function () {
       this.tilejson.geometry_type = this.geometry;
+      console.l;
       this.acceptTileJson();
     },
   },

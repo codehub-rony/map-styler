@@ -65,7 +65,6 @@ export default {
       value: this.condition.getValue(),
       attribute: this.condition.getAttribute(),
     };
-    console.log(this.condition);
   },
   unmounted() {
     this.attribute = "";
