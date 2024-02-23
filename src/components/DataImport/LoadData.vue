@@ -134,7 +134,7 @@ export default {
         style_name,
         tilejson.url,
         tilejson.source_id,
-        tilejson.geometry_type,
+        tilejson.vector_layers[0].geometry_type,
         tilejson.tiles_url
       );
       this.$emit("import-data", styleObject);

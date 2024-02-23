@@ -105,7 +105,7 @@ export default {
       this.$emit("set-tilejson", this.tilejson);
     },
     setGeometryManually: function () {
-      this.tilejson.geometry_type = this.geometry;
+      this.tilejson.vector_layers[0].geometry_type = this.geometry;
       console.l;
       this.acceptTileJson();
     },
