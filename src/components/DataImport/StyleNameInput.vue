@@ -6,14 +6,15 @@
     density="comfortable"
     v-model="styleName"
     class="mb-2 mt-2"
-    @change="$emit('update-input', $event.target.value)"
+    @change="
+      $emit('update-input', { var: 'styleName', value: $event.target.value })
+    "
   ></v-text-field>
 </template>
 
 <script>
 export default {
   emits: ["update-input"],
-  props: ["styleName"],
   data() {
     return {
       styleName: null,

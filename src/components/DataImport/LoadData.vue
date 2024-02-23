@@ -29,10 +29,14 @@
           class="d-flex flex-column form-input-item-container"
           v-if="selectedType"
         >
-          <StyleNameInput />
+          <StyleNameInput
+            @update-input="
+              (item) => (inputs[item.var] = item.value.replace(' ', ''))
+            "
+          />
           <GeoJSONInput
             v-if="selectedType === 'geojson'"
-            @update-input="updateInput"
+            @update-input="(item) => (inputs[item.var] = item.value)"
             ref="geoJSONInput"
           />
 
@@ -80,10 +84,8 @@ export default {
   },
   data() {
     return {
+      inputs: { styleName: null, file: null },
       selectedType: null,
-      styleName: null,
-      file: null,
-      url: null,
       dataSources: [
         { type: "geojson", label: "GeoJSON" },
         { type: "ogcvectortile", label: "OGC Vectortile" },
@@ -94,34 +96,21 @@ export default {
     };
   },
   methods: {
-    updateInput: function (input) {
-      switch (input.var) {
-        case "styleName":
-          this.styleName = input.value;
-          break;
-        case "file":
-          this.file = input.value;
-          break;
-        default:
-          null;
-      }
-    },
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
 
       if (valid) {
         let styleObject;
-        let style_name = this.styleName.replace(" ", "_");
 
         if (this.selectedType === "geojson") {
           this.openFile().then((geojson) => {
             let json = JSON.parse(geojson);
             let geometry_type = json.features[0].geometry.type.toLowerCase();
-            let source_id = style_name;
+            let source_id = this.inputs.styleName;
 
             styleObject = new GeojsonStyle(
-              style_name,
+              this.inputs.styleName,
               source_id,
               geometry_type,
               geojson
@@ -132,7 +121,7 @@ export default {
         }
 
         if (this.selectedType === "ogcvectortile" && this.tilejson) {
-          this.createTileStyleObject(this.tilejson, style_name);
+          this.createTileStyleObject(this.tilejson, this.inputs.styleName);
         }
       }
     },
@@ -163,7 +152,7 @@ export default {
     openFile: async function (e) {
       let reader = new FileReader();
       const promise = new Promise((resolve, reject) => {
-        reader.readAsText(this.file["0"]);
+        reader.readAsText(this.inputs.file["0"]);
         reader.onload = () => {
           if (this.isValidJSON(reader.result)) {
             this.loading = false;
@@ -187,11 +176,6 @@ export default {
       } else {
         this.$emit("go-back");
       }
-    },
-  },
-  watch: {
-    stlyeName: function (newVal) {
-      console.log(newVal);
     },
   },
 };
