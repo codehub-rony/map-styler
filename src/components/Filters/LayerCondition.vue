@@ -75,25 +75,27 @@ export default {
     deleteCondition: function () {
       this.$emit("delete-condition", this.condition.getId());
     },
-    parseIntIfNumber: function (value) {
-      const number_types = ["number", "integer"];
+    parseIntIfNumber: function (attribute, value) {
+      if (attribute && value) {
+        const number_types = ["number", "integer"];
 
-      return number_types.includes(
-        this.attributes[this.attribute].toLowerCase()
-      )
-        ? parseInt(value)
-        : value;
-    },
-    updateFilter: function () {
-      this.$emit("update-condition");
+        return number_types.includes(this.attributes[attribute].toLowerCase())
+          ? parseInt(value)
+          : value;
+      }
     },
   },
   watch: {
     test: {
-      handler(newVal) {
+      handler(properties) {
+        properties.value = this.parseIntIfNumber(
+          properties.attribute,
+          properties.value
+        );
+
         this.$emit("update-condition", {
           id: this.condition.id,
-          properties: newVal,
+          properties: properties,
         });
       },
       deep: true,
