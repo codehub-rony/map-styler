@@ -6,8 +6,14 @@
     <div v-for="(layer, i) in styleObject.layers" :id="i" class="">
       <div class="d-flex flex-row align-center justify-space-between pl-1">
         <span class="text-subtitle-2 pl-3">{{ layer.label }}</span>
-        <div>
-          <DeleteButton :callback="deleteLayer" :item="layer" class="mb-1" />
+        <div class="d-flex flex-row">
+          <EditButton
+            :layer="layer"
+            :styleObject="styleObject"
+            @open-edit-dialog="handleEvent"
+            class="mb-1"
+          />
+          <DeleteButton :callback="deleteLayer" :layer="layer" class="mb-1" />
           <VisibilityButton :layer="layer" class="mb-1" />
         </div>
       </div>
@@ -39,14 +45,17 @@ import InputField from "./InputField.vue";
 import ColorField from "./ColorField.vue";
 import DeleteButton from "@/components/DeleteButton.vue";
 import VisibilityButton from "./VisibilityButton.vue";
+import EditButton from "./EditButton.vue";
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 export default {
+  emits: ["open-edit-dialog"],
   components: {
     InputField,
     ColorField,
     DeleteButton,
     VisibilityButton,
+    EditButton,
   },
   computed: {
     ...mapState(useAppStore, ["styleObject"]),
@@ -54,12 +63,10 @@ export default {
 
   methods: {
     deleteLayer: function (layer) {
-      //to do add function in StyleObject for deleting layers
-      this.styleObject.layers.forEach((item, i) => {
-        if (item.id === layer.id) {
-          this.styleObject.layers.splice(i, 1);
-        }
-      });
+      this.styleObject.deleteLayer(layer.getId());
+    },
+    handleEvent: function (layer) {
+      this.$emit("open-edit-dialog", layer);
     },
   },
 };

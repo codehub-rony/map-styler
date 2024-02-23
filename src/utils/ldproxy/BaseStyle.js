@@ -63,6 +63,10 @@ class BaseStyle {
         return null;
     }
   }
+  addLayer(new_layer) {
+    let position_last_element = this.layers.length - 1;
+    this.layers.splice(position_last_element, 0, new_layer);
+  }
 
   addFilter(layer_id, layer_label, filter) {
     let new_layer = this.createLayer();

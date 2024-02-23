@@ -6,7 +6,9 @@
     density="comfortable"
     v-model="styleName"
     class="mb-2 mt-2"
-    @change="update"
+    @change="
+      $emit('update-input', { var: 'styleName', value: $event.target.value })
+    "
   ></v-text-field>
 </template>
 
@@ -21,11 +23,6 @@ export default {
         (v) => /^[A-Za-z\s_]+$/.test(v) || "Name can only contain characters",
       ],
     };
-  },
-  methods: {
-    update: function () {
-      this.$emit("update-input", { var: "styleName", value: this.styleName });
-    },
   },
 };
 </script>

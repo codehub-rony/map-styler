@@ -1,13 +1,15 @@
+import Filter from "./Filter.js";
+
 class BaseLayer {
   constructor(layer_name, source_id, type) {
     if (source_id === undefined) {
       throw new Error("Missing parameter: source_id");
     }
-    this.id = `${layer_name}_${type}`;
+    this.id = this.generateUniqueId();
     this.label = `default ${type}`;
     this.source = source_id;
     this.type = type;
-    this.filter = [];
+    this.filter = null;
     this.layout = { visibility: "visible" };
   }
   getPaint(attributes) {
@@ -27,11 +29,35 @@ class BaseLayer {
   }
 
   hasFilter() {
-    return this.filter.length > 0;
+    return this.filter ? true : false;
+  }
+
+  createFilter() {
+    return new Filter();
+  }
+
+  setFilter(filter) {
+    this.filter = filter;
+  }
+
+  generateUniqueId() {
+    let id = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < 10) {
+      id += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return id;
   }
 
   setVisibility(isVisible) {
     this.layout.visibility = isVisible ? "visible" : "none";
+  }
+
+  getId() {
+    return this.id;
   }
 
   getStyleObject(attributes) {
@@ -43,8 +69,8 @@ class BaseLayer {
       layout: this.layout,
     };
 
-    if (this.filter.length > 0) {
-      styleObject["filter"] = this.filter;
+    if (this.filter) {
+      styleObject["filter"] = this.filter.getFilterAsArray();
     }
 
     return styleObject;
@@ -52,4 +78,3 @@ class BaseLayer {
 }
 
 export default BaseLayer;
-// module.exports = BaseLayer
