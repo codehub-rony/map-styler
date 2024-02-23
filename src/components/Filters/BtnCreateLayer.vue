@@ -1,16 +1,18 @@
 <template>
-  <div class="d-flex justify-center pb-3">
-    <v-btn
-      elevation="0"
-      variant="outlined"
-      rounded="0"
-      size="small"
-      @click="openDialog"
-      >new layer
-    </v-btn>
-  </div>
+  <div>
+    <div class="d-flex justify-center pb-3">
+      <v-btn
+        elevation="0"
+        variant="outlined"
+        rounded="0"
+        size="small"
+        @click="openDialog"
+        >new layer
+      </v-btn>
+    </div>
 
-  <LayerEditDialog ref="LayerEditDialog" @add-layer="addLayer" />
+    <LayerEditDialog ref="LayerEditDialog" @add-layer="addLayer" />
+  </div>
 </template>
 
 <script>
