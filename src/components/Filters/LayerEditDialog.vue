@@ -94,7 +94,11 @@ export default {
       }
     },
     createCondition: function () {
-      this.filter.createCondition();
+      if (!this.filter) {
+        this.filter = this.layer.createFilter();
+      } else {
+        this.filter.createCondition();
+      }
     },
     updateCondition: function (update) {
       let index = this.conditionUpdates.findIndex(
