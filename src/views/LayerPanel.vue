@@ -2,13 +2,13 @@
   <v-scroll-y-transition>
     <v-sheet rounded="0" elevation="2">
       <LayerList v-if="styleObject" @open-edit-dialog="editLayer" />
-      <!-- <BtnCreateLayer
+      <BtnCreateLayer
         v-if="styleObject"
         :styleObject="styleObject"
         mode="new"
         class="mt-4"
         ref="filterDialog"
-      /> -->
+      />
     </v-sheet>
   </v-scroll-y-transition>
   <v-scroll-y-transition> </v-scroll-y-transition>
