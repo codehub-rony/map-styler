@@ -14,7 +14,11 @@ import * as olExtent from "ol/extent";
 import OSM from "ol/source/OSM.js";
 import TileLayer from "ol/layer/Tile.js";
 
+// Styling
 import { stylefunction } from "ol-mapbox-style";
+
+// Utils
+import SelectInteraction from "@/utils/mapviewer/SelectInteraction.js";
 
 // OGC Tile layer
 import VectorTileLayer from "ol/layer/VectorTile.js";
@@ -49,7 +53,9 @@ export default {
   mounted() {
     this.setHeight();
     this.initMap();
+    this.initSelectInteraction(this.styleObject.source_type);
 
+    // Redirect to landingpage on pagre reload
     if (this.styleObject) {
       this.createVectorLayer();
     } else {
@@ -77,6 +83,13 @@ export default {
         view: this.view,
         controls: [],
       });
+    },
+    initSelectInteraction: function (source_type) {
+      let select = new SelectInteraction(source_type);
+
+      if (select) {
+        this.map.addInteraction(select);
+      }
     },
     createVectorLayer: function () {
       if (this.styleObject.source_type === "geojson") {
