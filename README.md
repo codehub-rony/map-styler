@@ -9,7 +9,8 @@ Visit [MapStyler](https://mapstyler.com) and try it. For more information on the
     - geoJSON files
     - [OGC API Vectortile](https://github.com/opengeospatial/ogcapi-tiles) in WebMercator projection
 -  Basic styling for point, line and polygon features
--  Create new style layers based on conditional attribute formating
+-  Create new layers based using data filters
+-  Style layers
 -  export style as GL JS JSON
 
 #### Roadmap
