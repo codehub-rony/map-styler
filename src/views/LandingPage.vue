@@ -2,18 +2,18 @@
   <v-container class="container-content-landing">
     <v-row>
       <v-col
-        ><v-sheet height="200"> <StartMenuView /></v-sheet>
+        ><v-sheet height="200"> <DataImportView /></v-sheet>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import StartMenuView from "@/views/StartMenuView";
+import DataImportView from "@/views/DataImportView";
 
 export default {
   components: {
-    StartMenuView,
+    DataImportView,
   },
 };
 </script>
