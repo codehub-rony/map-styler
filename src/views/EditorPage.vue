@@ -11,7 +11,6 @@
       </v-col>
     </v-row>
   </v-container>
-  <LandingDialog @load-datasource="loadData" />
 </template>
 
 <script>
@@ -31,20 +30,10 @@ export default {
     MapViewer,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObject", "setStyleObject"]),
+    ...mapState(useAppStore, ["styleObject"]),
   },
   data() {
-    return {
-      customData: false,
-      geodataSource: { type: null, json: null },
-    };
-  },
-
-  methods: {
-    loadData: function (styleObject) {
-      this.setStyleObject(styleObject);
-      this.$refs.map.createVectorLayer();
-    },
+    return {};
   },
 };
 </script>

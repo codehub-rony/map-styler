@@ -36,7 +36,7 @@ export default {
     geodataSource: Object,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObject"]),
+    ...mapState(useAppStore, ["styleObject", "dataSource"]),
   },
   data() {
     return {
@@ -49,6 +49,12 @@ export default {
   mounted() {
     this.setHeight();
     this.initMap();
+
+    if (this.styleObject) {
+      this.createVectorLayer();
+    } else {
+      this.$router.push("/");
+    }
 
     this.map.on("click", (evt) => {
       // console.log(evt.coordinate, evt.map.getView().getZoom());
