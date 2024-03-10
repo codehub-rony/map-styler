@@ -35,8 +35,6 @@ import "../../node_modules/ol/ol.css";
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 
-import { Fill, Stroke, Style } from "ol/style.js";
-
 export default {
   props: {
     geodataSource: Object,
@@ -50,8 +48,6 @@ export default {
       view: null,
       height: null,
       vectorLayer: null,
-      selectionLayer: null,
-      selection: {},
     };
   },
   mounted() {
@@ -85,35 +81,6 @@ export default {
         target: "map_container",
         view: this.view,
         controls: [],
-      });
-    },
-    initSelectInteraction: function (source_type) {
-      let select = new SelectInteraction(source_type);
-
-      if (select) {
-        this.map.addInteraction(select);
-      }
-    },
-    createSelectionLayer: function (map, vtLayer) {
-      const selectedCountryStyle = new Style({
-        stroke: new Stroke({
-          color: "rgba(200,20,20,0.8)",
-          width: 2,
-        }),
-        fill: new Fill({
-          color: "rgba(200,20,20,0.4)",
-        }),
-      });
-
-      this.selectionLayer = new VectorTileLayer({
-        map: map,
-        renderMode: "vector",
-        source: vtLayer.getSource(),
-        style: (feature) => {
-          if (feature.getId() in this.selection) {
-            return selectedCountryStyle;
-          }
-        },
       });
     },
     createVectorLayer: function () {
