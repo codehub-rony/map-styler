@@ -58,10 +58,6 @@ export default {
     this.setHeight();
     this.initMap();
 
-    if (this.styleObject.source_type === "geojson") {
-      this.initSelectInteraction(this.styleObject.source_type);
-    }
-
     // Redirect to landingpage on pagre reload
     if (this.styleObject) {
       this.createVectorLayer();
@@ -71,28 +67,6 @@ export default {
 
     this.map.on("click", (event) => {
       // console.log(evt.coordinate, evt.map.getView().getZoom());
-
-      // vectortile click interaction
-      if (this.styleObject.source_type === "ogc_vector_tile") {
-        this.selection = {};
-        this.vectorLayer.getFeatures(event.pixel).then((features) => {
-          if (!features.length) {
-            this.selection = {};
-            this.selectionLayer.changed();
-            return;
-          }
-          const feature = features[0];
-          if (!feature) {
-            return;
-          }
-          const fid = feature.getId();
-
-          // add selected feature to lookup
-          this.selection[fid] = feature;
-
-          this.selectionLayer.changed();
-        });
-      }
     });
   },
   methods: {
@@ -150,6 +124,12 @@ export default {
         let features = new GeoJSON().readFeatures(this.styleObject.geojson, {
           featureProjection: "EPSG:3857",
         });
+
+        // Setting id for SelectionInteraction
+        features.forEach((feature, i) => {
+          feature.setId(i);
+        });
+
         this.vectorLayer.getSource().addFeatures(features);
         this.map.addLayer(this.vectorLayer);
         this.zoomToExtent(this.vectorLayer.getSource().getExtent());
@@ -164,8 +144,6 @@ export default {
           source: source,
         });
 
-        this.createSelectionLayer(this.map, this.vectorLayer);
-
         this.map.addLayer(this.vectorLayer);
         const key = source.on("change", () => {
           if (source.getState() === "ready") {
@@ -175,6 +153,11 @@ export default {
           }
         });
       }
+      new SelectInteraction(
+        this.map,
+        this.vectorLayer,
+        this.styleObject.source_type
+      );
     },
     zoomToExtent: function (extent) {
       let resolution = this.view.getResolutionForExtent(extent);
