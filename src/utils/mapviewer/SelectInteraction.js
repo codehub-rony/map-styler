@@ -3,6 +3,11 @@ import { Vector as VectorLayer } from "ol/layer.js";
 
 import VectorTileLayer from "ol/layer/VectorTile.js";
 
+const SOURCE_TYPES = {
+  OGC_VECTOR_TILE: "ogc_vector_tile",
+  GEOJSON: "geojson",
+};
+
 class SelectionStyle {
   constructor() {
     this.style = new Style({
@@ -38,13 +43,13 @@ class SelectionLayer {
       }
     };
 
-    if (source_type === "ogc_vector_tile") {
+    if (source_type === SOURCE_TYPES.OGC_VECTOR_TILE) {
       return new VectorTileLayer({
         map: map,
         source: source,
         style: styleFunction,
       });
-    } else if (source_type === "geojson") {
+    } else if (source_type === SOURCE_TYPES.GEOJSON) {
       return new VectorLayer({
         map: map,
         source: source,
