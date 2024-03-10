@@ -87,6 +87,20 @@ class SelectInteraction extends SelectionLayer {
         this.selection_layer.changed();
       });
     });
+
+    map.on("pointermove", function (event) {
+      var hit = this.forEachFeatureAtPixel(
+        event.pixel,
+        function (feature, layer) {
+          return true;
+        }
+      );
+      if (hit) {
+        this.getTargetElement().style.cursor = "pointer";
+      } else {
+        this.getTargetElement().style.cursor = "";
+      }
+    });
   }
 }
 
