@@ -35,6 +35,8 @@ import "../../node_modules/ol/ol.css";
 import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 
+import { Fill, Stroke, Style } from "ol/style.js";
+
 export default {
   props: {
     geodataSource: Object,
@@ -48,12 +50,17 @@ export default {
       view: null,
       height: null,
       vectorLayer: null,
+      selectionLayer: null,
+      selection: {},
     };
   },
   mounted() {
     this.setHeight();
     this.initMap();
-    this.initSelectInteraction(this.styleObject.source_type);
+
+    if (this.styleObject.source_type === "geojson") {
+      this.initSelectInteraction(this.styleObject.source_type);
+    }
 
     // Redirect to landingpage on pagre reload
     if (this.styleObject) {
@@ -62,8 +69,30 @@ export default {
       this.$router.push("/");
     }
 
-    this.map.on("click", (evt) => {
+    this.map.on("click", (event) => {
       // console.log(evt.coordinate, evt.map.getView().getZoom());
+
+      // vectortile click interaction
+      if (this.styleObject.source_type === "ogc_vector_tile") {
+        this.selection = {};
+        this.vectorLayer.getFeatures(event.pixel).then((features) => {
+          if (!features.length) {
+            this.selection = {};
+            this.selectionLayer.changed();
+            return;
+          }
+          const feature = features[0];
+          if (!feature) {
+            return;
+          }
+          const fid = feature.getId();
+
+          // add selected feature to lookup
+          this.selection[fid] = feature;
+
+          this.selectionLayer.changed();
+        });
+      }
     });
   },
   methods: {
@@ -91,6 +120,28 @@ export default {
         this.map.addInteraction(select);
       }
     },
+    createSelectionLayer: function (map, vtLayer) {
+      const selectedCountryStyle = new Style({
+        stroke: new Stroke({
+          color: "rgba(200,20,20,0.8)",
+          width: 2,
+        }),
+        fill: new Fill({
+          color: "rgba(200,20,20,0.4)",
+        }),
+      });
+
+      this.selectionLayer = new VectorTileLayer({
+        map: map,
+        renderMode: "vector",
+        source: vtLayer.getSource(),
+        style: (feature) => {
+          if (feature.getId() in this.selection) {
+            return selectedCountryStyle;
+          }
+        },
+      });
+    },
     createVectorLayer: function () {
       if (this.styleObject.source_type === "geojson") {
         this.vectorLayer = new VectorLayer({
@@ -112,6 +163,8 @@ export default {
         this.vectorLayer = new VectorTileLayer({
           source: source,
         });
+
+        this.createSelectionLayer(this.map, this.vectorLayer);
 
         this.map.addLayer(this.vectorLayer);
         const key = source.on("change", () => {
