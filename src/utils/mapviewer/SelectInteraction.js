@@ -69,8 +69,8 @@ class SelectInteraction extends SelectionLayer {
 
     map.on("click", (event) => {
       vector_layer.getFeatures(event.pixel).then((features) => {
+        this.selection = {};
         if (!features.length) {
-          this.selection = {};
           this.selection_layer.changed();
           return;
         }
