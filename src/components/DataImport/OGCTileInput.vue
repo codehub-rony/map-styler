@@ -106,7 +106,6 @@ export default {
     },
     setGeometryManually: function () {
       this.tilejson.vector_layers[0].geometry_type = this.geometry;
-      console.l;
       this.acceptTileJson();
     },
   },

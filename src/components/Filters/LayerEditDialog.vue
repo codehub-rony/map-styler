@@ -43,7 +43,7 @@
             >cancel</v-btn
           >
           <v-btn color="primary" size="small" flat rounded="0" @click="save"
-            >save</v-btn
+            >create</v-btn
           >
         </div>
       </v-card>

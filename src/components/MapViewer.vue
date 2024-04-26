@@ -66,6 +66,11 @@ export default {
     // Redirect to landingpage on page reload
     if (this.styleObject) {
       this.createVectorLayer();
+      this.applyStyle(
+        this.vectorLayer,
+        this.styleObject.getStyleAsJSON(),
+        this.styleObject.source_id
+      );
     } else {
       this.$router.push("/");
     }
@@ -141,12 +146,19 @@ export default {
       this.height =
         window.innerHeight < 950 ? window.innerHeight * 0.8 : "85vh";
     },
+    applyStyle: function (vectorlayer, stylejson, source_id) {
+      stylefunction(
+        this.vectorLayer,
+        this.styleObject.getStyleAsJSON(),
+        this.styleObject.source_id
+      );
+    },
   },
   watch: {
     styleObject: {
       handler() {
         if (this.vectorLayer) {
-          stylefunction(
+          this.applyStyle(
             this.vectorLayer,
             this.styleObject.getStyleAsJSON(),
             this.styleObject.source_id

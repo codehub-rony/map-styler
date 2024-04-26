@@ -6,7 +6,7 @@ class LineLayer extends BaseLayer {
     this.attributes = [
       {
         name: "line-color",
-        value: { r: 54, g: 154, b: 204, a: 1 },
+        value: { r: 0, g: 0, b: 0, a: 1 },
         component: { label: "stroke color", type: "color_picker" },
       },
 
