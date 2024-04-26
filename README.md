@@ -7,18 +7,17 @@ Visit [MapStyler](https://mapstyler.com) and try it. For more information on the
 #### Current features:
 -  Support for various datasources:
     - geoJSON files
-    - [OGC API Vectortile](https://github.com/opengeospatial/ogcapi-tiles) in WebMercator projection
+    - [OGC API Vectortile](https://github.com/opengeospatial/ogcapi-tiles) in WebMercator projection (beta)
 -  Basic styling for point, line and polygon features
--  Create new layers based using data filters
+-  Create new layers using data filters
 -  Style layers
--  export style as GL JS JSON
+-  export style as [Maplibre style JSON](https://maplibre.org/maplibre-style-spec/)
+-  Click interaction to show attributes of features
 
 #### Roadmap
 The tool is in development and many more features are to come:
 - Add support for [Maptiler GeoJSON layers](https://docs.maptiler.com/sdk-js/examples/geojson-polygon/) as data source
-- Advanced styling using conditional formatting
 - Add option to export a basemap layer
-- Click interaction for map features
 
 Suggestions and ideas for futher development are welcome. 
 
