@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import demo_data from "../assets/buildings.json";
+import demo_data from "../assets/municipalities.json";
 import GeojsonStyle from "@/utils/ldproxy/GeojsonStyle.js";
 import LoadData from "@/components/DataImport/LoadData.vue";
 
@@ -70,8 +70,8 @@ export default {
     loadDemoData: function () {
       let geometry_type = demo_data.features[0].geometry.type.toLowerCase();
       let styleObject = new GeojsonStyle(
-        "buildings",
-        "buildings",
+        "Municipalities",
+        "municipalities",
         geometry_type,
         JSON.stringify(demo_data)
       );
