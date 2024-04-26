@@ -38,6 +38,17 @@
               @import-data="handleLoadData"
               @go-back="customData = false" /></v-col
         ></v-row>
+        <v-row v-if="!customData">
+          <v-col>
+            <v-divider></v-divider>
+            <v-img
+              height="600"
+              class="mt-7"
+              elevation="2"
+              src="@/assets/landing_page.png"
+            />
+            <v-divider></v-divider> </v-col
+        ></v-row>
       </v-container>
     </v-sheet>
   </div>
