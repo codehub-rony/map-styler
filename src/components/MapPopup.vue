@@ -5,7 +5,7 @@
     elevation="1"
     rounded="0"
   >
-    <div class="d-flex justify-space-between pa-4">
+    <div class="d-flex justify-space-between pa-4 pr-2">
       <span class="text-h6 font-weight-light">Feature properties</span>
       <DeleteButton @click="closePopup" class="mb-1" />
     </div>
