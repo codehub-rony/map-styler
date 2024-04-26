@@ -5,11 +5,7 @@
         <v-row justify-content="center" dense
           ><v-col cols="12">
             <div class="d-flex flex-column align-center">
-              <v-img
-                src="../assets/logo.svg"
-                height="200"
-                class="default-image-height"
-              />
+              <v-img src="../assets/logo.svg" class="default-image-height" />
               <div v-if="!customData" class="d-flex flex-column align-center">
                 <span class="text-h5 mt-4 font-weight-black">MapStyler</span>
                 <span class="text-h6 mt-4 font-weight-light text-center"
@@ -18,7 +14,7 @@
               </div>
             </div>
           </v-col></v-row
-        ><v-row v-if="!customData" dense class="mt-5"
+        ><v-row v-if="!customData" justify-content="center" dense class="mt-5"
           ><v-col cols="12">
             <div class="mt-4 d-flex flex-column align-center">
               <v-btn color="primary" flat @click="customData = true" width="250"
@@ -30,12 +26,13 @@
                 variant="plain"
                 class="mt-3"
                 @click="loadDemoData()"
+                :loading="loading"
                 >try out
               </v-btn>
             </div></v-col
           ></v-row
         >
-        <v-row v-if="customData" dense
+        <v-row v-if="customData" dense justify-content="center"
           ><v-col cols="12">
             <LoadData
               @import-data="handleLoadData"
@@ -63,20 +60,25 @@ export default {
     return {
       customData: false,
       isOpen: true,
+      loading: false,
     };
   },
   methods: {
     ...mapActions(useAppStore, ["setStyleObject"]),
     loadDemoData: function () {
-      let geometry_type = demo_data.features[0].geometry.type.toLowerCase();
-      let styleObject = new GeojsonStyle(
-        "Municipalities",
-        "municipalities",
-        geometry_type,
-        JSON.stringify(demo_data)
-      );
+      this.loading = true;
+      setTimeout(() => {
+        // timeout to initiate loader icon, otherwise button freezes
+        let geometry_type = demo_data.features[0].geometry.type.toLowerCase();
+        let styleObject = new GeojsonStyle(
+          "Municipalities",
+          "municipalities",
+          geometry_type,
+          JSON.stringify(demo_data)
+        );
 
-      this.handleLoadData(styleObject);
+        this.handleLoadData(styleObject);
+      }, 100);
     },
     handleLoadData: function (styleObject) {
       this.setStyleObject(styleObject);
@@ -85,3 +87,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.default-image-height {
+  height: 200px;
+  width: 200px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+</style>

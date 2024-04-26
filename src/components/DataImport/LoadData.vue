@@ -201,6 +201,7 @@ export default {
 <style>
 .form-container {
   width: 100%;
+  max-width: 500px;
 }
 .form-input-item-container {
   width: 100%;
