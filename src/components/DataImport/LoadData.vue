@@ -15,7 +15,7 @@
                 class="pa-4 ma-4 testy"
                 rounded="1"
                 flat
-                @click="selectedType = source.type"
+                @click="selectedType = source"
               >
                 <h4>{{ source.label }}</h4>
               </v-card>
@@ -35,13 +35,13 @@
             "
           />
           <GeoJSONInput
-            v-if="selectedType === 'geojson'"
+            v-if="isGeoJsonSelected()"
             @update-input="(item) => (inputs[item.var] = item.value)"
             ref="geoJSONInput"
           />
 
           <OGCTileInput
-            v-if="selectedType === 'ogcvectortile'"
+            v-if="isVectorTileSelected()"
             @set-tilejson="setTilejson"
           />
         </div>
@@ -74,6 +74,12 @@ import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 
+import {
+  DataSourceTypes,
+  GeojsonDataSource,
+  VectorTileDataSource,
+} from "@/utils/datasources/DataSourceTypes";
+
 export default {
   emits: ["import-data"],
   components: { StyleNameInput, OGCTileInput, GeoJSONInput },
@@ -86,16 +92,22 @@ export default {
     return {
       inputs: { styleName: null, file: null },
       selectedType: null,
-      dataSources: [
-        { type: "geojson", label: "GeoJSON" },
-        { type: "ogcvectortile", label: "OGC Vectortile" },
-      ],
+      dataSources: null,
       loading: false,
       loadingData: false,
       tilejson: null,
     };
   },
+  mounted() {
+    this.dataSources = new DataSourceTypes().getDataSources();
+  },
   methods: {
+    isVectorTileSelected: function () {
+      return this.selectedType instanceof VectorTileDataSource;
+    },
+    isGeoJsonSelected: function () {
+      return this.selectedType instanceof GeojsonDataSource;
+    },
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
@@ -103,9 +115,10 @@ export default {
       if (valid) {
         let styleObject;
 
-        if (this.selectedType === "geojson") {
+        if (this.selectedType instanceof GeojsonDataSource) {
           this.openFile().then((geojson) => {
             let json = JSON.parse(geojson);
+            // move geometry-Type to class
             let geometry_type = json.features[0].geometry.type.toLowerCase();
             let source_id = this.inputs.styleName;
 
@@ -113,14 +126,18 @@ export default {
               this.inputs.styleName,
               source_id,
               geometry_type,
-              geojson
+              geojson,
+              this.selectedType
             );
 
             this.$emit("import-data", styleObject);
           });
         }
 
-        if (this.selectedType === "ogcvectortile" && this.tilejson) {
+        if (
+          this.selectedType instanceof VectorTileDataSource &&
+          this.tilejson
+        ) {
           this.createTileStyleObject(this.tilejson, this.inputs.styleName);
         }
       }
@@ -140,6 +157,7 @@ export default {
       this.$emit("import-data", styleObject);
     },
 
+    // Move this function to GeoJsoninput
     isValidJSON: function (file) {
       try {
         JSON.parse(file);
