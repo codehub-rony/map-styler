@@ -6,7 +6,7 @@
     rounded="0"
   >
     <div class="d-flex justify-space-between pa-4">
-      <span class="text-h6 font-weight-light pb-2">Feature properties</span>
+      <span class="text-h6 font-weight-light">Feature properties</span>
       <DeleteButton @click="closePopup" class="mb-1" />
     </div>
     <div class="map-popup-content">
