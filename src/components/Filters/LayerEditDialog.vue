@@ -42,9 +42,9 @@
             @click="dialogIsOpen = false"
             >cancel</v-btn
           >
-          <v-btn color="primary" size="small" flat rounded="0" @click="save"
-            >save</v-btn
-          >
+          <v-btn color="primary" size="small" flat rounded="0" @click="save">{{
+            ButtontTitle
+          }}</v-btn>
         </div>
       </v-card>
     </v-dialog>
@@ -74,6 +74,9 @@ export default {
   computed: {
     title: function () {
       return this.mode === 1 ? "Create new layer" : "Edit layer";
+    },
+    ButtontTitle: function () {
+      return this.mode === 1 ? "create" : "update";
     },
   },
   methods: {

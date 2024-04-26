@@ -8,10 +8,8 @@
               <div class="d-flex flex-column align-center">
                 <v-img
                   src="../assets/logo.svg"
-                  :class="{
-                    'smaller-image-height': customData,
-                    'default-image-height': !customData,
-                  }"
+                  height="200"
+                  class="default-image-height"
                 />
                 <div v-if="!customData" class="d-flex flex-column align-center">
                   <span class="text-h5 mt-4 font-weight-black">MapStyler</span>
@@ -94,15 +92,17 @@ export default {
 .smaller-image-height {
   margin-top: 20px;
   margin-bottom: 10px;
+  height: 200px;
   animation-name: shrink;
   animation-duration: 0.3s;
   animation-fill-mode: forwards;
 }
 
 .default-image-height {
+  height: 200px;
+  width: 200px;
   margin-top: 20px;
   margin-bottom: 10px;
-  height: 200px;
 }
 
 @keyframes shrink {
@@ -110,7 +110,7 @@ export default {
     height: 200px;
   }
   to {
-    height: 0px;
+    height: 1px;
   }
 }
 .testy {
