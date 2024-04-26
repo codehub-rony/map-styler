@@ -1,16 +1,19 @@
 <template>
   <v-sheet
     id="popup"
-    class="ol-popup pa-4 d-flex flex-column"
+    class="container-map-popup d-flex flex-column"
     elevation="1"
     rounded="0"
   >
-    <div class="d-flex justify-space-between">
+    <div class="d-flex justify-space-between pa-4">
       <span class="text-h6 font-weight-light pb-2">Feature properties</span>
       <DeleteButton @click="closePopup" class="mb-1" />
     </div>
-    <div id="popup-content pl-2">
-      <div v-for="(value, key) in properties" class="d-flex flex-column mb-2">
+    <div class="map-popup-content">
+      <div
+        v-for="(value, key) in properties"
+        class="d-flex flex-column pl-4 pr-4 mb-2"
+      >
         <span class="text-subtitle-2">{{ key }}: </span
         ><span class="text-body-2">{{ value ? value : "undefined" }}</span>
       </div>
@@ -158,14 +161,14 @@ export default {
 </script>
 
 <style>
-.ol-popup {
+.container-map-popup {
   position: absolute;
   left: -50px;
   min-width: 280px;
   bottom: 12px;
 }
-.ol-popup:after,
-.ol-popup:before {
+.container-map-popup:after,
+.container-map-popup:before {
   top: 100%;
   border: solid transparent;
   content: " ";
@@ -174,16 +177,20 @@ export default {
   position: absolute;
   pointer-events: none;
 }
-.ol-popup:after {
+.container-map-popup:after {
   border-top-color: white;
   border-width: 10px;
   left: 48px;
   margin-left: -10px;
 }
-.ol-popup:before {
+.container-map-popup:before {
   border-top-color: #cccccc;
   border-width: 11px;
   left: 48px;
   margin-left: -11px;
+}
+.map-popup-content {
+  max-height: 300px;
+  overflow-y: scroll;
 }
 </style>
