@@ -5,7 +5,13 @@ import CircleLayer from "./CircleLayer.js";
 const geometry_types = { point: "point", polygon: "polygon", line: "line" };
 
 class BaseStyle {
-  constructor(style_name, source_id, geometry_type, source_type) {
+  constructor(
+    style_name,
+    source_id,
+    geometry_type,
+    source_type,
+    datasource_type
+  ) {
     if (style_name === undefined) {
       throw new Error("Name parameter is required");
     }
@@ -13,9 +19,14 @@ class BaseStyle {
     this.style_name = style_name;
     this.source_id = source_id;
     this.source_type = source_type;
+    this._datasource_type = datasource_type;
     this.sources = {};
     this.layers = [];
     this.geometry_type = this.standarizeGeometryType(geometry_type);
+  }
+
+  get datasource_type() {
+    return this._datasource_type;
   }
 
   standarizeGeometryType(source_geom_type) {
@@ -40,7 +51,7 @@ class BaseStyle {
     if (!this.geometry_type) {
       throw new Error("Style has no geometry_type");
     } else if (this.geometry_type === geometry_types.polygon) {
-      this.layers.push(new FillLayer(this.style_name, this.source_id));
+      this.layers.push(new FillLayer(this.style_name, this.source_id, true));
       this.layers.push(new LineLayer(this.style_name, this.source_id));
     } else if (this.geometry_type === geometry_types.line) {
       this.layers.push(new LineLayer(this.style_name, this.source_id));
@@ -58,7 +69,7 @@ class BaseStyle {
       case geometry_types.line:
         return new LineLayer(this.style_name, this.source_id);
       case geometry_types.polygon:
-        return new FillLayer(this.style_name, this.source_id);
+        return new FillLayer(this.style_name, this.source_id, false);
       default:
         return null;
     }
@@ -72,7 +83,7 @@ class BaseStyle {
     let new_layer = this.createLayer();
     new_layer["id"] = layer_id;
     new_layer["label"] = layer_label;
-    new_layer.attributes[0].value = { r: 253, g: 174, b: 97, a: 0.7 };
+    new_layer.attributes[0].value = this.generateRGBAColor();
     new_layer["filter"] = filter;
 
     if (new_layer instanceof FillLayer) {

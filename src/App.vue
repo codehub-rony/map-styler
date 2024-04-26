@@ -1,7 +1,8 @@
 <template>
   <v-app id="app_container">
     <AppBar />
-    <v-main class="bg-grey-lighten-3">
+    <!-- <v-main class="bg-grey-lighten-3"> -->
+    <v-main>
       <router-view></router-view>
       <!-- <AppFooter /> -->
     </v-main>
@@ -22,11 +23,6 @@ export default {
       geodata: { type: null, json: null },
       isOpen: true,
     };
-  },
-  methods: {
-    handleData: function (geojson) {
-      this.geodata = { type: "geojson", json: geojson };
-    },
   },
 };
 </script>

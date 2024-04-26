@@ -51,6 +51,17 @@ class BaseLayer {
     }
     return id;
   }
+  getRandomInteger(max) {
+    return Math.floor(Math.random() * (max + 1));
+  }
+
+  generateRGBAColor() {
+    let r = this.getRandomInteger(255);
+    let g = this.getRandomInteger(255);
+    let b = this.getRandomInteger(255);
+
+    return { r: r, g: g, b: b, a: 0.7 };
+  }
 
   setVisibility(isVisible) {
     this.layout.visibility = isVisible ? "visible" : "none";

@@ -1,12 +1,19 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
 
-import HomePage from "@/views/HomePage.vue";
+import EditorPage from "@/views/EditorPage.vue";
+import LandingPage from "@/views/LandingPage.vue";
 
 const routes = [
   {
+    path: "/editor",
+    name: "editor",
+    component: EditorPage,
+    props: true,
+  },
+  {
     path: "/",
-    component: HomePage,
+    component: LandingPage,
   },
 ];
 

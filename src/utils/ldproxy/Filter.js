@@ -15,7 +15,6 @@ class Filter {
   }
 
   deleteCondition(condition_id) {
-    console.log(condition_id, this.conditions);
     this.conditions = this.conditions.filter(
       (condition) => condition.id !== condition_id
     );

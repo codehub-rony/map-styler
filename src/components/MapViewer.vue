@@ -1,6 +1,12 @@
 <template>
   <div>
     <v-sheet :height="height" id="map_container"> </v-sheet>
+    <MapPopup
+      :map="map"
+      :vectorLayer="vectorLayer"
+      :styleObject="styleObject"
+      v-if="map && styleObject"
+    />
   </div>
 </template>
 
@@ -10,10 +16,14 @@ import View from "ol/View.js";
 import { unByKey } from "ol/Observable.js";
 import * as olExtent from "ol/extent";
 
+// Components
+import MapPopup from "@/components/MapPopup.vue";
+
 // basemap
 import OSM from "ol/source/OSM.js";
 import TileLayer from "ol/layer/Tile.js";
 
+// Styling
 import { stylefunction } from "ol-mapbox-style";
 
 // OGC Tile layer
@@ -32,11 +42,14 @@ import { useAppStore } from "@/store/app.js";
 import { mapState } from "pinia";
 
 export default {
+  components: {
+    MapPopup,
+  },
   props: {
     geodataSource: Object,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObject"]),
+    ...mapState(useAppStore, ["styleObject", "dataSource"]),
   },
   data() {
     return {
@@ -50,8 +63,20 @@ export default {
     this.setHeight();
     this.initMap();
 
+    // Redirect to landingpage on page reload
+    if (this.styleObject) {
+      this.createVectorLayer();
+      this.applyStyle(
+        this.vectorLayer,
+        this.styleObject.getStyleAsJSON(),
+        this.styleObject.source_id
+      );
+    } else {
+      this.$router.push("/");
+    }
+
     this.map.on("click", (evt) => {
-      // console.log(evt.coordinate, evt.map.getView().getZoom());
+      console.log(evt.coordinate, evt.map.getView().getZoom());
     });
   },
   methods: {
@@ -80,6 +105,12 @@ export default {
         let features = new GeoJSON().readFeatures(this.styleObject.geojson, {
           featureProjection: "EPSG:3857",
         });
+
+        // Setting id for SelectionInteraction
+        features.forEach((feature, i) => {
+          feature.setId(i);
+        });
+
         this.vectorLayer.getSource().addFeatures(features);
         this.map.addLayer(this.vectorLayer);
         this.zoomToExtent(this.vectorLayer.getSource().getExtent());
@@ -115,12 +146,19 @@ export default {
       this.height =
         window.innerHeight < 950 ? window.innerHeight * 0.8 : "85vh";
     },
+    applyStyle: function (vectorlayer, stylejson, source_id) {
+      stylefunction(
+        this.vectorLayer,
+        this.styleObject.getStyleAsJSON(),
+        this.styleObject.source_id
+      );
+    },
   },
   watch: {
     styleObject: {
       handler() {
         if (this.vectorLayer) {
-          stylefunction(
+          this.applyStyle(
             this.vectorLayer,
             this.styleObject.getStyleAsJSON(),
             this.styleObject.source_id
