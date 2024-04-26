@@ -24,10 +24,5 @@ export default {
       isOpen: true,
     };
   },
-  methods: {
-    handleData: function (geojson) {
-      this.geodata = { type: "geojson", json: geojson };
-    },
-  },
 };
 </script>

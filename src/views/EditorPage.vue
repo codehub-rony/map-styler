@@ -15,7 +15,6 @@
 
 <script>
 // components
-import LandingDialog from "@/components/LandingDialog.vue";
 import LayerPanel from "@/views/LayerPanel.vue";
 import MapViewer from "@/components/MapViewer.vue";
 
@@ -25,7 +24,6 @@ import { mapState } from "pinia";
 
 export default {
   components: {
-    LandingDialog,
     LayerPanel,
     MapViewer,
   },
