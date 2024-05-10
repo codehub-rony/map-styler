@@ -77,7 +77,7 @@ export default {
         const number_types = ["number", "integer"];
 
         return number_types.includes(this.attributes[attribute].toLowerCase())
-          ? parseInt(value)
+          ? parseFloat(value)
           : value;
       }
     },
