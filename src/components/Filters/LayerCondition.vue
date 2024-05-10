@@ -8,17 +8,17 @@
         size="x-small"
         @click="deleteCondition"
       ></v-btn>
-      <select v-model="test.attribute" class="add-filter-input-select">
+      <select v-model="attribute" class="add-filter-input-select">
         <option
           :value="attribute"
-          v-for="(attribute, i) in properties"
+          v-for="(attribute, i) in selectItems"
           :key="i"
         >
           {{ attribute }}
         </option>
       </select>
 
-      <select class="custom-select" v-model="test.operator">
+      <select class="custom-select" v-model="operator">
         <option
           class="custom-select-option"
           :value="operator"
@@ -32,9 +32,9 @@
       <input
         class="add-filter-input-select"
         id="filter-input-type"
-        v-model="test.value"
+        v-model="attributeValue"
         :placeholder="
-          test.attribute ? attributes[test.attribute].toLowerCase() : null
+          update.attribute ? attributes[update.attribute].toLowerCase() : null
         "
       />
     </div>
@@ -50,29 +50,23 @@ export default {
   data() {
     return {
       attribute: null,
-      properties: [],
+      selectItems: [],
       operator: null,
-      value: null,
+      attributeValue: null,
       operators: ["==", ">=", "<=", "<", ">"],
-      test: { attribute: null, operator: null, value: null },
+      update: { attribute: null, operator: null, value: null },
     };
   },
   mounted() {
-    this.properties = Object.keys(this.attributes);
+    this.selectItems = Object.keys(this.attributes);
     this.operator = this.condition.getOperator();
     this.attribute = this.condition.getAttribute();
-    this.value = this.condition.getValue();
-
-    this.test = {
-      operator: this.condition.getOperator(),
-      value: this.condition.getValue(),
-      attribute: this.condition.getAttribute(),
-    };
+    this.attributeValue = this.condition.getValue();
   },
   unmounted() {
     this.attribute = "";
     this.operator = "";
-    this.value = "";
+    this.attributeValue = "";
   },
   methods: {
     deleteCondition: function () {
@@ -89,19 +83,33 @@ export default {
     },
   },
   watch: {
-    test: {
+    update: {
       handler(properties) {
-        properties.value = this.parseIntIfNumber(
-          properties.attribute,
-          properties.value
-        );
-
-        this.$emit("update-condition", {
-          id: this.condition.id,
-          properties: properties,
-        });
+        if (
+          properties.value != null &&
+          properties.operator != null &&
+          properties.attribute != null
+        ) {
+          this.$emit("update-condition", {
+            id: this.condition.id,
+            properties: properties,
+          });
+        }
       },
       deep: true,
+    },
+    attributeValue: function (newVal, oldValue) {
+      let value = this.parseIntIfNumber(this.attribute, newVal);
+
+      if (newVal) {
+        this.update.value = value;
+      }
+    },
+    attribute: function (newVal) {
+      this.update.attribute = newVal;
+    },
+    operator: function (newVal) {
+      this.update.operator = newVal;
     },
   },
 };

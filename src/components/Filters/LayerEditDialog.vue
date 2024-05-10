@@ -76,7 +76,7 @@ export default {
       return this.mode === 1 ? "Create new layer" : "Edit layer";
     },
     ButtontTitle: function () {
-      return this.mode === 1 ? "create" : "update";
+      return this.mode === 1 ? "create" : "save";
     },
   },
   methods: {
