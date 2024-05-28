@@ -57,18 +57,3 @@ class Filter {
 }
 
 export default Filter;
-
-// "filter": [
-//   "all",
-//   [
-//     "<=",
-//     "bouwjaar",
-//     1980
-//   ],
-//   [
-//     ">",
-//     "bouwjaar",
-//     1950
-//   ]
-// ]
-// },
