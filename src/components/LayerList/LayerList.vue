@@ -32,6 +32,11 @@
           :attribute="attribute"
           v-if="attribute.component.type === 'input_field'"
         />
+
+        <DashArrayInput
+          :attribute="attribute"
+          v-if="attribute.component.type === 'input_field_dasharray'"
+        />
       </div>
 
       <v-divider class="pb-2" v-if="styleObject.layers.length - 1 !== i">
@@ -42,6 +47,7 @@
 
 <script>
 import InputField from "./InputField.vue";
+import DashArrayInput from "./DashArrayInput.vue";
 import ColorField from "./ColorField.vue";
 import DeleteButton from "@/components/DeleteButton.vue";
 import VisibilityButton from "./VisibilityButton.vue";
@@ -52,6 +58,7 @@ export default {
   emits: ["open-edit-dialog"],
   components: {
     InputField,
+    DashArrayInput,
     ColorField,
     DeleteButton,
     VisibilityButton,

@@ -9,11 +9,18 @@ class LineLayer extends BaseLayer {
         value: { r: 0, g: 0, b: 0, a: 1 },
         component: { label: "stroke color", type: "color_picker" },
       },
-
       {
         name: "line-width",
         value: 1,
         component: { label: "stroke width", type: "input_field" },
+      },
+      {
+        name: "line-dasharray",
+        value: [0, 0],
+        component: { label: "Dash", type: "input_field_dasharray" },
+        set: function (idx, value) {
+          this.value[idx] = value;
+        },
       },
     ];
   }

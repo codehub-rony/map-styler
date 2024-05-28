@@ -8,12 +8,13 @@ class Filter {
     this.createCondition();
   }
 
-  createCondition() {
+  createCondition(operator, attribute, value) {
     // consider returnign empty condition object and not pushing it conidtions array.
     // I think that introduces an error when rendering the style
     let id = this.getMaxId();
-    let condition = new Condition(id);
+    let condition = new Condition(id, operator, attribute, value);
     this.conditions.push(condition);
+    return id;
   }
 
   deleteCondition(condition_id) {
@@ -56,18 +57,3 @@ class Filter {
 }
 
 export default Filter;
-
-// "filter": [
-//   "all",
-//   [
-//     "<=",
-//     "bouwjaar",
-//     1980
-//   ],
-//   [
-//     ">",
-//     "bouwjaar",
-//     1950
-//   ]
-// ]
-// },

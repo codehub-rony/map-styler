@@ -22,6 +22,7 @@ import MapPopup from "@/components/MapPopup.vue";
 // basemap
 import OSM from "ol/source/OSM.js";
 import TileLayer from "ol/layer/Tile.js";
+import TileJSON from "ol/source/TileJSON";
 
 // Styling
 import { stylefunction } from "ol-mapbox-style";
@@ -53,12 +54,15 @@ export default {
   },
   data() {
     return {
+      feature_attributes: [],
+
       map: null,
       view: null,
       height: null,
       vectorLayer: null,
     };
   },
+
   mounted() {
     this.setHeight();
     this.initMap();
@@ -88,14 +92,24 @@ export default {
       });
       this.map = new Map({
         layers: [
-          new TileLayer({
-            source: new OSM(),
-          }),
+          // new TileLayer({
+          //   source: new OSM(),
+          // }),
         ],
         target: "map_container",
         view: this.view,
         controls: [],
       });
+      let maptiler_key = import.meta.env.VITE_MAPTILER_KEY;
+      let background = new TileLayer({
+        source: new TileJSON({
+          url: `https://api.maptiler.com/maps/dataviz/tiles.json?key=${maptiler_key}`,
+          tileSize: 512,
+          crossOrigin: "anonymous",
+        }),
+      });
+
+      this.map.addLayer(background);
     },
     createVectorLayer: function () {
       if (this.styleObject.source_type === "geojson") {
@@ -131,10 +145,20 @@ export default {
             const extent = source.getTileGrid().getExtent();
             this.zoomToExtent(extent);
             unByKey(key);
+
+            setTimeout(() => {
+              this.feature_attributes = Object.keys(
+                this.vectorLayer
+                  .getSource()
+                  .getFeaturesInExtent(extent)[0]
+                  .getProperties()
+              );
+            }, 6000);
           }
         });
       }
     },
+
     zoomToExtent: function (extent) {
       let resolution = this.view.getResolutionForExtent(extent);
       let zoom = this.view.getZoomForResolution(resolution) - 0.3;
