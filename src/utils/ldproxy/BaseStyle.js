@@ -51,12 +51,20 @@ class BaseStyle {
     if (!this.geometry_type) {
       throw new Error("Style has no geometry_type");
     } else if (this.geometry_type === geometry_types.polygon) {
-      this.layers.push(new FillLayer(this.style_name, this.source_id, true));
-      this.layers.push(new LineLayer(this.style_name, this.source_id));
+      this.layers.push(
+        new FillLayer(`${this.style_name}_fill`, this.source_id, true)
+      );
+      this.layers.push(
+        new LineLayer(`${this.style_name}_line`, this.source_id)
+      );
     } else if (this.geometry_type === geometry_types.line) {
-      this.layers.push(new LineLayer(this.style_name, this.source_id));
+      this.layers.push(
+        new LineLayer(`${this.style_name}_line`, this.source_id)
+      );
     } else if (this.geometry_type === geometry_types.point) {
-      this.layers.push(new CircleLayer(this.style_name, this.source_id));
+      this.layers.push(
+        new CircleLayer(`${this.style_name}_circle`, this.source_id)
+      );
     } else {
       throw new Error("Unkown geometry type from geoJSON");
     }
