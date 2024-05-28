@@ -62,14 +62,14 @@ class BaseStyle {
     }
   }
 
-  createLayer() {
+  createLayer(label) {
     switch (this.geometry_type) {
       case geometry_types.point:
-        return new CircleLayer(this.style_name, this.source_id);
+        return new CircleLayer(label, this.source_id);
       case geometry_types.line:
-        return new LineLayer(this.style_name, this.source_id);
+        return new LineLayer(label, this.source_id);
       case geometry_types.polygon:
-        return new FillLayer(this.style_name, this.source_id, false);
+        return new FillLayer(label, this.source_id, false);
       default:
         return null;
     }

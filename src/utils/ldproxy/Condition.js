@@ -1,9 +1,9 @@
 class Condition {
-  constructor(id) {
+  constructor(id, operator = ">=", attribute, value) {
     this.id = id;
-    this.operator = ">=";
-    this.attribute = null;
-    this.value = null;
+    this.operator = operator;
+    this.attribute = attribute;
+    this.value = value;
   }
 
   getId() {
