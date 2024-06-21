@@ -17,7 +17,10 @@ class LineLayer extends BaseLayer {
       {
         name: "line-dasharray",
         value: [0, 0],
-        component: { label: "Dash", type: "input_field_dasharray" },
+        component: {
+          label: "dash pattern",
+          type: "input_field_dasharray",
+        },
         set: function (idx, value) {
           this.value[idx] = value;
         },
