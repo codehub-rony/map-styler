@@ -52,8 +52,7 @@ import ColorField from "./ColorField.vue";
 import DeleteButton from "@/components/DeleteButton.vue";
 import VisibilityButton from "./VisibilityButton.vue";
 import EditButton from "./EditButton.vue";
-import { useAppStore } from "@/store/app.js";
-import { mapState } from "pinia";
+
 export default {
   emits: ["open-edit-dialog"],
   components: {
@@ -64,8 +63,8 @@ export default {
     VisibilityButton,
     EditButton,
   },
-  computed: {
-    ...mapState(useAppStore, ["styleObject"]),
+  props: {
+    styleObject: Object,
   },
 
   methods: {

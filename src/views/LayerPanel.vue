@@ -1,9 +1,14 @@
 <template>
   <v-scroll-y-transition>
     <v-sheet rounded="0" elevation="2">
-      <LayerList v-if="styleObject" @open-edit-dialog="editLayer" />
+      <!-- <LayerList v-if="styleObject" @open-edit-dialog="editLayer" /> -->
+      <LayerList
+        v-for="layer in styleObjects"
+        :key="layer.source_id"
+        :styleObject="layer"
+        class="mt-2"
+      />
       <BtnCreateLayer
-        v-if="styleObject"
         :styleObject="styleObject"
         mode="new"
         class="mt-4"
@@ -14,12 +19,7 @@
   <v-scroll-y-transition> </v-scroll-y-transition>
   <v-btn @click="openDialogForNewSource">Add new source</v-btn>
   <v-scroll-y-transition>
-    <!-- <DownloadBtn v-if="styleObject" :styleObject="styleObject" class="mt-4" /> -->
-    <DownloadBtn
-      v-if="isStyleObjectLoaded"
-      :styleObjects="styleObjects"
-      class="mt-4"
-    />
+    <DownloadBtn :styleObjects="styleObjects" class="mt-4" />
   </v-scroll-y-transition>
   <NewTileJSONDialog ref="newdatasource" />
 </template>
@@ -34,7 +34,7 @@ import NewTileJSONDialog from "@/components//DataImport/NewTileJSONDialog.vue";
 
 // store
 import { useAppStore } from "@/store/app.js";
-import { mapState, mapActions } from "pinia";
+import { mapState } from "pinia";
 
 export default {
   components: {
@@ -44,15 +44,7 @@ export default {
     NewTileJSONDialog,
   },
   computed: {
-    ...mapState(useAppStore, [
-      "styleObject",
-      "styleObjects",
-      "selectedLayer",
-      "addDataSource",
-    ]),
-    expand() {
-      return this.selectedLayer ? true : false;
-    },
+    ...mapState(useAppStore, ["styleObjects"]),
   },
   data() {
     return {
@@ -60,7 +52,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAppStore, ["isStyleObjectLoaded"]),
     editLayer: function (layer) {
       this.$refs.filterDialog.openDialog(layer);
     },
