@@ -7,16 +7,18 @@
 <script>
 export default {
   props: {
-    styleObject: Object,
+    styleObjects: Array,
   },
   methods: {
     handleClick: function () {
-      let json = this.styleObject.getStyleAsJSON();
-      const a = document.createElement("a");
-      const file = new Blob([json], { type: "application/json" });
-      a.href = URL.createObjectURL(file);
-      a.download = `${this.styleObject.style_name}.mbs`;
-      a.click();
+      this.styleObjects.forEach((styleObject) => {
+        let json = styleObject.getStyleAsJSON();
+        const a = document.createElement("a");
+        const file = new Blob([json], { type: "application/json" });
+        a.href = URL.createObjectURL(file);
+        a.download = `${styleObject.style_name}.mbs`;
+        a.click();
+      });
     },
   },
 };
