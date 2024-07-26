@@ -109,6 +109,12 @@ class BaseStyle {
       }
     });
   }
+
+  setVisibilityAllLayers(isVisble) {
+    this.layers.forEach((layer) => {
+      layer.setVisibility(isVisble);
+    });
+  }
 }
 
 export default BaseStyle;

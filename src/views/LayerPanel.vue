@@ -54,14 +54,6 @@ export default {
       this.$refs.newdatasource.openDialog();
     },
   },
-  watch: {
-    styleObjects: {
-      handler() {
-        console.log(this.styleObjects);
-      },
-      deep: true,
-    },
-  },
 };
 </script>
 

@@ -81,22 +81,15 @@ export default {
   props: {
     styleObject: Object,
   },
-  computed: {
-    icon() {
-      return this.isHidden ? "mdi-eye-outline" : "mdi-eye-off-outline";
-    },
-  },
   data() {
     return {
-      isHovered: false,
       isCollapsed: false,
       isOpen: false,
-      isHidden: true,
       items: [
         {
           title: "hide layer",
           icon: "mdi-delete-outline",
-          action: this.hideDataset,
+          action: this.toggleVisibility,
           isHidden: false,
         },
         {
@@ -133,8 +126,14 @@ export default {
     downloadStyleJSON: function () {
       console.log("clicked download style json");
     },
-    hideDataset: function () {
-      console.log("clicked hide layer");
+  },
+  watch: {
+    items: {
+      handler() {
+        const item = this.items.find((item) => item.title === "hide layer");
+        this.styleObject.setVisibilityAllLayers(item.isHidden);
+      },
+      deep: true,
     },
   },
 };
