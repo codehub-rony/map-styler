@@ -219,6 +219,20 @@ export default {
             .find((layer) => layer.get("source_id") === removed[0]);
           this.map.removeLayer(layer_to_remove);
         }
+
+        // update styles on update
+        if (removed.length == added.length) {
+          this.styleObjects.forEach((styleObject) => {
+            let layer_to_Style = map_layers.find(
+              (layer) => layer.get("source_id") === styleObject.source_id
+            );
+            this.applyStyle(
+              layer_to_Style,
+              styleObject.getStyleAsJSON(),
+              styleObject.source_id
+            );
+          });
+        }
       },
       deep: true,
     },
