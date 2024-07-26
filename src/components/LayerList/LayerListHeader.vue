@@ -100,11 +100,11 @@ export default {
           icon: "mdi-download",
           action: this.downloadStyleJSON,
         },
-        {
-          title: "Rename",
-          icon: "mdi-pencil-outline",
-          action: this.renameDataset,
-        },
+        // {
+        //   title: "Rename",
+        //   icon: "mdi-pencil-outline",
+        //   action: this.renameDataset,
+        // },
         {
           title: "Delete",
           icon: "mdi-delete-outline",
