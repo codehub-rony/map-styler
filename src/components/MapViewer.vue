@@ -187,33 +187,37 @@ export default {
   watch: {
     styleObjects: {
       handler() {
-        const layers = [...this.map.getLayers().getArray()];
-        if (
-          this.styleObjects.length >
-          this.map.getLayers().getArray().length - 1
-        ) {
-          let test = layers.map((layer) => layer.get("source_id"));
+        const map_layers = [...this.map.getLayers().getArray()].filter(
+          (layer) => layer.get("source_id") !== undefined
+        );
+        const style_source_ids = this.styleObjects.map((obj) => obj.source_id);
+        const map_source_ids = map_layers.map((layer) =>
+          layer.get("source_id")
+        );
 
-          let mest = this.styleObjects.filter(
-            (x) => !test.includes(x.source_id)
+        // Find styleObjects that have not been added to map
+        const added = style_source_ids.filter(
+          (source_id) => !map_source_ids.includes(source_id)
+        );
+
+        // Find styleObjects that have been removed, but are still on the map
+        const removed = map_source_ids.filter(
+          (source_id) => !style_source_ids.includes(source_id)
+        );
+
+        if (added.length > 0) {
+          let object_to_add = this.styleObjects.find(
+            (style_object) => style_object.source_id === added[0]
           );
-          this.createVectorLayer(mest[0]);
-        } else if (
-          this.styleObjects.length <
-          this.map.getLayers().getArray().length - 1
-        ) {
-        } else {
-          this.styleObjects.forEach((styleObject) => {
-            let layer_to_Style = layers.find(
-              (layer) => layer.get("source_id") === styleObject.source_id
-            );
+          this.createVectorLayer(object_to_add);
+        }
 
-            this.applyStyle(
-              layer_to_Style,
-              styleObject.getStyleAsJSON(),
-              styleObject.source_id
-            );
-          });
+        if (removed.length > 0) {
+          let layer_to_remove = this.map
+            .getLayers()
+            .getArray()
+            .find((layer) => layer.get("source_id") === removed[0]);
+          this.map.removeLayer(layer_to_remove);
         }
       },
       deep: true,
