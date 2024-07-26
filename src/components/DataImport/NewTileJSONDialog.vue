@@ -59,7 +59,6 @@ export default {
   methods: {
     ...mapActions(useAppStore, ["addStyleObject"]),
     createTileJson() {
-      console.log(this.tilejson, this.styleName);
       if (this.tilejson && this.styleName) {
         let styleObject = new OGCTileStyle(
           this.styleName,
@@ -69,7 +68,7 @@ export default {
           this.tilejson.tiles_url
         );
         this.addStyleObject(styleObject);
-        console.log(styleObject, "added new layer");
+
         this.closeDialog();
       }
     },
