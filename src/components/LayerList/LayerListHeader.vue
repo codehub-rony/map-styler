@@ -1,10 +1,6 @@
 <template>
-  <div class="pb-3 pa-2">
-    <div
-      class="d-flex flex-row justify-space-between"
-      @mouseover="isHovered = true"
-      @mouseleave="isHovered = false"
-    >
+  <div>
+    <div class="d-flex flex-row justify-space-between">
       <div class="text-h6 font-weight-light">
         {{ styleObject.style_name }}
       </div>
@@ -12,53 +8,66 @@
       <div class="d-flex flex-row">
         <v-btn
           variant="text"
-          icon="mdi-pencil-outline"
-          color="grey"
-          size="x-small"
-          v-if="isHovered"
-        ></v-btn>
-
-        <v-btn
-          variant="text"
-          icon="mdi-plus"
-          color="grey"
-          size="x-small"
-          v-bind="props"
-        >
-        </v-btn>
-        <v-btn
-          variant="text"
-          icon="mdi-download"
-          color="grey"
-          size="x-small"
-          v-bind="props"
-        >
-        </v-btn>
-
-        <v-btn
-          variant="text"
-          icon="mdi-delete-outline"
-          color="grey"
-          size="x-small"
-          v-if="isHovered"
-          @click="deleteDataSet"
-        ></v-btn>
-        <v-btn
-          variant="text"
           :icon="isCollapsed ? 'mdi-chevron-right' : 'mdi-chevron-down'"
           color="grey"
           size="x-small"
-          v-if="isHovered"
+          v-bind="props"
           @click="handleCollapse"
-        ></v-btn>
+        >
+        </v-btn>
 
-        <v-btn
-          variant="text"
-          icon="mdi-dots-horizontal"
-          color="grey"
-          size="x-small"
-          v-if="!isHovered"
-        ></v-btn>
+        <v-menu location="end">
+          <template v-slot:activator="{ props }">
+            <v-btn
+              variant="text"
+              icon="mdi-dots-horizontal"
+              color="grey"
+              size="x-small"
+              @click="isOpen = isOpen ? false : true"
+              v-bind="props"
+            ></v-btn>
+          </template>
+
+          <v-list elevation="0" rounded="0" class="pa-0">
+            <div class="dataset-menu-container">
+              <div v-for="(item, index) in items" :key="index">
+                <div
+                  v-if="item.title != 'hide layer'"
+                  class="pl-2 pr-2 pt-1 pb-1 hover-bg"
+                  :style="{ cursor: 'pointer' }"
+                  @click="item.action"
+                >
+                  <v-icon
+                    :icon="item.icon"
+                    size="x-small"
+                    color="grey"
+                  ></v-icon>
+                  <span class="text-body-2 pl-2">{{ item.title }}</span>
+                </div>
+                <div
+                  v-if="item.title == 'hide layer'"
+                  class="pl-2 pr-2 pt-1 pb-1 hover-bg"
+                  :style="{ cursor: 'pointer' }"
+                  @click="item.isHidden = item.isHidden ? false : true"
+                >
+                  <v-icon
+                    :icon="
+                      item.isHidden ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+                    "
+                    size="x-small"
+                    color="grey"
+                  ></v-icon>
+                  <span v-if="item.isHidden" class="text-body-2 pl-2"
+                    >hide on map</span
+                  >
+                  <span v-if="!item.isHidden" class="text-body-2 pl-2"
+                    >show on map</span
+                  >
+                </div>
+              </div>
+            </div>
+          </v-list>
+        </v-menu>
       </div>
     </div>
   </div>
@@ -68,26 +77,81 @@
 //store
 import { useAppStore } from "@/store/app.js";
 import { mapActions } from "pinia";
+
 export default {
   emist: ["collapse"],
   props: {
     styleObject: Object,
   },
+  computed: {
+    icon() {
+      return this.isHidden ? "mdi-eye-outline" : "mdi-eye-off-outline";
+    },
+  },
   data() {
     return {
       isHovered: false,
       isCollapsed: false,
+      isOpen: false,
+      isHidden: true,
+      items: [
+        {
+          title: "hide layer",
+          icon: "mdi-delete-outline",
+          action: this.hideDataset,
+          isHidden: false,
+        },
+        {
+          title: "Download",
+          icon: "mdi-download",
+          action: this.downloadStyleJSON,
+        },
+        {
+          title: "Rename",
+          icon: "mdi-pencil-outline",
+          action: this.renameDataset,
+        },
+        {
+          title: "Delete",
+          icon: "mdi-delete-outline",
+          action: this.deleteDataSet,
+        },
+      ],
     };
   },
   methods: {
     ...mapActions(useAppStore, ["deleteStyleObject"]),
     deleteDataSet: function () {
+      console.log("deleteing", this.styleObject.source_id);
       this.deleteStyleObject(this.styleObject.source_id);
     },
     handleCollapse: function () {
       this.isCollapsed = this.isCollapsed ? false : true;
       this.$emit("collapse");
     },
+    renameDataset: function () {
+      console.log("clicked rename");
+    },
+    downloadStyleJSON: function () {
+      console.log("clicked download style json");
+    },
+    hideDataset: function () {
+      console.log("clicked hide layer");
+    },
   },
 };
 </script>
+
+<style>
+.dataset-menu-container {
+  border: solid 1px #e0e0e0;
+}
+
+.hover-bg {
+  background-color: white; /* Default background color */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+.hover-bg:hover {
+  background-color: #e0e0e0; /* Background color on hover */
+}
+</style>

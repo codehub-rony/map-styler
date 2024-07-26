@@ -1,5 +1,11 @@
 <template>
-  <v-btn block color="primary" elevation="2" class="mt-2" @click="handleClick"
+  <v-btn
+    block
+    color="primary"
+    rounded="0"
+    elevation="0"
+    class="mt-2"
+    @click="handleClick"
     >download</v-btn
   >
 </template>

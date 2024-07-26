@@ -11,7 +11,6 @@ import "vuetify/styles";
 // Composables
 import { createVuetify } from "vuetify";
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
     themes: {
@@ -21,6 +20,7 @@ export default createVuetify({
           secondary: "#5CBBF6",
         },
       },
+      dark: false,
     },
   },
 });

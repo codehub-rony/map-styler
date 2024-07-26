@@ -46,7 +46,6 @@ export default {
       colorPickerIsOpen: false,
     };
   },
-
   methods: {
     handleClick: function (e) {
       // Prevent colorpicker from closing when the colorpicker itself is clicked
@@ -74,14 +73,17 @@ export default {
   height: 20px;
   width: 35px;
   border: 1px solid rgb(197, 197, 197);
+  z-index: 130;
 }
 .color-selector-container {
   position: relative;
+  z-index: 120;
 }
 .color-selector {
   position: absolute;
   min-width: 250px;
   left: 35px;
-  z-index: 20;
+  z-index: 120;
+  border: 1px solid #e0e0e0;
 }
 </style>

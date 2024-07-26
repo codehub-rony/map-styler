@@ -198,6 +198,10 @@ export default {
             (x) => !test.includes(x.source_id)
           );
           this.createVectorLayer(mest[0]);
+        } else if (
+          this.styleObjects.length <
+          this.map.getLayers().getArray().length - 1
+        ) {
         } else {
           this.styleObjects.forEach((styleObject) => {
             let layer_to_Style = layers.find(
@@ -220,5 +224,6 @@ export default {
 <style>
 #map_container {
   height: 85vh;
+  border: solid 1px #e0e0e0;
 }
 </style>

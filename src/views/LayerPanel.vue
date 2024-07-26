@@ -1,33 +1,35 @@
 <template>
-  <v-scroll-y-transition>
-    <v-sheet rounded="0" elevation="2">
-      <!-- <LayerList v-if="styleObject" @open-edit-dialog="editLayer" /> -->
-      <LayerList
-        v-for="layer in styleObjects"
-        :key="layer.source_id"
-        :styleObject="layer"
-        class="mt-2"
-      />
-      <BtnCreateLayer
-        :styleObject="styleObject"
-        mode="new"
-        class="mt-4"
-        ref="filterDialog"
-      />
+  <div class="layer-panel-container">
+    <v-sheet>
+      <div class="d-flex flex-row justify-space-between mb-2">
+        <h2 class="text-h5 font-weight-light">Datasets</h2>
+        <v-btn
+          size="x-small"
+          variant="text"
+          @click="openDialogForNewSource"
+          class="mt-2"
+          >add new</v-btn
+        >
+      </div>
+      <v-scroll-y-transition>
+        <div class="layer-list-container">
+          <LayerList
+            v-for="layer in styleObjects"
+            :key="layer.source_id"
+            :styleObject="layer"
+            class="mb-5"
+          />
+        </div>
+      </v-scroll-y-transition>
+      <DownloadBtn />
+      <NewTileJSONDialog ref="newdatasource" />
     </v-sheet>
-  </v-scroll-y-transition>
-  <v-scroll-y-transition> </v-scroll-y-transition>
-  <v-btn @click="openDialogForNewSource">Add new source</v-btn>
-  <v-scroll-y-transition>
-    <DownloadBtn :styleObjects="styleObjects" class="mt-4" />
-  </v-scroll-y-transition>
-  <NewTileJSONDialog ref="newdatasource" />
+  </div>
 </template>
 
 <script>
 import DownloadBtn from "@/components/DownloadBtn.vue";
 import LayerList from "@/components/LayerList/LayerList.vue";
-import BtnCreateLayer from "@/components/Filters/BtnCreateLayer.vue";
 
 //tmp
 import NewTileJSONDialog from "@/components//DataImport/NewTileJSONDialog.vue";
@@ -38,7 +40,6 @@ import { mapState } from "pinia";
 
 export default {
   components: {
-    BtnCreateLayer,
     DownloadBtn,
     LayerList,
     NewTileJSONDialog,
@@ -52,14 +53,26 @@ export default {
     };
   },
   methods: {
-    editLayer: function (layer) {
-      this.$refs.filterDialog.openDialog(layer);
-    },
     openDialogForNewSource: function () {
       this.$refs.newdatasource.openDialog();
+    },
+  },
+  watch: {
+    styleObjects: {
+      handler() {
+        console.log(this.styleObjects);
+      },
+      deep: true,
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.layer-panel-container {
+}
+.layer-list-container {
+  max-height: 76vh;
+  overflow: auto;
+}
+</style>

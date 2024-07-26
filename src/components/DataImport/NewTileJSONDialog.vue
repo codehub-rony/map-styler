@@ -69,6 +69,7 @@ export default {
           this.tilejson.tiles_url
         );
         this.addStyleObject(styleObject);
+        console.log(styleObject, "added new layer");
         this.closeDialog();
       }
     },
