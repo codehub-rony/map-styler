@@ -1,5 +1,6 @@
 <template>
-  <div class="dataset-container">
+  <!-- <div :class="['dataset-container', isCollapsed ? 'mb-2' : 'mb-5']"> -->
+  <div class="dataset-container mb-2">
     <LayerListHeader
       :styleObject="styleObject"
       @collapse="isCollapsed = isCollapsed ? false : true"

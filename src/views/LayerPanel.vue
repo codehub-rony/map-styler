@@ -1,30 +1,27 @@
 <template>
-  <div class="layer-panel-container">
-    <v-sheet>
-      <div class="d-flex flex-row justify-space-between mb-2">
-        <h2 class="text-h5 font-weight-light">Datasets</h2>
-        <v-btn
-          size="x-small"
-          variant="text"
-          @click="openDialogForNewSource"
-          class="mt-2"
-          >add new</v-btn
-        >
+  <v-sheet>
+    <div class="d-flex flex-row justify-space-between mb-2">
+      <h2 class="text-h5 font-weight-light">Datasets</h2>
+      <v-btn
+        size="x-small"
+        variant="text"
+        @click="openDialogForNewSource"
+        class="mt-2"
+        >add new</v-btn
+      >
+    </div>
+    <v-scroll-y-transition>
+      <div>
+        <LayerList
+          v-for="layer in styleObjects"
+          :key="layer.source_id"
+          :styleObject="layer"
+        />
       </div>
-      <v-scroll-y-transition>
-        <div class="layer-list-container">
-          <LayerList
-            v-for="layer in styleObjects"
-            :key="layer.source_id"
-            :styleObject="layer"
-            class="mb-5"
-          />
-        </div>
-      </v-scroll-y-transition>
-      <DownloadBtn />
-      <NewTileJSONDialog ref="newdatasource" />
-    </v-sheet>
-  </div>
+    </v-scroll-y-transition>
+    <DownloadBtn />
+    <NewTileJSONDialog ref="newdatasource" />
+  </v-sheet>
 </template>
 
 <script>
@@ -68,11 +65,4 @@ export default {
 };
 </script>
 
-<style>
-.layer-panel-container {
-}
-.layer-list-container {
-  max-height: 76vh;
-  overflow: auto;
-}
-</style>
+<style></style>
