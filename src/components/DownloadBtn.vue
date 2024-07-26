@@ -11,6 +11,8 @@
 </template>
 
 <script>
+//utils
+import utils from "@/utils/common.js";
 export default {
   props: {
     styleObjects: Array,
@@ -18,12 +20,7 @@ export default {
   methods: {
     handleClick: function () {
       this.styleObjects.forEach((styleObject) => {
-        let json = styleObject.getStyleAsJSON();
-        const a = document.createElement("a");
-        const file = new Blob([json], { type: "application/json" });
-        a.href = URL.createObjectURL(file);
-        a.download = `${styleObject.style_name}.mbs`;
-        a.click();
+        utils.download_stylejson(styleObject);
       });
     },
   },

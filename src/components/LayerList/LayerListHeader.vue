@@ -76,6 +76,9 @@
 import { useAppStore } from "@/store/app.js";
 import { mapActions } from "pinia";
 
+//utils
+import utils from "@/utils/common.js";
+
 export default {
   emist: ["collapse"],
   props: {
@@ -124,7 +127,7 @@ export default {
       console.log("clicked rename");
     },
     downloadStyleJSON: function () {
-      console.log("clicked download style json");
+      utils.download_stylejson(this.styleObject);
     },
   },
   watch: {

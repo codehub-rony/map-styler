@@ -19,7 +19,7 @@
         />
       </div>
     </v-scroll-y-transition>
-    <DownloadBtn />
+    <DownloadBtn :styleObjects="styleObjects" />
     <NewTileJSONDialog ref="newdatasource" />
   </v-sheet>
 </template>
