@@ -131,25 +131,16 @@ export default {
           const extent = source.getTileGrid().getExtent();
           this.zoomToExtent(extent);
           unByKey(key);
-
-          // setTimeout(() => {
-          //   this.feature_attributes = Object.keys(
-          //     this.vectorLayer
-          //       .getSource()
-          //       .getFeaturesInExtent(extent)[0]
-          //       .getProperties()
-          //   );
-          // }, 6000);
         }
       });
     },
     initVectorLayers: function () {
       this.styleObjects.forEach((styleObject) => {
         if (styleObject.source_type === "geojson") {
-          this.vectorLayer = new VectorLayer({
+          let geojson_layer = new VectorLayer({
             source: new VectorSource(),
           });
-          let features = new GeoJSON().readFeatures(this.styleObject.geojson, {
+          let features = new GeoJSON().readFeatures(styleObject.geojson, {
             featureProjection: "EPSG:3857",
           });
 
@@ -158,9 +149,16 @@ export default {
             feature.setId(i);
           });
 
-          this.vectorLayer.getSource().addFeatures(features);
-          this.map.addLayer(this.vectorLayer);
-          this.zoomToExtent(this.vectorLayer.getSource().getExtent());
+          this.applyStyle(
+            geojson_layer,
+            styleObject.getStyleAsJSON(),
+            styleObject.source_id
+          );
+
+          geojson_layer.getSource().addFeatures(features);
+          geojson_layer.set("source_id", styleObject.source_id);
+          this.map.addLayer(geojson_layer);
+          this.zoomToExtent(geojson_layer.getSource().getExtent());
         }
 
         if (styleObject.source_type === "ogc_vector_tile") {
@@ -223,11 +221,11 @@ export default {
         // update styles on update
         if (removed.length == added.length) {
           this.styleObjects.forEach((styleObject) => {
-            let layer_to_Style = map_layers.find(
+            let layer_to_style = map_layers.find(
               (layer) => layer.get("source_id") === styleObject.source_id
             );
             this.applyStyle(
-              layer_to_Style,
+              layer_to_style,
               styleObject.getStyleAsJSON(),
               styleObject.source_id
             );
