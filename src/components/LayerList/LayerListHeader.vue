@@ -93,7 +93,7 @@ export default {
           title: "hide layer",
           icon: "mdi-delete-outline",
           action: this.toggleVisibility,
-          isHidden: false,
+          isHidden: true,
         },
         {
           title: "Download",
@@ -116,7 +116,6 @@ export default {
   methods: {
     ...mapActions(useAppStore, ["deleteStyleObject"]),
     deleteDataSet: function () {
-      console.log("deleteing", this.styleObject.source_id);
       this.deleteStyleObject(this.styleObject.source_id);
     },
     handleCollapse: function () {
