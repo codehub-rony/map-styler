@@ -18,20 +18,10 @@
 import LayerPanel from "@/views/LayerPanel.vue";
 import MapViewer from "@/components/MapViewer.vue";
 
-// store
-import { useAppStore } from "@/store/app.js";
-import { mapState } from "pinia";
-
 export default {
   components: {
     LayerPanel,
     MapViewer,
-  },
-  computed: {
-    ...mapState(useAppStore, ["styleObject"]),
-  },
-  data() {
-    return {};
   },
 };
 </script>
