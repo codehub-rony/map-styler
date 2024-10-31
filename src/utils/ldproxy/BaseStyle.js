@@ -13,7 +13,7 @@ class BaseStyle {
     this.style_name = style_name;
     this.source_id = source_id;
     this.source_type = source_type; // obsolete, will be refactored to class instances of datasources
-    this._datasource_type = datasource_type; // Datasourcetpye is the new source_type
+    this._datasource_type = null; // Datasourcetpye is the new source_type
     this.sources = {};
     this.layers = [];
     this.geometry_type = this.standarizeGeometryType(geometry_type);
