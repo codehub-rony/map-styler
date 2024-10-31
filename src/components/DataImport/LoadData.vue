@@ -77,7 +77,7 @@ import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 import {
   DataSourceTypes,
   GeojsonDataSource,
-  VectorTileDataSource,
+  OGCVectorTileDataSource,
 } from "@/utils/datasources/DataSourceTypes";
 
 export default {
@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     isVectorTileSelected: function () {
-      return this.selectedType instanceof VectorTileDataSource;
+      return this.selectedType instanceof OGCVectorTileDataSource;
     },
     isGeoJsonSelected: function () {
       return this.selectedType instanceof GeojsonDataSource;
@@ -135,7 +135,7 @@ export default {
         }
 
         if (
-          this.selectedType instanceof VectorTileDataSource &&
+          this.selectedType instanceof OGCVectorTileDataSource &&
           this.tilejson
         ) {
           this.createTileStyleObject(this.tilejson, this.inputs.styleName);

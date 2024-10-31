@@ -42,6 +42,10 @@ import "../../node_modules/ol/ol.css";
 import { useAppStore } from "@/store/app.js";
 import { mapState, mapActions } from "pinia";
 
+import {
+  GeojsonDataSource,
+  OGCVectorTileDataSource,
+} from "@/utils/datasources/DataSourceTypes";
 export default {
   components: {
     MapPopup,
@@ -87,11 +91,7 @@ export default {
         zoom: 6,
       });
       this.map = new Map({
-        layers: [
-          // new TileLayer({
-          //   source: new OSM(),
-          // }),
-        ],
+        layers: [],
         target: "map_container",
         view: this.view,
         controls: [],
@@ -107,16 +107,11 @@ export default {
 
       this.map.addLayer(background);
     },
-    createVectorLayer: function (styleObject) {
-      const source = new OGCVectorTile({
-        url: styleObject.tilejson_url,
-        format: new MVT(),
-      });
-      let layer = new VectorTileLayer({
-        source: source,
-      });
-
-      layer.set("source_id", styleObject.source_id);
+    createOGCVectorLayer: function (styleObject) {
+      let layer = styleObject.datasource_type.create_ol_layer(
+        styleObject.tilejson_url,
+        styleObject.source_id
+      );
 
       this.map.addLayer(layer);
 
@@ -126,9 +121,10 @@ export default {
         styleObject.source_id
       );
 
-      const key = source.on("change", () => {
-        if (source.getState() === "ready") {
-          const extent = source.getTileGrid().getExtent();
+      let layer_source = layer.getSource();
+      const key = layer_source.on("change", () => {
+        if (layer_source.getState() === "ready") {
+          const extent = layer_source.getTileGrid().getExtent();
           this.zoomToExtent(extent);
           unByKey(key);
         }
@@ -161,8 +157,8 @@ export default {
           this.zoomToExtent(geojson_layer.getSource().getExtent());
         }
 
-        if (styleObject.source_type === "ogc_vector_tile") {
-          this.createVectorLayer(styleObject);
+        if (styleObject.datasource_type instanceof OGCVectorTileDataSource) {
+          this.createOGCVectorLayer(styleObject);
         }
       });
     },
@@ -207,7 +203,7 @@ export default {
           let object_to_add = this.styleObjects.find(
             (style_object) => style_object.source_id === added[0]
           );
-          this.createVectorLayer(object_to_add);
+          this.createOGCVectorLayer(object_to_add);
         }
 
         if (removed.length > 0) {

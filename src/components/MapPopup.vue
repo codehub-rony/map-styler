@@ -30,7 +30,7 @@ import VectorTileLayer from "ol/layer/VectorTile.js";
 
 import {
   GeojsonDataSource,
-  VectorTileDataSource,
+  OGCVectorTileDataSource,
 } from "@/utils/datasources/DataSourceTypes";
 
 export default {
@@ -74,7 +74,7 @@ export default {
     };
 
     // if (this.styleObject.source_type === SOURCE_TYPES.OGC_VECTOR_TILE) {
-    if (this.styleObject.source_type instanceof VectorTileDataSource) {
+    if (this.styleObject.source_type instanceof OGCVectorTileDataSource) {
       this.selectionLayer = new VectorTileLayer({
         map: this.map,
         source: this.vectorLayer.getSource(),
