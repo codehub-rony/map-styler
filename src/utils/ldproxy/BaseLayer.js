@@ -10,6 +10,8 @@ class BaseLayer {
     this.source = source_id;
     this.type = type;
     this.filter = null;
+    // consider setting the visibility param as true or false rather then strings.
+    // Add conversio to string in export function
     this.layout = { visibility: "visible" };
   }
   getPaint(attributes) {
@@ -65,6 +67,14 @@ class BaseLayer {
 
   setVisibility(isVisible) {
     this.layout.visibility = isVisible ? "visible" : "none";
+  }
+
+  getVisibility() {
+    if (this.layout.visibility === "none") {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   getId() {

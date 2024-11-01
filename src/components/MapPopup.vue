@@ -27,6 +27,12 @@ import Overlay from "ol/Overlay.js";
 import { Fill, Stroke, Style } from "ol/style.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import VectorTileLayer from "ol/layer/VectorTile.js";
+
+import {
+  GeojsonDataSource,
+  OGCVectorTileDataSource,
+} from "@/utils/datasources/DataSourceTypes";
+
 export default {
   components: {
     DeleteButton,
@@ -56,10 +62,10 @@ export default {
     };
   },
   mounted() {
-    const SOURCE_TYPES = {
-      OGC_VECTOR_TILE: "ogc_vector_tile",
-      GEOJSON: "geojson",
-    };
+    // const SOURCE_TYPES = {
+    //   OGC_VECTOR_TILE: "ogc_vector_tile",
+    //   GEOJSON: "geojson",
+    // };
 
     let styleFunction = (feature) => {
       if (feature.getId() in this.selection) {
@@ -67,13 +73,15 @@ export default {
       }
     };
 
-    if (this.styleObject.source_type === SOURCE_TYPES.OGC_VECTOR_TILE) {
+    // if (this.styleObject.source_type === SOURCE_TYPES.OGC_VECTOR_TILE) {
+    if (this.styleObject.source_type instanceof OGCVectorTileDataSource) {
       this.selectionLayer = new VectorTileLayer({
         map: this.map,
         source: this.vectorLayer.getSource(),
         style: styleFunction,
       });
-    } else if (this.styleObject.source_type === SOURCE_TYPES.GEOJSON) {
+      // } else if (this.styleObject.source_type === SOURCE_TYPES.GEOJSON) {
+    } else if (this.styleObject.source_type instanceof GeojsonDataSource) {
       this.selectionLayer = new VectorLayer({
         map: this.map,
         source: this.vectorLayer.getSource(),

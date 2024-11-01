@@ -1,7 +1,7 @@
 <template>
   <v-btn
     variant="text"
-    icon="mdi-window-close"
+    icon="mdi-delete-outline"
     color="grey"
     size="x-small"
     @click="handleClick"

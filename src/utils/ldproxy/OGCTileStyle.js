@@ -1,4 +1,5 @@
 import BaseStyle from "./BaseStyle.js";
+import { OGCVectorTileDataSource } from "@/utils/datasources/DataSourceTypes";
 
 class OGCTileStyle extends BaseStyle {
   constructor(style_name, tilejson_url, source_id, geometry_type, tiles_url) {
@@ -7,10 +8,11 @@ class OGCTileStyle extends BaseStyle {
     this.tiles_url = tiles_url;
     this.vector_layer = null;
 
-    this.init();
+    this.#init();
   }
 
-  init() {
+  #init() {
+    this._datasource_type = new OGCVectorTileDataSource();
     this.sources[this.source_id] = { type: "vector", tiles: [this.tiles_url] };
     this.createDefaultLayers();
   }

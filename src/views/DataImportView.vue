@@ -75,7 +75,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAppStore, ["setStyleObject"]),
+    ...mapActions(useAppStore, ["addStyleObject"]),
     loadDemoData: function () {
       this.loading = true;
       setTimeout(() => {
@@ -92,7 +92,7 @@ export default {
       }, 100);
     },
     handleLoadData: function (styleObject) {
-      this.setStyleObject(styleObject);
+      this.addStyleObject(styleObject);
       this.$router.push("/editor");
     },
   },

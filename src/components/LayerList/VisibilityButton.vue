@@ -28,5 +28,13 @@ export default {
       this.layer.setVisibility(this.isHidden);
     },
   },
+  watch: {
+    layer: {
+      handler() {
+        this.isHidden = this.layer.getVisibility();
+      },
+      deep: true,
+    },
+  },
 };
 </script>

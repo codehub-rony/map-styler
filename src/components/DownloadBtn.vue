@@ -1,22 +1,27 @@
 <template>
-  <v-btn block color="primary" elevation="2" class="mt-2" @click="handleClick"
+  <v-btn
+    block
+    color="primary"
+    rounded="0"
+    elevation="0"
+    class="mt-2"
+    @click="handleClick"
     >download</v-btn
   >
 </template>
 
 <script>
+//utils
+import utils from "@/utils/common.js";
 export default {
   props: {
-    styleObject: Object,
+    styleObjects: Array,
   },
   methods: {
     handleClick: function () {
-      let json = this.styleObject.getStyleAsJSON();
-      const a = document.createElement("a");
-      const file = new Blob([json], { type: "application/json" });
-      a.href = URL.createObjectURL(file);
-      a.download = `${this.styleObject.style_name}.mbs`;
-      a.click();
+      this.styleObjects.forEach((styleObject) => {
+        utils.download_stylejson(styleObject);
+      });
     },
   },
 };

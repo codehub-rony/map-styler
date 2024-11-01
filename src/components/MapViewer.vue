@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-sheet :height="height" id="map_container"> </v-sheet>
-    <MapPopup
+    <!-- <MapPopup
       :map="map"
       :vectorLayer="vectorLayer"
       :styleObject="styleObject"
       v-if="map && styleObject"
-    />
+    /> -->
   </div>
 </template>
 
@@ -40,8 +40,12 @@ import "../../node_modules/ol/ol.css";
 
 // store
 import { useAppStore } from "@/store/app.js";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 
+import {
+  GeojsonDataSource,
+  OGCVectorTileDataSource,
+} from "@/utils/datasources/DataSourceTypes";
 export default {
   components: {
     MapPopup,
@@ -50,7 +54,7 @@ export default {
     geodataSource: Object,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObject", "dataSource"]),
+    ...mapState(useAppStore, ["styleObjects"]),
   },
   data() {
     return {
@@ -68,13 +72,8 @@ export default {
     this.initMap();
 
     // Redirect to landingpage on page reload
-    if (this.styleObject) {
-      this.createVectorLayer();
-      this.applyStyle(
-        this.vectorLayer,
-        this.styleObject.getStyleAsJSON(),
-        this.styleObject.source_id
-      );
+    if (this.isStyleObjectLoaded()) {
+      this.initVectorLayers();
     } else {
       this.$router.push("/");
     }
@@ -84,6 +83,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions(useAppStore, ["isStyleObjectLoaded"]),
     initMap: function () {
       this.view = new View({
         center: [595074, 6829276],
@@ -91,11 +91,7 @@ export default {
         zoom: 6,
       });
       this.map = new Map({
-        layers: [
-          // new TileLayer({
-          //   source: new OSM(),
-          // }),
-        ],
+        layers: [],
         target: "map_container",
         view: this.view,
         controls: [],
@@ -111,52 +107,64 @@ export default {
 
       this.map.addLayer(background);
     },
-    createVectorLayer: function () {
-      if (this.styleObject.source_type === "geojson") {
-        this.vectorLayer = new VectorLayer({
-          source: new VectorSource(),
-        });
-        let features = new GeoJSON().readFeatures(this.styleObject.geojson, {
-          featureProjection: "EPSG:3857",
-        });
-
-        // Setting id for SelectionInteraction
-        features.forEach((feature, i) => {
-          feature.setId(i);
-        });
-
-        this.vectorLayer.getSource().addFeatures(features);
-        this.map.addLayer(this.vectorLayer);
-        this.zoomToExtent(this.vectorLayer.getSource().getExtent());
-      }
-
-      if (this.styleObject.source_type === "ogc_vector_tile") {
-        const source = new OGCVectorTile({
-          url: this.styleObject.tilejson_url,
+    createOGCVectorLayer: function (styleObject) {
+      let layer = new VectorTileLayer({
+        source: new OGCVectorTile({
+          url: styleObject.tilejson_url,
           format: new MVT(),
-        });
-        this.vectorLayer = new VectorTileLayer({
-          source: source,
-        });
+        }),
+      });
 
-        this.map.addLayer(this.vectorLayer);
-        const key = source.on("change", () => {
-          if (source.getState() === "ready") {
-            const extent = source.getTileGrid().getExtent();
-            this.zoomToExtent(extent);
-            unByKey(key);
+      layer.set("source_id", styleObject.source_id);
 
-            setTimeout(() => {
-              this.feature_attributes = Object.keys(
-                this.vectorLayer
-                  .getSource()
-                  .getFeaturesInExtent(extent)[0]
-                  .getProperties()
-              );
-            }, 6000);
-          }
-        });
-      }
+      this.map.addLayer(layer);
+
+      this.applyStyle(
+        layer,
+        styleObject.getStyleAsJSON(),
+        styleObject.source_id
+      );
+
+      let layer_source = layer.getSource();
+      const key = layer_source.on("change", () => {
+        if (layer_source.getState() === "ready") {
+          const extent = layer_source.getTileGrid().getExtent();
+          this.zoomToExtent(extent);
+          unByKey(key);
+        }
+      });
+    },
+    initVectorLayers: function () {
+      this.styleObjects.forEach((styleObject) => {
+        if (styleObject.source_type === "geojson") {
+          let geojson_layer = new VectorLayer({
+            source: new VectorSource(),
+          });
+          let features = new GeoJSON().readFeatures(styleObject.geojson, {
+            featureProjection: "EPSG:3857",
+          });
+
+          // Setting id for SelectionInteraction
+          features.forEach((feature, i) => {
+            feature.setId(i);
+          });
+
+          this.applyStyle(
+            geojson_layer,
+            styleObject.getStyleAsJSON(),
+            styleObject.source_id
+          );
+
+          geojson_layer.getSource().addFeatures(features);
+          geojson_layer.set("source_id", styleObject.source_id);
+          this.map.addLayer(geojson_layer);
+          this.zoomToExtent(geojson_layer.getSource().getExtent());
+        }
+
+        if (styleObject.datasource_type instanceof OGCVectorTileDataSource) {
+          this.createOGCVectorLayer(styleObject);
+        }
+      });
     },
 
     zoomToExtent: function (extent) {
@@ -171,22 +179,57 @@ export default {
         window.innerHeight < 950 ? window.innerHeight * 0.8 : "85vh";
     },
     applyStyle: function (vectorlayer, stylejson, source_id) {
-      stylefunction(
-        this.vectorLayer,
-        this.styleObject.getStyleAsJSON(),
-        this.styleObject.source_id
-      );
+      stylefunction(vectorlayer, stylejson, source_id);
     },
   },
   watch: {
-    styleObject: {
+    styleObjects: {
       handler() {
-        if (this.vectorLayer) {
-          this.applyStyle(
-            this.vectorLayer,
-            this.styleObject.getStyleAsJSON(),
-            this.styleObject.source_id
+        const map_layers = [...this.map.getLayers().getArray()].filter(
+          (layer) => layer.get("source_id") !== undefined
+        );
+        const style_source_ids = this.styleObjects.map((obj) => obj.source_id);
+        const map_source_ids = map_layers.map((layer) =>
+          layer.get("source_id")
+        );
+
+        // Find styleObjects that have not been added to map
+        const added = style_source_ids.filter(
+          (source_id) => !map_source_ids.includes(source_id)
+        );
+
+        // Find styleObjects that have been removed, but are still on the map
+        const removed = map_source_ids.filter(
+          (source_id) => !style_source_ids.includes(source_id)
+        );
+
+        if (added.length > 0) {
+          let object_to_add = this.styleObjects.find(
+            (style_object) => style_object.source_id === added[0]
           );
+          this.createOGCVectorLayer(object_to_add);
+        }
+
+        if (removed.length > 0) {
+          let layer_to_remove = this.map
+            .getLayers()
+            .getArray()
+            .find((layer) => layer.get("source_id") === removed[0]);
+          this.map.removeLayer(layer_to_remove);
+        }
+
+        // update styles on update
+        if (removed.length == added.length) {
+          this.styleObjects.forEach((styleObject) => {
+            let layer_to_style = map_layers.find(
+              (layer) => layer.get("source_id") === styleObject.source_id
+            );
+            this.applyStyle(
+              layer_to_style,
+              styleObject.getStyleAsJSON(),
+              styleObject.source_id
+            );
+          });
         }
       },
       deep: true,
@@ -197,5 +240,6 @@ export default {
 <style>
 #map_container {
   height: 85vh;
+  border: solid 1px #e0e0e0;
 }
 </style>

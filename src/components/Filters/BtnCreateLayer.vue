@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="d-flex justify-center pb-3">
-      <v-btn
-        elevation="0"
-        variant="outlined"
-        rounded="0"
-        size="small"
-        @click="openDialog"
-        >new layer
+    <!-- <div>
+      <v-btn block variant="text" size="x-small" @click="openDialog"
+        ><v-icon icon="mdi-plus"></v-icon>
+      </v-btn>
+    </div> -->
+    <div>
+      <v-btn block variant="text" size="x-small" @click="openDialog"
+        ><span class="text-caption">create filter</span>
       </v-btn>
     </div>
 

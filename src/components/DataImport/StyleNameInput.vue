@@ -24,6 +24,9 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.styleName = "test";
+  },
 };
 </script>
 
