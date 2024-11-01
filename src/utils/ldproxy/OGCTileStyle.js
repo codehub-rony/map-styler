@@ -3,7 +3,7 @@ import { OGCVectorTileDataSource } from "@/utils/datasources/DataSourceTypes";
 
 class OGCTileStyle extends BaseStyle {
   constructor(style_name, tilejson_url, source_id, geometry_type, tiles_url) {
-    super(style_name, source_id, geometry_type, "ogc_vector_tile");
+    super(style_name, source_id, geometry_type);
     this.tilejson_url = tilejson_url;
     this.tiles_url = tiles_url;
     this.vector_layer = null;

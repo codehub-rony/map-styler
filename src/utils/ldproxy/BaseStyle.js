@@ -5,15 +5,14 @@ import CircleLayer from "./CircleLayer.js";
 const geometry_types = { point: "point", polygon: "polygon", line: "line" };
 
 class BaseStyle {
-  constructor(style_name, source_id, geometry_type, source_type) {
+  constructor(style_name, source_id, geometry_type) {
     if (style_name === undefined) {
       throw new Error("Name parameter is required");
     }
     this.version = 8;
     this.style_name = style_name;
     this.source_id = source_id;
-    this.source_type = source_type; // obsolete, will be refactored to class instances of datasources
-    this._datasource_type = null; // Datasourcetpye is the new source_type
+    this._datasource_type = null;
     this.sources = {};
     this.layers = [];
     this.geometry_type = this.standarizeGeometryType(geometry_type);

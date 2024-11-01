@@ -25,7 +25,7 @@ export default {
     };
   },
   mounted() {
-    this.styleName = "test";
+    this.styleName = "";
   },
 };
 </script>

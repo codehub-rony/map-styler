@@ -136,7 +136,7 @@ export default {
     },
     initVectorLayers: function () {
       this.styleObjects.forEach((styleObject) => {
-        if (styleObject.source_type === "geojson") {
+        if (styleObject.datasource_type instanceof GeojsonDataSource) {
           let geojson_layer = new VectorLayer({
             source: new VectorSource(),
           });

@@ -61,10 +61,6 @@ export default {
       tilejson: null,
     };
   },
-  mounted() {
-    this.url =
-      "http://localhost:7080/rest/services/buisleiding_contouren/collections/huidige_contouren/tiles/WebMercatorQuad";
-  },
   methods: {
     openUrl: function () {
       window.open(

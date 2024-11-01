@@ -1,12 +1,14 @@
 import BaseStyle from "./BaseStyle.js";
+import { GeojsonDataSource } from "@/utils/datasources/DataSourceTypes";
 
 class GeojsonStyle extends BaseStyle {
   constructor(layer_name, source_id, geometry_type, geojson) {
-    super(layer_name, source_id, geometry_type, "geojson");
-    this.initialize(geojson);
+    super(layer_name, source_id, geometry_type);
+    this.#init(geojson);
   }
 
-  initialize(geojson) {
+  #init(geojson) {
+    this._datasource_type = new GeojsonDataSource();
     this.sources[this.source_id] = { type: "geojson", data: "./data.geojson" };
     this.geojson = JSON.parse(geojson);
     this.createDefaultLayers();
@@ -32,9 +34,8 @@ class GeojsonStyle extends BaseStyle {
       attributes[key] = datatype ? datatype : null;
     });
 
-
     return attributes;
   }
 }
 
-export default GeojsonStyle
+export default GeojsonStyle;
