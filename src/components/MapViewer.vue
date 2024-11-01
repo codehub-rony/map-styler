@@ -108,10 +108,14 @@ export default {
       this.map.addLayer(background);
     },
     createOGCVectorLayer: function (styleObject) {
-      let layer = styleObject.datasource_type.create_ol_layer(
-        styleObject.tilejson_url,
-        styleObject.source_id
-      );
+      let layer = new VectorTileLayer({
+        source: new OGCVectorTile({
+          url: styleObject.tilejson_url,
+          format: new MVT(),
+        }),
+      });
+
+      layer.set("source_id", styleObject.source_id);
 
       this.map.addLayer(layer);
 
