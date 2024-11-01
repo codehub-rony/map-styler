@@ -9,8 +9,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.26.0",
     "@mdi/font": "7.0.96",
     "add": "^2.0.6",
+    "babel-jest": "^29.7.0",
     "ol": "^7.4.0",
     "ol-mapbox-style": "^10.6.0",
     "pinia": "^2.1.4",

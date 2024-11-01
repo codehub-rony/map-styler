@@ -56,7 +56,7 @@
 
 <script>
 import demo_data from "../assets/municipalities.json";
-import GeojsonStyle from "@/utils/ldproxy/GeojsonStyle.js";
+import GeojsonStyle from "@/utils/stylejson/GeojsonStyle.js";
 import LoadData from "@/components/DataImport/LoadData.vue";
 
 // store

@@ -1,6 +1,6 @@
-import FillLayer from "./FillLayer.js";
-import LineLayer from "./LineLayer.js";
-import CircleLayer from "./CircleLayer.js";
+import FillLayer from "./layers/FillLayer.js";
+import LineLayer from "./layers/LineLayer.js";
+import CircleLayer from "./layers/CircleLayer.js";
 
 const geometry_types = { point: "point", polygon: "polygon", line: "line" };
 

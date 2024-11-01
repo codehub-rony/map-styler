@@ -68,8 +68,8 @@
 </template>
 
 <script>
-import GeojsonStyle from "@/utils/ldproxy/GeojsonStyle.js";
-import OGCTileStyle from "@/utils/ldproxy/OGCTileStyle.js";
+import GeojsonStyle from "@/utils/stylejson/GeojsonStyle.js";
+import OGCTileStyle from "@/utils/stylejson/OGCTileStyle.js";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";

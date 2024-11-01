@@ -1,8 +1,8 @@
-import Filter from "./Filter.js";
+import Filter from "../Filter.js";
 
 class BaseLayer {
   constructor(layer_name, source_id, type) {
-    if (source_id === undefined) {
+    if (!source_id) {
       throw new Error("Missing parameter: source_id");
     }
     this.id = this.generateUniqueId();

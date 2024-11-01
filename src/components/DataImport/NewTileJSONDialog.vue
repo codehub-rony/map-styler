@@ -36,7 +36,7 @@ import ButtonGroup from "@/components/DataImport/ButtonGroup.vue";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 
-import OGCTileStyle from "@/utils/ldproxy/OGCTileStyle.js";
+import OGCTileStyle from "@/utils/stylejson/OGCTileStyle.js";
 
 // store
 import { useAppStore } from "@/store/app.js";
