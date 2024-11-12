@@ -1,13 +1,13 @@
 import Filter from "../Filter.js";
 
 class BaseLayer {
-  constructor(layer_name, source_id, type) {
+  constructor(layer_label, source_id, type) {
     if (!source_id) {
       throw new Error("Missing parameter: source_id");
     }
     this.id = this.generateUniqueId();
-    this.label = layer_name ? layer_name : `default ${type}`;
-    this.source = source_id;
+    this.label = layer_label ? layer_label : `default ${type}`;
+    this._source = source_id;
     this.type = type;
     this.filter = null;
     // consider setting the visibility param as true or false rather then strings.
@@ -32,6 +32,10 @@ class BaseLayer {
 
   hasFilter() {
     return this.filter ? true : false;
+  }
+
+  get source() {
+    return this._source;
   }
 
   createFilter() {
@@ -84,7 +88,7 @@ class BaseLayer {
   getStyleObject(attributes) {
     let styleObject = {
       id: this.id,
-      source: this.source,
+      source: this._source,
       type: this.type,
       paint: this.getPaint(attributes),
       layout: this.layout,

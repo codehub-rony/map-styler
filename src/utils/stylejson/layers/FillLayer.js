@@ -1,7 +1,7 @@
 import BaseLayer from "./BaseLayer.js";
 class FillLayer extends BaseLayer {
-  constructor(style_name, source_id, default_style) {
-    super(style_name, source_id, "fill");
+  constructor(layer_label, source_id, default_style) {
+    super(layer_label, source_id, "fill");
     this.attributes = [
       {
         name: "fill-color",
@@ -16,6 +16,13 @@ class FillLayer extends BaseLayer {
 
   getStyleAsObject() {
     return this.getStyleObject(this.attributes);
+  }
+
+  setFromObject(styleobject) {
+    console.log(styleobject.type !== "fill");
+    if (styleobject.type !== "fill") {
+      throw new Error("layer is not of type 'fill'");
+    }
   }
 }
 
