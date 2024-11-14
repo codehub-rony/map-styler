@@ -9,12 +9,6 @@ class StyleDataSources {
   }
 }
 
-class GeojsonDataSource extends StyleDataSources {
-  constructor() {
-    super("GeoJSON");
-  }
-}
-
 class TiledVectorSource extends StyleDataSources {
   constructor(source_id, tiles_url) {
     super(source_id, "vector");
@@ -28,22 +22,4 @@ class TiledVectorSource extends StyleDataSources {
   }
 }
 
-class DataSourceTypes {
-  constructor() {
-    this.sources = this.#init_sources();
-  }
-
-  #init_sources() {
-    let sources = [];
-    sources.push(new GeojsonDataSource());
-    sources.push(new OGCVectorTileDataSource());
-
-    return sources;
-  }
-
-  getDataSources() {
-    return this.sources;
-  }
-}
-
-export { DataSourceTypes, GeojsonDataSource, TiledVectorSource };
+export { TiledVectorSource };

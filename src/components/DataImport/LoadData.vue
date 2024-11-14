@@ -15,7 +15,7 @@
                 class="pa-4 ma-4 testy"
                 rounded="1"
                 flat
-                @click="selectedType = source"
+                @click="selectedType = source.id"
               >
                 <h4>{{ source.label }}</h4>
               </v-card>
@@ -73,12 +73,6 @@ import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 
-import {
-  DataSourceTypes,
-  GeojsonDataSource,
-  OGCVectorTileDataSource,
-} from "@/utils/datasources/DataSourceTypes";
-
 import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 
 export default {
@@ -101,15 +95,18 @@ export default {
   },
   computed: {
     isVectorTileSelected() {
-      return this.selectedType instanceof OGCVectorTileDataSource;
+      return this.selectedType === "ogc_vectortile";
     },
     isGeoJsonSelected() {
-      return this.selectedType instanceof GeojsonDataSource;
+      return this.selectedType === "geojson";
     },
   },
 
   mounted() {
-    this.dataSources = new DataSourceTypes().getDataSources();
+    this.dataSources = [
+      { label: "geoJSON", id: "geojson" },
+      { label: "OGC Vectortile", id: "ogc_vectortile" },
+    ];
   },
   methods: {
     async validate() {
@@ -119,7 +116,7 @@ export default {
       if (valid) {
         let styleObject;
 
-        if (this.selectedType instanceof GeojsonDataSource) {
+        if (this.selectedType === "geojson") {
           this.openFile().then((geojson) => {
             let json = JSON.parse(geojson);
             // move geometry-Type to class
@@ -138,17 +135,14 @@ export default {
           });
         }
 
-        if (
-          this.selectedType instanceof OGCVectorTileDataSource &&
-          this.tilejson
-        ) {
-          console.log(this.tilejson);
+        if (this.selectedType === "ogc_vectortile" && this.tilejson) {
           let styleObject = new OGCVectorTiles(
-            this.tilejson,
+            this.tilejson.url,
+            this.tilejson.tilejson,
             this.inputs.styleName
           );
-          console.log(styleObject);
-          // this.$emit("import-data", styleObject);
+
+          this.$emit("import-data", styleObject);
         }
       }
     },
