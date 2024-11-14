@@ -36,7 +36,7 @@ class StyleJSON {
       this.createDefaultLayers(source_id, geometry_type);
     } else {
       throw new Error(
-        "Insufficient parameters provided for OGCVectorTiles initialization."
+        "Insufficient parameters provided for StyleJSON initialization."
       );
     }
   }
@@ -85,6 +85,18 @@ class StyleJSON {
     }, {});
 
     return styleObject;
+  }
+
+  getStyleAsJSON() {
+    const styleObject = this.getStyleAsObject();
+
+    let new_layers = styleObject.layers.map((x) => x.getStyleAsObject());
+    styleObject.layers = new_layers;
+    styleObject.layers.forEach((layer) => {
+      layer["source-layer"] = Object.keys(this._sources)[0];
+    });
+
+    return JSON.stringify(styleObject, null, 2);
   }
 }
 

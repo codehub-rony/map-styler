@@ -123,7 +123,7 @@ describe("StyleJSON", function () {
       expect(() => {
         new StyleJSON("test", {});
       }).toThrow(
-        "Insufficient parameters provided for OGCVectorTiles initialization."
+        "Insufficient parameters provided for StyleJSON initialization."
       );
     });
 
@@ -162,6 +162,16 @@ describe("StyleJSON", function () {
       stylejson.sources["osm"] = new_source.osm;
 
       expect(styleObject).toEqual(stylejson);
+    });
+
+    it("getstyleAsJSON() adds 'source-layer': <source_id> to each layer", function () {
+      let json = JSON.parse(style.getStyleAsJSON());
+      let source_id = Object.keys(json.sources)[0];
+      let has_source_layers_defined = json.layers.every(
+        (layer) => layer["source-layer"] === source_id
+      );
+
+      expect(has_source_layers_defined).toBe(true);
     });
   });
 });
