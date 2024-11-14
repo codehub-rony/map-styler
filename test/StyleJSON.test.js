@@ -1,5 +1,5 @@
 import StyleJSON from "../src/utils/datasources/StyleJSON.js";
-import { TiledVectorSource } from "../src/utils/datasources/StyleDataSources.js";
+// import { TiledVectorSource } from "../src/utils/datasources/StyleDataSources.js";
 
 describe("StyleJSON", function () {
   const stylejson = {
@@ -19,13 +19,17 @@ describe("StyleJSON", function () {
   };
 
   describe("Initialize class with stylejson", () => {
-    const styleObject = new StyleJSON(stylejson);
+    let styleObject;
 
-    it("style name is defined", function () {
-      expect(styleObject.name).not.toBeUndefined();
+    beforeEach(() => {
+      styleObject = new StyleJSON(null, null, null, stylejson);
     });
 
-    it("style name is set correctly", function () {
+    it("instance of StyleJSON is created", function () {
+      expect(styleObject).toBeInstanceOf(StyleJSON);
+    });
+
+    it("style name is defined", function () {
       expect(styleObject.name).toBe(stylejson.name);
     });
 
@@ -33,7 +37,7 @@ describe("StyleJSON", function () {
       expect(styleObject.sources).not.toBeUndefined();
     });
 
-    it("correct number of sources are added", function () {
+    it("correct number of sources are created", function () {
       let originalSourceCount = Object.keys(stylejson.sources).length;
       let instanceSourceCount = Object.keys(styleObject.sources).length;
 
@@ -41,26 +45,99 @@ describe("StyleJSON", function () {
     });
   });
 
-  describe("Initialize class without stylejson", () => {
+  describe("Create vectortile stylejson", () => {
     let styleObject;
 
     beforeEach(() => {
-      styleObject = new StyleJSON();
+      styleObject = new StyleJSON(null, null, null, stylejson);
+    });
+
+    // it("source has a type attribute", function () {
+    //   let source_id = Object.keys(styleObject.sources)[0];
+
+    //   let has_attribute = styleObject.sources[source_id].hasOwnProperty("type");
+
+    //   expect(has_attribute).toBe(true);
+    // });
+
+    // it("source type to be 'vector'", function () {
+    //   let source_id = Object.keys(stylejson.sources)[0].type;
+    //   let key = Object.keys(styleObject.sources)[0].type;
+
+    //   expect(key).toBe(source_id);
+    // });
+    it("source has a tiles attribute", function () {
+      let source_id = Object.keys(styleObject.sources)[0];
+
+      let has_attribute =
+        styleObject.sources[source_id].hasOwnProperty("tiles");
+
+      expect(has_attribute).toBe(true);
+    });
+    it("tiles to be an array with length 1", function () {
+      let source_id = Object.keys(styleObject.sources)[0];
+
+      let tiles_length = styleObject.sources[source_id].tiles.length;
+
+      expect(tiles_length).toBe(1);
+    });
+  });
+
+  describe("Initialize class with stylename, tilejson and geometry type", () => {
+    let styleObject;
+    let tilejson = {
+      tilejson: "3.0.0",
+      tiles: [
+        "http://localhost:7080/rest/services/approach-altitude/collections/runways/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
+      ],
+      vector_layers: [
+        {
+          id: "runways",
+          fields: {
+            id: "Integer",
+            fid: "Integer",
+            name: "String",
+            ref: "String",
+            width: "String",
+          },
+          description: "",
+          maxzoom: 15,
+          minzoom: 3,
+          geometry_type: "polygons",
+        },
+      ],
+      bounds: [4.7079566, 52.2875942, 4.8035125, 52.3626997],
+      center: [4.75573455, 52.325146950000004, 0],
+      maxzoom: 15,
+      minzoom: 3,
+      name: "approach-altitude",
+    };
+
+    let input_stylename = "test";
+
+    beforeEach(() => {
+      styleObject = new StyleJSON(input_stylename, tilejson, "polygon");
+    });
+
+    it("throws error if insufficient params are provided", function () {
+      expect(() => {
+        new StyleJSON("test", {});
+      }).toThrow(
+        "Insufficient parameters provided for OGCVectorTiles initialization."
+      );
     });
 
     it("instance of StyleJSON is created", function () {
       expect(styleObject).toBeInstanceOf(StyleJSON);
     });
 
-    it("style name can be set", function () {
-      let style_name = "airports";
-      styleObject.name = style_name;
-      expect(styleObject.name).toBe(style_name);
+    it("style name is set correctly", function () {
+      expect(styleObject.name).toBe(input_stylename);
     });
   });
 
   describe("Method tests", () => {
-    const style = new StyleJSON(stylejson);
+    const style = new StyleJSON(null, null, null, stylejson);
 
     it("getStyleAsObject returns correct structure", function () {
       let styleObject = style.getStyleAsObject();
@@ -86,32 +163,5 @@ describe("StyleJSON", function () {
 
       expect(styleObject).toEqual(stylejson);
     });
-
-    // it("style name is defined", function () {
-    //   expect(styleObject.name).not.toBeUndefined();
-    // });
-
-    // it("style name is set correctly", function () {
-    //   expect(styleObject.name).toBe(stylejson.name);
-    // });
-
-    // it("has sources attribute", function () {
-    //   expect(styleObject.sources).not.toBeUndefined();
-    // });
-
-    // it("correct number of sources are added", function () {
-    //   let originalSourceCount = Object.keys(stylejson.sources).length;
-    //   let instanceSourceCount = styleObject.sources.length;
-
-    //   expect(instanceSourceCount).toBe(originalSourceCount);
-    // });
-
-    // it("sources are of type TiledVectorSource", function () {
-    //   const areAllSourcesTiledVectorSource = Object.values(
-    //     styleObject.sources
-    //   ).every((source) => source instanceof TiledVectorSource);
-
-    //   expect(areAllSourcesTiledVectorSource).toBe(true);
-    // });
   });
 });

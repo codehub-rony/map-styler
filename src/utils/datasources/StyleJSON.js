@@ -1,9 +1,15 @@
 import FillLayer from "../stylejson/layers/FillLayer";
 import LineLayer from "../stylejson/layers/LineLayer";
 import CircleLayer from "../stylejson/layers/CircleLayer";
+import { TiledVectorSource } from "./StyleDataSources";
 
 class StyleJSON {
-  constructor(stylejson) {
+  constructor(
+    stylename = null,
+    tilejson = null,
+    geometry_type = null,
+    stylejson = null
+  ) {
     this._version = 8;
     this._name;
     this._center;
@@ -19,6 +25,19 @@ class StyleJSON {
       // this._layer
 
       this.#initSources(stylejson.sources);
+    } else if (stylename && tilejson && geometry_type) {
+      this._name = stylename;
+
+      let source_id = tilejson.vector_layers[0].id;
+      let tiles_url = tilejson.tiles[0];
+
+      let source = new TiledVectorSource(source_id, tiles_url);
+      this.addSource(source.getStyleAsObject());
+      this.createDefaultLayers(source_id, geometry_type);
+    } else {
+      throw new Error(
+        "Insufficient parameters provided for OGCVectorTiles initialization."
+      );
     }
   }
   get name() {

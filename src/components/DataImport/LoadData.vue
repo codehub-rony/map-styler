@@ -35,14 +35,14 @@
             "
           />
           <GeoJSONInput
-            v-if="isGeoJsonSelected()"
+            v-if="isGeoJsonSelected"
             @update-input="(item) => (inputs[item.var] = item.value)"
             ref="geoJSONInput"
           />
 
           <OGCTileInput
-            v-if="isVectorTileSelected()"
-            @set-tilejson="setTilejson"
+            v-if="isVectorTileSelected"
+            @set-tilejson="this.tilejson = $event"
           />
         </div>
       </v-form>
@@ -69,7 +69,6 @@
 
 <script>
 import GeojsonStyle from "@/utils/stylejson/GeojsonStyle.js";
-import OGCTileStyle from "@/utils/stylejson/OGCTileStyle.js";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
@@ -79,6 +78,8 @@ import {
   GeojsonDataSource,
   OGCVectorTileDataSource,
 } from "@/utils/datasources/DataSourceTypes";
+
+import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 
 export default {
   emits: ["import-data"],
@@ -98,16 +99,19 @@ export default {
       tilejson: null,
     };
   },
+  computed: {
+    isVectorTileSelected() {
+      return this.selectedType instanceof OGCVectorTileDataSource;
+    },
+    isGeoJsonSelected() {
+      return this.selectedType instanceof GeojsonDataSource;
+    },
+  },
+
   mounted() {
     this.dataSources = new DataSourceTypes().getDataSources();
   },
   methods: {
-    isVectorTileSelected: function () {
-      return this.selectedType instanceof OGCVectorTileDataSource;
-    },
-    isGeoJsonSelected: function () {
-      return this.selectedType instanceof GeojsonDataSource;
-    },
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
@@ -138,23 +142,15 @@ export default {
           this.selectedType instanceof OGCVectorTileDataSource &&
           this.tilejson
         ) {
-          this.createTileStyleObject(this.tilejson, this.inputs.styleName);
+          console.log(this.tilejson);
+          let styleObject = new OGCVectorTiles(
+            this.tilejson,
+            this.inputs.styleName
+          );
+          console.log(styleObject);
+          // this.$emit("import-data", styleObject);
         }
       }
-    },
-    setTilejson: function (tilejson) {
-      this.tilejson = tilejson;
-    },
-    //consider movig this to OGCTileINput component. Requires passing style_name as prop
-    createTileStyleObject: function (tilejson, style_name) {
-      let styleObject = new OGCTileStyle(
-        style_name,
-        tilejson.url,
-        tilejson.source_id,
-        tilejson.vector_layers[0].geometry_type,
-        tilejson.tiles_url
-      );
-      this.$emit("import-data", styleObject);
     },
 
     // Move this function to GeoJsoninput

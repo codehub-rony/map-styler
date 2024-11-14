@@ -55,7 +55,7 @@ export default {
       url: null,
       errorMessages: [],
       validationRules: [(v) => !!v || "A URL to a vector tilejson is required"],
-      validGoemetries: ["polygons", "polygon", "point", "line"],
+      validGoemetries: ["polygons", "polygon", "point", "line", "points"],
       showToggle: false,
       geometry: null,
       tilejson: null,
@@ -90,23 +90,17 @@ export default {
           ) {
             this.showToggle = true;
           } else {
-            this.acceptTileJson(tilejson);
+            this.$emit("set-tilejson", tilejson);
           }
         })
         .catch(() => {
           this.errorMessages.push("The URL does not return a valid tilejson");
         });
     },
-    acceptTileJson: function () {
-      this.tilejson["source_id"] = this.tilejson.vector_layers[0].id;
-      this.tilejson["tiles_url"] = this.tilejson.tiles[0];
-      this.tilejson["url"] = this.url;
 
-      this.$emit("set-tilejson", this.tilejson);
-    },
     setGeometryManually: function () {
       this.tilejson.vector_layers[0].geometry_type = this.geometry;
-      this.acceptTileJson();
+      this.$emit("set-tilejson", this.tilejson);
     },
   },
 };
