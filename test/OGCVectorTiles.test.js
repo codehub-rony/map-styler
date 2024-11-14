@@ -29,38 +29,23 @@ describe("OGCVectorTiles", function () {
 
     it("does not throw error if source_config param is provided", function () {
       expect(() => {
-        new OGCVectorTiles(null, null, "test style");
+        new OGCVectorTiles(null, null, null, "test style");
       }).not.toThrow(
         "Insufficient parameters provided for OGCVectorTiles initialization."
       );
     });
 
-    it("does not throw error if tilejson and stylename params are provided", function () {
+    it("does not throw error if tilejson_url, tilejson and stylename params are provided", function () {
       expect(() => {
-        new OGCVectorTiles("test", "test style", null);
+        new OGCVectorTiles(tilejson_url, "test", "test style", null);
       }).not.toThrow(
         "Insufficient parameters provided for OGCVectorTiles initialization."
       );
     });
   });
 
-  // describe("Initialize with config", () => {
-
-  //   it("instance of OGCVectorTiles is created", function () {
-  //     expect(dataSource).toBeInstanceOf(OGCVectorTiles);
-  //   });
-
-  //   it("instance of StyleJSON is created", function () {
-  //     expect(dataSource.stylejson).toBeInstanceOf(StyleJSON);
-  //   });
-  // });
-
   describe("Initiate defaultstyle using tilejson", () => {
     let dataSource;
-    beforeEach(() => {
-      let stylename = "test style";
-      dataSource = new OGCVectorTiles(tilejson, stylename);
-    });
     let tilejson = {
       tilejson: "3.0.0",
       tiles: [
@@ -89,6 +74,13 @@ describe("OGCVectorTiles", function () {
       name: "approach-altitude",
     };
 
+    let tilejson_url =
+      "http://localhost:7080/rest/services/approach-altitude/collections/runways/tiles/WebMercatorQuad";
+    beforeEach(() => {
+      let stylename = "test style";
+      dataSource = new OGCVectorTiles(tilejson_url, tilejson, stylename);
+    });
+
     it("instance of OGCVectorTiles is created", function () {
       expect(dataSource).toBeInstanceOf(OGCVectorTiles);
     });
@@ -96,9 +88,40 @@ describe("OGCVectorTiles", function () {
     it("instance of StyleJSON is created", function () {
       expect(dataSource.stylejson).toBeInstanceOf(StyleJSON);
     });
+    it("has geometry_type attribute", function () {
+      expect(dataSource.hasOwnProperty("_geometry_type")).toBe(true);
+    });
 
-    it("Geometry type is standardized", function () {
+    it("geometry_type attribute has getter", function () {
+      expect(dataSource.geometry_type).toBe("polygon");
+    });
+
+    it("geometry_type attribute is standardized", function () {
       expect(dataSource._geometry_type).toBe("polygon");
+    });
+
+    it("has tilejson_url attribute", function () {
+      expect(dataSource.hasOwnProperty("_tilejson_url")).toBe(true);
+    });
+
+    it("tilejson_url attribute is set with correct value", function () {
+      expect(dataSource._tilejson_url).toBe(tilejson_url);
+    });
+
+    it("tilejson_url attribute has getter", function () {
+      expect(dataSource.tilejson_url).toBe(tilejson_url);
+    });
+
+    it("has source_id attribute", function () {
+      expect(dataSource.hasOwnProperty("_source_id")).toBe(true);
+    });
+
+    it("_source_id attribute is set with correct value", function () {
+      expect(dataSource._source_id).toBe(tilejson.vector_layers[0].id);
+    });
+
+    it("_source_id has a getter", function () {
+      expect(dataSource.source_id).toBe(tilejson.vector_layers[0].id);
     });
   });
 });

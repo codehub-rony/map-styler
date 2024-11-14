@@ -90,7 +90,7 @@ export default {
           ) {
             this.showToggle = true;
           } else {
-            this.$emit("set-tilejson", tilejson);
+            this.$emit("set-tilejson", { tilejson: tilejson, url: this.url });
           }
         })
         .catch(() => {
@@ -100,7 +100,7 @@ export default {
 
     setGeometryManually: function () {
       this.tilejson.vector_layers[0].geometry_type = this.geometry;
-      this.$emit("set-tilejson", this.tilejson);
+      this.$emit("set-tilejson", { tilejson: this.tilejson, url: this.url });
     },
   },
 };

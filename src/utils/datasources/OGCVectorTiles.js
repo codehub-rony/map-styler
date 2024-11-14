@@ -1,13 +1,19 @@
 import BaseDataSource from "./BaseDataSource";
 import StyleJSON from "./StyleJSON";
 class OGCVectorTiles extends BaseDataSource {
-  constructor(tilejson = null, stylename = null, source_config = null) {
+  constructor(
+    tilejson_url = null,
+    tilejson = null,
+    stylename = null,
+    source_config = null
+  ) {
     super();
+    this._tilejson_url = null;
 
     if (source_config) {
       this.#initializeWithConfig(source_config);
-    } else if (tilejson && stylename) {
-      this.#initializeWithTileJSON(tilejson, stylename);
+    } else if (tilejson_url && tilejson && stylename) {
+      this.#initializeWithTileJSON(tilejson_url, tilejson, stylename);
     } else {
       throw new Error(
         "Insufficient parameters provided for OGCVectorTiles initialization."
@@ -15,10 +21,12 @@ class OGCVectorTiles extends BaseDataSource {
     }
   }
 
-  #initializeWithTileJSON(tilejson, stylename) {
+  #initializeWithTileJSON(tilejson_url, tilejson, stylename) {
     this._geometry_type = this.standarizeGeometryType(
       tilejson.vector_layers[0].geometry_type
     );
+    this._tilejson_url = tilejson_url;
+    this._source_id = tilejson.vector_layers[0].id;
 
     this._stylejson = new StyleJSON(stylename, tilejson, this._geometry_type);
   }
@@ -33,6 +41,10 @@ class OGCVectorTiles extends BaseDataSource {
     this._projection = config.projection;
     this._geometry_type = config.geometry_type;
     this._stylejson = new StyleJSON(null, null, config.stylejson);
+  }
+
+  get tilejson_url() {
+    return this._tilejson_url;
   }
 }
 
