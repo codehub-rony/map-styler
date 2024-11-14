@@ -15,7 +15,7 @@
         <LayerList
           v-for="layer in styleObjects"
           :key="layer.source_id"
-          :styleObject="layer"
+          :styleObject="layer.stylejson"
         />
       </div>
     </v-scroll-y-transition>
