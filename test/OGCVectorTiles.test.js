@@ -123,5 +123,41 @@ describe("OGCVectorTiles", function () {
     it("_source_id has a getter", function () {
       expect(dataSource.source_id).toBe(tilejson.vector_layers[0].id);
     });
+    // it("getstyleAsJSON() adds 'source-layer': <source_id> to each layer", function () {
+    //   let json = JSON.parse(style.getStyleAsJSON());
+    //   let source_id = Object.keys(json.sources)[0];
+    //   let has_source_layers_defined = json.layers.every(
+    //     (layer) => layer["source-layer"] === source_id
+    //   );
+
+    //   expect(has_source_layers_defined).toBe(true);
+    // });
+    // it("addSource() returns valid structure when adding new source to existing source", function () {
+    //   let new_source = {
+    //     osm: {
+    //       type: "vector",
+    //       tiles: [
+    //         "http://localhost:7080/rest/services/approach-altitude/collections/osm/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
+    //       ],
+    //     },
+    //   };
+
+    //   style.addSource(new_source);
+
+    //   let styleObject = style.getStyleAsObject();
+
+    //   stylejson.sources["osm"] = new_source.osm;
+
+    //   expect(styleObject).toEqual(stylejson);
+    // });
+    // describe("Method tests", () => {
+    //   const style = new StyleJSON(null, null, null, stylejson);
+
+    //   it("getStyleAsObject returns correct structure", function () {
+    //     let styleObject = style.getStyleAsObject();
+
+    //     expect(styleObject).toEqual(stylejson);
+    //   });
+    // });
   });
 });

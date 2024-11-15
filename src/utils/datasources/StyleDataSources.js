@@ -22,4 +22,17 @@ class TiledVectorSource extends StyleDataSources {
   }
 }
 
-export { TiledVectorSource };
+class GeoJsonSource extends StyleDataSources {
+  constructor(source_id) {
+    super(source_id, "geojson");
+    this._data = "./data.geojson";
+  }
+
+  getStyleAsObject() {
+    let styleObject = {};
+    styleObject[this._id] = { type: this._type, data: this._data };
+    return styleObject;
+  }
+}
+
+export { TiledVectorSource, GeoJsonSource };

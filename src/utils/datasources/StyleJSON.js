@@ -1,12 +1,11 @@
 import FillLayer from "../stylejson/layers/FillLayer";
 import LineLayer from "../stylejson/layers/LineLayer";
 import CircleLayer from "../stylejson/layers/CircleLayer";
-import { TiledVectorSource } from "./StyleDataSources";
 
 class StyleJSON {
   constructor(
     stylename = null,
-    tilejson = null,
+    source = null,
     geometry_type = null,
     stylejson = null
   ) {
@@ -25,15 +24,11 @@ class StyleJSON {
       // this._layer
 
       this.#initSources(stylejson.sources);
-    } else if (stylename && tilejson && geometry_type) {
+    } else if (stylename && source && geometry_type) {
       this._name = stylename;
 
-      let source_id = tilejson.vector_layers[0].id;
-      let tiles_url = tilejson.tiles[0];
-
-      let source = new TiledVectorSource(source_id, tiles_url);
-      this.addSource(source.getStyleAsObject());
-      this.createDefaultLayers(source_id, geometry_type);
+      this.addSource(source);
+      this.createDefaultLayers(source.id, geometry_type);
     } else {
       throw new Error(
         "Insufficient parameters provided for StyleJSON initialization."
@@ -59,7 +54,7 @@ class StyleJSON {
   }
 
   addSource(source) {
-    this._sources = Object.assign({}, this._sources, source);
+    this._sources = Object.assign({}, this._sources, source.getStyleAsObject());
   }
 
   createDefaultLayers(source_id, geometry_type) {
@@ -85,18 +80,6 @@ class StyleJSON {
     }, {});
 
     return styleObject;
-  }
-
-  getStyleAsJSON() {
-    const styleObject = this.getStyleAsObject();
-
-    let new_layers = styleObject.layers.map((x) => x.getStyleAsObject());
-    styleObject.layers = new_layers;
-    styleObject.layers.forEach((layer) => {
-      layer["source-layer"] = Object.keys(this._sources)[0];
-    });
-
-    return JSON.stringify(styleObject, null, 2);
   }
 
   setVisibilityAllLayers(isVisible) {

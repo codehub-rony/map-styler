@@ -1,5 +1,6 @@
 import BaseDataSource from "./BaseDataSource";
 import StyleJSON from "./StyleJSON";
+import { TiledVectorSource } from "./StyleDataSources";
 class OGCVectorTiles extends BaseDataSource {
   constructor(
     tilejson_url = null,
@@ -28,7 +29,10 @@ class OGCVectorTiles extends BaseDataSource {
     this._tilejson_url = tilejson_url;
     this._source_id = tilejson.vector_layers[0].id;
 
-    this._stylejson = new StyleJSON(stylename, tilejson, this._geometry_type);
+    let tiles_url = tilejson.tiles[0];
+    let source = new TiledVectorSource(this._source_id, tiles_url);
+
+    this._stylejson = new StyleJSON(stylename, source, this._geometry_type);
   }
 
   #initializeWithConfig(source_config) {
@@ -45,6 +49,17 @@ class OGCVectorTiles extends BaseDataSource {
 
   get tilejson_url() {
     return this._tilejson_url;
+  }
+  getStyleAsJSON() {
+    const styleObject = this._stylejson.getStyleAsObject();
+
+    styleObject.layers = styleObject.layers.map((x) => x.getStyleAsObject());
+
+    styleObject.layers.forEach((layer) => {
+      layer["source-layer"] = Object.keys(styleObject.sources)[0];
+    });
+
+    return JSON.stringify(styleObject, null, 2);
   }
 }
 

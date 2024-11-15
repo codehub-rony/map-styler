@@ -1,5 +1,5 @@
 const download_stylejson = function (styleObject) {
-  let json = styleObject.stylejson.getStyleAsJSON();
+  let json = styleObject.getStyleAsJSON();
   const a = document.createElement("a");
   const file = new Blob([json], { type: "application/json" });
   a.href = URL.createObjectURL(file);

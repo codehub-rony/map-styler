@@ -68,12 +68,12 @@
 </template>
 
 <script>
-import GeojsonStyle from "@/utils/stylejson/GeojsonStyle.js";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 
 import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
+import GeoJSONFeatures from "@/utils/datasources/GeoJSONFeatures";
 
 export default {
   emits: ["import-data"],
@@ -104,7 +104,7 @@ export default {
 
   mounted() {
     this.dataSources = [
-      { label: "geoJSON", id: "geojson" },
+      { label: "GeoJSON", id: "geojson" },
       { label: "OGC Vectortile", id: "ogc_vectortile" },
     ];
   },
@@ -118,18 +118,7 @@ export default {
 
         if (this.selectedType === "geojson") {
           this.openFile().then((geojson) => {
-            let json = JSON.parse(geojson);
-            // move geometry-Type to class
-            let geometry_type = json.features[0].geometry.type.toLowerCase();
-            let source_id = this.inputs.styleName;
-
-            styleObject = new GeojsonStyle(
-              this.inputs.styleName,
-              source_id,
-              geometry_type,
-              geojson,
-              this.selectedType
-            );
+            styleObject = new GeoJSONFeatures(this.inputs.styleName, geojson);
 
             this.$emit("import-data", styleObject);
           });
