@@ -19,6 +19,7 @@ class GeoJSONFeatures extends BaseDataSource {
   }
 
   #initializeWithGeoJSON(stylename, geojson) {
+    this._style_name = stylename;
     if (typeof geojson === "string") {
       geojson = JSON.parse(geojson);
     }

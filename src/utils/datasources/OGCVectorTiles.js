@@ -23,6 +23,7 @@ class OGCVectorTiles extends BaseDataSource {
   }
 
   #initializeWithTileJSON(tilejson_url, tilejson, stylename) {
+    this._style_name = stylename;
     this._geometry_type = this.standarizeGeometryType(
       tilejson.vector_layers[0].geometry_type
     );
@@ -50,6 +51,7 @@ class OGCVectorTiles extends BaseDataSource {
   get tilejson_url() {
     return this._tilejson_url;
   }
+
   getStyleAsJSON() {
     const styleObject = this._stylejson.getStyleAsObject();
 

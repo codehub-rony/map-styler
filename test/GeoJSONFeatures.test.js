@@ -33,6 +33,12 @@ describe("GeoJSONFeatures", function () {
       const instance = new GeoJSONFeatures(style_name, geojson);
       expect(instance.geojson).toEqual(geojson);
     });
+
+    it("style_name attribute is set with correct value and has getter", function () {
+      let stylename = "test style";
+      const instance = new GeoJSONFeatures(stylename, geojson);
+      expect(instance.style_name).toBe(stylename);
+    });
   });
 });
 

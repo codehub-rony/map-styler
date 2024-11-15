@@ -88,41 +88,24 @@ describe("OGCVectorTiles", function () {
     it("instance of StyleJSON is created", function () {
       expect(dataSource.stylejson).toBeInstanceOf(StyleJSON);
     });
-    it("has geometry_type attribute", function () {
-      expect(dataSource.hasOwnProperty("_geometry_type")).toBe(true);
-    });
 
-    it("geometry_type attribute has getter", function () {
+    it("geometry_type attribute is set correctly (not empty and standarized", function () {
       expect(dataSource.geometry_type).toBe("polygon");
     });
 
-    it("geometry_type attribute is standardized", function () {
-      expect(dataSource._geometry_type).toBe("polygon");
-    });
-
-    it("has tilejson_url attribute", function () {
-      expect(dataSource.hasOwnProperty("_tilejson_url")).toBe(true);
-    });
-
-    it("tilejson_url attribute is set with correct value", function () {
-      expect(dataSource._tilejson_url).toBe(tilejson_url);
-    });
-
-    it("tilejson_url attribute has getter", function () {
+    it("tilejson_url attribute is set with correct value and has getter", function () {
       expect(dataSource.tilejson_url).toBe(tilejson_url);
     });
 
-    it("has source_id attribute", function () {
-      expect(dataSource.hasOwnProperty("_source_id")).toBe(true);
-    });
-
-    it("_source_id attribute is set with correct value", function () {
-      expect(dataSource._source_id).toBe(tilejson.vector_layers[0].id);
-    });
-
-    it("_source_id has a getter", function () {
+    it("_source_id attribute is set with correct value and has getter", function () {
       expect(dataSource.source_id).toBe(tilejson.vector_layers[0].id);
     });
+
+    it("style_name attribute is set with correct value and has getter", function () {
+      let stylename = "test style";
+      expect(dataSource.style_name).toBe(stylename);
+    });
+
     // it("getstyleAsJSON() adds 'source-layer': <source_id> to each layer", function () {
     //   let json = JSON.parse(style.getStyleAsJSON());
     //   let source_id = Object.keys(json.sources)[0];
