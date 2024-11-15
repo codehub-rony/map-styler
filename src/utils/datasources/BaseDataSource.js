@@ -26,7 +26,7 @@ class BaseDataSource {
     let geom_type = geom.toLowerCase();
 
     const polygon = ["polygon", "multipolygon", "polygons"];
-    const line = ["linestring", "multilinestring"];
+    const line = ["linestring", "multilinestring", "lines"];
     const point = ["point", "points"];
 
     if (polygon.includes(geom_type)) {
