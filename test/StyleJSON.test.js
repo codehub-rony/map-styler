@@ -134,6 +134,15 @@ describe("StyleJSON", function () {
     it("style name is set correctly", function () {
       expect(styleObject.name).toBe(input_stylename);
     });
+    it("setVisibilityAllLayers() toggles the visible of all layers to provided boolean value", function () {
+      let isVisible = false;
+      styleObject.setVisibilityAllLayers(isVisible);
+
+      let isUpdateVisible = styleObject.layers.every(
+        (layer) => layer.getVisibility() === false
+      );
+      expect(isUpdateVisible).toBe(true);
+    });
   });
 
   describe("Method tests", () => {

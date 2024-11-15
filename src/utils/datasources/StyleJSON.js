@@ -98,6 +98,12 @@ class StyleJSON {
 
     return JSON.stringify(styleObject, null, 2);
   }
+
+  setVisibilityAllLayers(isVisible) {
+    this._layers.forEach((layer) => {
+      layer.setVisibility(isVisible);
+    });
+  }
 }
 
 export default StyleJSON;
