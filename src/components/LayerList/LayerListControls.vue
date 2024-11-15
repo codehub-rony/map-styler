@@ -133,7 +133,7 @@ export default {
     items: {
       handler() {
         const item = this.items.find((item) => item.title === "hide layer");
-        this.styleObject.setVisibilityAllLayers(item.isHidden);
+        this.styleObject.stylejson.setVisibilityAllLayers(item.isHidden);
       },
       deep: true,
     },
