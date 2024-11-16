@@ -89,8 +89,14 @@ describe("OGCVectorTiles", function () {
       expect(dataSource.stylejson).toBeInstanceOf(StyleJSON);
     });
 
-    it("geometry_type attribute is set correctly (not empty and standarized", function () {
+    it("geometry_type attribute is set correctly (not empty and standarized)", function () {
       expect(dataSource.geometry_type).toBe("polygon");
+    });
+
+    it("fields are parsed from tilejson and set to fields attribute", function () {
+      let original_fields = tilejson.vector_layers[0].fields;
+
+      expect(dataSource.fields).toEqual(original_fields);
     });
 
     it("tilejson_url attribute is set with correct value and has getter", function () {

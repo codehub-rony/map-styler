@@ -29,6 +29,7 @@ class OGCVectorTiles extends BaseDataSource {
     );
     this._tilejson_url = tilejson_url;
     this._source_id = tilejson.vector_layers[0].id;
+    this._fields = tilejson.vector_layers[0].fields;
 
     let tiles_url = tilejson.tiles[0];
     let source = new TiledVectorSource(this._source_id, tiles_url);
