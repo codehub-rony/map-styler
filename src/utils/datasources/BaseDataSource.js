@@ -5,6 +5,7 @@ class BaseDataSource {
     this._projection = "EPSG:3857";
     this._geometry_type = null;
     this._stylejson;
+    this._fields;
   }
   get style_name() {
     return this._style_name;
@@ -19,6 +20,10 @@ class BaseDataSource {
 
   get geometry_type() {
     return this._geometry_type;
+  }
+
+  get fields() {
+    return this._fields;
   }
 
   set geometry_type(geometry_type) {
