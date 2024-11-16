@@ -87,6 +87,14 @@ class StyleJSON {
       layer.setVisibility(isVisible);
     });
   }
+
+  deleteLayer(id_to_remove) {
+    this._layers.forEach((layer, i) => {
+      if (layer.id === id_to_remove) {
+        this._layers.splice(i, 1);
+      }
+    });
+  }
 }
 
 export default StyleJSON;

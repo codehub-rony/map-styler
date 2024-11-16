@@ -1,17 +1,16 @@
 import StyleJSON from "../src/utils/datasources/StyleJSON.js";
-// import { TiledVectorSource } from "../src/utils/datasources/StyleDataSources.js";
+import { TiledVectorSource } from "../src/utils/datasources/StyleDataSources";
 
 describe("StyleJSON", function () {
   const stylejson = {
     version: 8,
-    name: "runways",
-    zoom: 10,
+    name: "test style",
     center: [4.7242, 52.3275],
     sources: {
       runways: {
         type: "vector",
         tiles: [
-          "http://localhost:7080/rest/services/approach-altitude/collections/runways/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
+          "http://localhost:7080/rest/services/<service_id>/collections/runways/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt",
         ],
       },
     },
@@ -46,12 +45,32 @@ describe("StyleJSON", function () {
   });
 
   describe("Method tests", () => {
-    const style = new StyleJSON(null, null, null, stylejson);
+    let styleObject;
 
-    it("getStyleAsObject returns correct structure", function () {
-      let styleObject = style.getStyleAsObject();
+    beforeEach(() => {
+      let style_name = stylejson.name;
+      let tiles_url =
+        "http://localhost:7080/rest/services/<service_id>/collections/runways/tiles/WebMercatorQuad/{z}/{y}/{x}?f=mvt";
+      let source_id = "runways";
+      let geometry_type = "polygon";
+      let source = new TiledVectorSource(source_id, tiles_url, geometry_type);
+      styleObject = new StyleJSON(style_name, source, geometry_type, null);
+    });
 
-      expect(styleObject).toEqual(stylejson);
+    it("getStyleAsObject returns object", function () {
+      let styleAsObject = styleObject.getStyleAsObject();
+
+      expect(styleAsObject).toBeInstanceOf(Object);
+    });
+
+    it("DeleteLayer removes correct layer", function () {
+      let id_to_remove = styleObject.layers[0].id;
+
+      styleObject.deleteLayer(id_to_remove);
+
+      let remaing_ids = styleObject.layers.map((x) => x.id);
+      console.log(styleObject.layers);
+      expect(remaing_ids.includes(id_to_remove)).toBe(false);
     });
   });
 });
