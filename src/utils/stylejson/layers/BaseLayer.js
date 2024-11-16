@@ -6,7 +6,9 @@ class BaseLayer {
       throw new Error("Missing parameter: source_id");
     }
     this.id = this.generateUniqueId();
-    this._label = layer_label ? layer_label : `default ${type}`;
+    this._label = layer_label
+      ? layer_label.replace("_", " ").toLowerCase()
+      : `new ${type}`;
     this._source = source_id;
     this.type = type;
     this.filter = null;
@@ -17,6 +19,10 @@ class BaseLayer {
 
   get label() {
     return this._label;
+  }
+
+  set label(new_label) {
+    this._label = new_label;
   }
   getPaint(attributes) {
     let paint = {};

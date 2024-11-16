@@ -1,5 +1,6 @@
 import StyleJSON from "../src/utils/datasources/StyleJSON.js";
 import { TiledVectorSource } from "../src/utils/datasources/StyleDataSources";
+import FillLayer from "../src/utils/stylejson/layers/FillLayer.js";
 
 describe("StyleJSON", function () {
   const stylejson = {
@@ -71,6 +72,21 @@ describe("StyleJSON", function () {
       let remaing_ids = styleObject.layers.map((x) => x.id);
       console.log(styleObject.layers);
       expect(remaing_ids.includes(id_to_remove)).toBe(false);
+    });
+
+    it("CreateLayer with geometry type polygon returns a new layer with FillLayer as instances type", function () {
+      let source_id = "runways";
+      let new_layer = styleObject.createLayer(source_id, "polygon");
+
+      expect(new_layer).toBeInstanceOf(FillLayer);
+    });
+
+    it("AddLayer adds new layer to array of layers", function () {
+      let source_id = "runways";
+      let new_layer = styleObject.createLayer(source_id, "polygon");
+      styleObject.addLayer(new_layer);
+
+      expect(styleObject.layers.includes(new_layer)).toBe(true);
     });
   });
 });

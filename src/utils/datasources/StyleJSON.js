@@ -88,12 +88,30 @@ class StyleJSON {
     });
   }
 
+  createLayer(source_id, geometry_type) {
+    switch (geometry_type) {
+      case "point":
+        return new CircleLayer(null, source_id, source_id);
+      case "line":
+        return new LineLayer(null, source_id, source_id);
+      case "polygon":
+        return new FillLayer(null, source_id, source_id);
+      default:
+        return null;
+    }
+  }
+
   deleteLayer(id_to_remove) {
     this._layers.forEach((layer, i) => {
       if (layer.id === id_to_remove) {
         this._layers.splice(i, 1);
       }
     });
+  }
+
+  addLayer(new_layer) {
+    let position_last_element = this._layers.length - 1;
+    this._layers.splice(position_last_element, 0, new_layer);
   }
 }
 
