@@ -16,7 +16,7 @@
         <div
           class="d-flex flex-row align-center justify-space-between pl-2 pr-2"
         >
-          <span class="text-subtitle-2">{{ layer.style_name }}</span>
+          <span class="text-subtitle-2">{{ layer.label }}</span>
           <div class="d-flex flex-row">
             <EditButton
               :layer="layer"
