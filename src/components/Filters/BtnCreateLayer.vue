@@ -1,10 +1,5 @@
 <template>
   <div>
-    <!-- <div>
-      <v-btn block variant="text" size="x-small" @click="openDialog"
-        ><v-icon icon="mdi-plus"></v-icon>
-      </v-btn>
-    </div> -->
     <div>
       <v-btn block variant="text" size="x-small" @click="openDialog"
         ><span class="text-caption">create filter</span>
@@ -33,18 +28,20 @@ export default {
       label: null,
       messages: [],
       conditions: [],
-      attributes: [],
-      layer: null,
     };
   },
   methods: {
     openDialog: async function () {
-      this.attributes = await this.styleObject.getFeatureAttributes();
-      this.layer = this.styleObject.createLayer();
-      this.$refs.LayerEditDialog.openDialog(this.layer, this.attributes, "new");
+      let fields = this.styleObject.fields;
+      let new_layer = this.styleObject.stylejson.createLayer(
+        this.styleObject.source_id,
+        this.styleObject.geometry_type
+      );
+      let dialog_mode = "new";
+      this.$refs.LayerEditDialog.openDialog(new_layer, fields, dialog_mode);
     },
     addLayer: function (new_layer) {
-      this.styleObject.addLayer(new_layer);
+      this.styleObject.stylejson.addLayer(new_layer);
     },
   },
 };

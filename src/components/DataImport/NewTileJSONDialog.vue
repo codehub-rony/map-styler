@@ -36,7 +36,7 @@ import ButtonGroup from "@/components/DataImport/ButtonGroup.vue";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 
-import OGCTileStyle from "@/utils/stylejson/OGCTileStyle.js";
+import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 
 // store
 import { useAppStore } from "@/store/app.js";
@@ -60,13 +60,12 @@ export default {
     ...mapActions(useAppStore, ["addStyleObject"]),
     createTileJson() {
       if (this.tilejson && this.styleName) {
-        let styleObject = new OGCTileStyle(
-          this.styleName,
+        let styleObject = new OGCVectorTiles(
           this.tilejson.url,
-          this.tilejson.source_id,
-          this.tilejson.vector_layers[0].geometry_type,
-          this.tilejson.tiles_url
+          this.tilejson.tilejson,
+          this.styleName
         );
+
         this.addStyleObject(styleObject);
 
         this.closeDialog();

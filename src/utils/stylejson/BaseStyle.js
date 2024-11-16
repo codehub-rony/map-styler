@@ -5,58 +5,75 @@ import CircleLayer from "./layers/CircleLayer.js";
 const geometry_types = { point: "point", polygon: "polygon", line: "line" };
 
 class BaseStyle {
-  constructor(style_name, source_id, geometry_type) {
-    if (style_name === undefined) {
-      throw new Error("Name parameter is required");
+  constructor(stylejson) {
+    this._version = 8;
+    this._style_name = "New style";
+    this._source_id = "hello"; // use getsourceid function from datasource class
+    this._sources = {}; // create a class for datasources
+    this._layers = [];
+
+    if (stylejson) {
+      this.#parse_stylejson(stylejson);
     }
-    this.version = 8;
-    this.style_name = style_name;
-    this.source_id = source_id;
-    this._datasource_type = null;
-    this.sources = {};
-    this.layers = [];
-    this.geometry_type = this.standarizeGeometryType(geometry_type);
+  }
+
+  #parse_stylejson(stylejson) {
+    let json = stylejson;
+    if (stylejson && typeof stylejson === "string") {
+      json = JSON.parse(stylejson);
+    }
+
+    this._style_name = json.style_name;
+  }
+
+  get style_name() {
+    return this._style_name;
+  }
+
+  set style_name(style_name) {
+    this._style_name = style_name;
+  }
+
+  get source_id() {
+    return this._source_id;
+  }
+
+  set source_id(id) {
+    this.source_id = id;
   }
 
   get datasource_type() {
     return this._datasource_type;
   }
 
-  standarizeGeometryType(source_geom_type) {
-    let geom_type = source_geom_type.toLowerCase();
-
-    const polygon = ["polygon", "multipolygon", "polygons"];
-    const line = ["linestring", "multilinestring"];
-    const point = ["point", "points"];
-
-    if (polygon.includes(geom_type)) {
-      return "polygon";
-    } else if (line.includes(geom_type)) {
-      return "line";
-    } else if (point.includes(geom_type)) {
-      return "point";
-    } else {
-      throw new Error("Unknown geometry type");
-    }
+  set datasource_type(type) {
+    this._datasource_type = type;
+  }
+  get geometry_type() {
+    return this.geometry_type;
   }
 
-  createDefaultLayers() {
-    if (!this.geometry_type) {
+  set geometry_type(geometry_type) {
+    this._geometry_type = this.standarizeGeometryType(geometry_type);
+  }
+
+  createDefaultLayers(geometry_type) {
+    if (!geometry_type) {
       throw new Error("Style has no geometry_type");
-    } else if (this.geometry_type === geometry_types.polygon) {
-      this.layers.push(
-        new FillLayer(`${this.style_name}_fill`, this.source_id, true)
+    } else if (geometry_type === geometry_types.polygon) {
+      this._layers.push(
+        new FillLayer(`${this._style_name}_fill`, this._source_id, true)
       );
-      this.layers.push(
-        new LineLayer(`${this.style_name}_line`, this.source_id)
+      this._layers.push(
+        new LineLayer(`${this._style_name}_line`, this._source_id)
       );
-    } else if (this.geometry_type === geometry_types.line) {
-      this.layers.push(
-        new LineLayer(`${this.style_name}_line`, this.source_id)
+    } else if (geometry_type === geometry_types.line) {
+      this._layers.push(
+        new LineLayer(`${this._style_name}_line`, this._source_id)
       );
-    } else if (this.geometry_type === geometry_types.point) {
-      this.layers.push(
-        new CircleLayer(`${this.style_name}_circle`, this.source_id)
+    } else if (geometry_type === geometry_types.point) {
+      this._layers.push(
+        new CircleLayer(`${this._style_name}_circle`, this._source_id)
       );
     } else {
       throw new Error("Unkown geometry type from geoJSON");
@@ -64,20 +81,20 @@ class BaseStyle {
   }
 
   createLayer(label) {
-    switch (this.geometry_type) {
+    switch (this._geometry_type) {
       case geometry_types.point:
-        return new CircleLayer(label, this.source_id);
+        return new CircleLayer(label, this._source_id);
       case geometry_types.line:
-        return new LineLayer(label, this.source_id);
+        return new LineLayer(label, this._source_id);
       case geometry_types.polygon:
-        return new FillLayer(label, this.source_id, false);
+        return new FillLayer(label, this._source_id, false);
       default:
         return null;
     }
   }
   addLayer(new_layer) {
-    let position_last_element = this.layers.length - 1;
-    this.layers.splice(position_last_element, 0, new_layer);
+    let position_last_element = this._layers.length - 1;
+    this._layers.splice(position_last_element, 0, new_layer);
   }
 
   addFilter(layer_id, layer_label, filter) {
@@ -88,23 +105,23 @@ class BaseStyle {
     new_layer["filter"] = filter;
 
     if (new_layer instanceof FillLayer) {
-      let index = this.layers.length - 1;
-      this.layers.splice(index, 0, new_layer);
+      let index = this._layers.length - 1;
+      this._layers.splice(index, 0, new_layer);
     } else {
-      this.layers.push(new_layer);
+      this._layers.push(new_layer);
     }
   }
 
   deleteLayer(layer_id) {
-    this.layers.forEach((layer, i) => {
+    this._layers.forEach((layer, i) => {
       if (layer.id === layer_id) {
-        this.layers.splice(i, 1);
+        this._layers.splice(i, 1);
       }
     });
   }
 
   setVisibilityAllLayers(isVisble) {
-    this.layers.forEach((layer) => {
+    this._layers.forEach((layer) => {
       layer.setVisibility(isVisble);
     });
   }

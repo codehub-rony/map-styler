@@ -22,8 +22,9 @@ export default {
   },
   methods: {
     handleClick: async function () {
-      let attributes = await this.styleObject.getFeatureAttributes();
-      this.$refs.LayerEditDialog.openDialog(this.layer, attributes, "edit");
+      let fields = this.styleObject.fields;
+      let dialog_mode = "edit";
+      this.$refs.LayerEditDialog.openDialog(this.layer, fields, dialog_mode);
     },
   },
 };

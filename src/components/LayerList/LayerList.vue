@@ -1,14 +1,18 @@
 <template>
   <!-- <div :class="['dataset-container', isCollapsed ? 'mb-2' : 'mb-5']"> -->
   <div class="dataset-container mb-2">
-    <LayerListHeader
+    <LayerListControls
       :styleObject="styleObject"
       @collapse="isCollapsed = isCollapsed ? false : true"
       class="pl-2 pr-2 pb-1 pt-2"
     />
     <v-divider v-if="!isCollapsed" class="pb-2"> </v-divider>
     <div v-if="!isCollapsed">
-      <div v-for="(layer, i) in styleObject.layers" :id="i" class="mb-1 pl-4">
+      <div
+        v-for="(layer, i) in styleObject.stylejson.layers"
+        :id="i"
+        class="mb-1 pl-4"
+      >
         <div
           class="d-flex flex-row align-center justify-space-between pl-2 pr-2"
         >
@@ -84,7 +88,7 @@ import DeleteButton from "@/components/DeleteButton.vue";
 import VisibilityButton from "./VisibilityButton.vue";
 import EditButton from "./EditButton.vue";
 import BtnCreateLayer from "@/components/Filters/BtnCreateLayer.vue";
-import LayerListHeader from "@/components/LayerList/LayerListHeader.vue";
+import LayerListControls from "@/components/LayerList/LayerListControls.vue";
 
 export default {
   emits: ["open-edit-dialog"],
@@ -96,7 +100,7 @@ export default {
     VisibilityButton,
     EditButton,
     BtnCreateLayer,
-    LayerListHeader,
+    LayerListControls,
   },
   props: {
     styleObject: Object,
@@ -109,7 +113,7 @@ export default {
 
   methods: {
     deleteLayer: function (layer) {
-      this.styleObject.deleteLayer(layer.getId());
+      this.styleObject.stylejson.deleteLayer(layer.getId());
     },
     handleEvent: function (layer) {
       this.$refs.filterDialog.openDialog(layer);

@@ -15,7 +15,7 @@
                 class="pa-4 ma-4 testy"
                 rounded="1"
                 flat
-                @click="selectedType = source"
+                @click="selectedType = source.id"
               >
                 <h4>{{ source.label }}</h4>
               </v-card>
@@ -35,14 +35,14 @@
             "
           />
           <GeoJSONInput
-            v-if="isGeoJsonSelected()"
+            v-if="isGeoJsonSelected"
             @update-input="(item) => (inputs[item.var] = item.value)"
             ref="geoJSONInput"
           />
 
           <OGCTileInput
-            v-if="isVectorTileSelected()"
-            @set-tilejson="setTilejson"
+            v-if="isVectorTileSelected"
+            @set-tilejson="this.tilejson = $event"
           />
         </div>
       </v-form>
@@ -68,17 +68,12 @@
 </template>
 
 <script>
-import GeojsonStyle from "@/utils/stylejson/GeojsonStyle.js";
-import OGCTileStyle from "@/utils/stylejson/OGCTileStyle.js";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
 import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 
-import {
-  DataSourceTypes,
-  GeojsonDataSource,
-  OGCVectorTileDataSource,
-} from "@/utils/datasources/DataSourceTypes";
+import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
+import GeoJSONFeatures from "@/utils/datasources/GeoJSONFeatures";
 
 export default {
   emits: ["import-data"],
@@ -98,16 +93,22 @@ export default {
       tilejson: null,
     };
   },
+  computed: {
+    isVectorTileSelected() {
+      return this.selectedType === "ogc_vectortile";
+    },
+    isGeoJsonSelected() {
+      return this.selectedType === "geojson";
+    },
+  },
+
   mounted() {
-    this.dataSources = new DataSourceTypes().getDataSources();
+    this.dataSources = [
+      { label: "GeoJSON", id: "geojson" },
+      { label: "OGC Vectortile", id: "ogc_vectortile" },
+    ];
   },
   methods: {
-    isVectorTileSelected: function () {
-      return this.selectedType instanceof OGCVectorTileDataSource;
-    },
-    isGeoJsonSelected: function () {
-      return this.selectedType instanceof GeojsonDataSource;
-    },
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
@@ -115,46 +116,24 @@ export default {
       if (valid) {
         let styleObject;
 
-        if (this.selectedType instanceof GeojsonDataSource) {
+        if (this.selectedType === "geojson") {
           this.openFile().then((geojson) => {
-            let json = JSON.parse(geojson);
-            // move geometry-Type to class
-            let geometry_type = json.features[0].geometry.type.toLowerCase();
-            let source_id = this.inputs.styleName;
-
-            styleObject = new GeojsonStyle(
-              this.inputs.styleName,
-              source_id,
-              geometry_type,
-              geojson,
-              this.selectedType
-            );
+            styleObject = new GeoJSONFeatures(this.inputs.styleName, geojson);
 
             this.$emit("import-data", styleObject);
           });
         }
 
-        if (
-          this.selectedType instanceof OGCVectorTileDataSource &&
-          this.tilejson
-        ) {
-          this.createTileStyleObject(this.tilejson, this.inputs.styleName);
+        if (this.selectedType === "ogc_vectortile" && this.tilejson) {
+          let styleObject = new OGCVectorTiles(
+            this.tilejson.url,
+            this.tilejson.tilejson,
+            this.inputs.styleName
+          );
+
+          this.$emit("import-data", styleObject);
         }
       }
-    },
-    setTilejson: function (tilejson) {
-      this.tilejson = tilejson;
-    },
-    //consider movig this to OGCTileINput component. Requires passing style_name as prop
-    createTileStyleObject: function (tilejson, style_name) {
-      let styleObject = new OGCTileStyle(
-        style_name,
-        tilejson.url,
-        tilejson.source_id,
-        tilejson.vector_layers[0].geometry_type,
-        tilejson.tiles_url
-      );
-      this.$emit("import-data", styleObject);
     },
 
     // Move this function to GeoJsoninput

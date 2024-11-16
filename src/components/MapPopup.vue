@@ -28,10 +28,9 @@ import { Fill, Stroke, Style } from "ol/style.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import VectorTileLayer from "ol/layer/VectorTile.js";
 
-import {
-  GeojsonDataSource,
-  OGCVectorTileDataSource,
-} from "@/utils/datasources/DataSourceTypes";
+// import { GeojsonDataSource } from "@/utils/datasources/DataSourceTypes"; --obsolete
+
+import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 
 export default {
   components: {
@@ -68,7 +67,7 @@ export default {
       }
     };
 
-    if (this.styleObject.datasource_type instanceof OGCVectorTileDataSource) {
+    if (this.styleObject.datasource_type instanceof OGCVectorTiles) {
       this.selectionLayer = new VectorTileLayer({
         map: this.map,
         source: this.vectorLayer.getSource(),

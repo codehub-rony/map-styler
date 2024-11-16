@@ -56,8 +56,9 @@
 
 <script>
 import demo_data from "../assets/municipalities.json";
-import GeojsonStyle from "@/utils/stylejson/GeojsonStyle.js";
 import LoadData from "@/components/DataImport/LoadData.vue";
+
+import GeoJSONFeatures from "@/utils/datasources/GeoJSONFeatures";
 
 // store
 import { useAppStore } from "@/store/app.js";
@@ -79,14 +80,7 @@ export default {
     loadDemoData: function () {
       this.loading = true;
       setTimeout(() => {
-        // timeout to initiate loader icon, otherwise button freezes
-        let geometry_type = demo_data.features[0].geometry.type.toLowerCase();
-        let styleObject = new GeojsonStyle(
-          "Municipalities",
-          "municipalities",
-          geometry_type,
-          JSON.stringify(demo_data)
-        );
+        let styleObject = new GeoJSONFeatures("Municipalities", demo_data);
 
         this.handleLoadData(styleObject);
       }, 100);

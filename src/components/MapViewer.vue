@@ -42,10 +42,9 @@ import "../../node_modules/ol/ol.css";
 import { useAppStore } from "@/store/app.js";
 import { mapState, mapActions } from "pinia";
 
-import {
-  GeojsonDataSource,
-  OGCVectorTileDataSource,
-} from "@/utils/datasources/DataSourceTypes";
+import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
+import GeoJSONFeatures from "@/utils/datasources/GeoJSONFeatures";
+
 export default {
   components: {
     MapPopup,
@@ -136,7 +135,7 @@ export default {
     },
     initVectorLayers: function () {
       this.styleObjects.forEach((styleObject) => {
-        if (styleObject.datasource_type instanceof GeojsonDataSource) {
+        if (styleObject instanceof GeoJSONFeatures) {
           let geojson_layer = new VectorLayer({
             source: new VectorSource(),
           });
@@ -161,7 +160,7 @@ export default {
           this.zoomToExtent(geojson_layer.getSource().getExtent());
         }
 
-        if (styleObject.datasource_type instanceof OGCVectorTileDataSource) {
+        if (styleObject instanceof OGCVectorTiles) {
           this.createOGCVectorLayer(styleObject);
         }
       });
