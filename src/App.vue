@@ -13,16 +13,25 @@
 import AppBar from "@/components/AppBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
+// store
+import { useAppStore } from "@/store/app.js";
+import { mapActions } from "pinia";
+
 export default {
   components: {
     AppBar,
     AppFooter,
   },
-  data() {
-    return {
-      geodata: { type: null, json: null },
-      isOpen: true,
-    };
+  mounted() {
+    let mapstyler_user = localStorage.getItem("mapstyler_user");
+    console.log(mapstyler_user);
+
+    if (mapstyler_user) {
+      this.setUser(JSON.parse(mapstyler_user));
+    }
+  },
+  methods: {
+    ...mapActions(useAppStore, ["setUser"]),
   },
 };
 </script>

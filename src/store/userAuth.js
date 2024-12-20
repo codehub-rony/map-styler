@@ -1,27 +1,15 @@
 // Utilities
 import { defineStore } from "pinia";
 
-export const useAppStore = defineStore("app", {
+export const useAppStore = defineStore("userAuth", {
   state: () => ({
-    styleObjects: [],
-    styleObject: null,
-    user: null,
-    currentPage: null,
+    user_name: null,
+    token: null,
   }),
 
   actions: {
     setUser(user) {
       this.user = user;
-    },
-    logout() {
-      this.user = null;
-      this.styleObjects = [];
-      this.styleObject = null;
-      localStorage.removeItem("mapstyler_user");
-    },
-    setCurrentPage(page) {
-      console.log(page, "------------");
-      this.currentPage = page;
     },
     setStyleObject(styleObject) {
       this.styleObject = styleObject;

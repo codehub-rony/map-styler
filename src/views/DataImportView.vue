@@ -17,7 +17,12 @@
         ><v-row v-if="!customData" justify-content="center" dense class="mt-5"
           ><v-col cols="12">
             <div class="mt-4 d-flex flex-column align-center">
-              <v-btn color="primary" flat @click="customData = true" width="250"
+              <v-btn
+                color="primary"
+                flat
+                rounded="0"
+                @click="customData = true"
+                width="250"
                 >create style</v-btn
               >
 

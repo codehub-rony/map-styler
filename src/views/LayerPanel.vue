@@ -7,6 +7,7 @@
         variant="text"
         @click="openDialogForNewSource"
         class="mt-2"
+        v-if="user"
         >add new</v-btn
       >
     </div>
@@ -20,7 +21,7 @@
       </div>
     </v-scroll-y-transition>
     <DownloadBtn :styleObjects="styleObjects" />
-    <NewTileJSONDialog ref="newdatasource" />
+    <NewTileJSONDialog v-if="user" ref="newdatasource" />
   </v-sheet>
 </template>
 
@@ -42,12 +43,15 @@ export default {
     NewTileJSONDialog,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObjects"]),
+    ...mapState(useAppStore, ["styleObjects", "user"]),
   },
   data() {
     return {
       dialog: false,
     };
+  },
+  mounted() {
+    console.log(this.user);
   },
   methods: {
     openDialogForNewSource: function () {
