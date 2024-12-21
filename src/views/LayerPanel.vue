@@ -20,7 +20,27 @@
         />
       </div>
     </v-scroll-y-transition>
-    <DownloadBtn :styleObjects="styleObjects" />
+    <div class="d-flex flex-column">
+      <v-btn
+        block
+        color="primary"
+        rounded="0"
+        elevation="0"
+        class="mt-2"
+        v-if="user"
+        >save</v-btn
+      >
+      <v-btn
+        :color="user ? 'black' : 'primary'"
+        rounded="0"
+        elevation="0"
+        class="mt-2"
+        :variant="user ? 'text' : 'flat'"
+        @click="handleClickDownload"
+        >download</v-btn
+      >
+      <!-- <DownloadBtn :styleObjects="styleObjects" /> -->
+    </div>
     <NewTileJSONDialog v-if="user" ref="newdatasource" />
   </v-sheet>
 </template>
@@ -28,6 +48,8 @@
 <script>
 import DownloadBtn from "@/components/DownloadBtn.vue";
 import LayerList from "@/components/LayerList/LayerList.vue";
+
+import utils from "@/utils/common.js";
 
 //tmp
 import NewTileJSONDialog from "@/components//DataImport/NewTileJSONDialog.vue";
@@ -56,6 +78,11 @@ export default {
   methods: {
     openDialogForNewSource: function () {
       this.$refs.newdatasource.openDialog();
+    },
+    handleClickDownload: function () {
+      this.styleObjects.forEach((styleObject) => {
+        utils.download_stylejson(styleObject);
+      });
     },
   },
 };

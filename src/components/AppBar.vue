@@ -8,20 +8,14 @@
         @click="refresh"
       />
     </div>
-    <div v-if="user">
-      <v-btn
-        class="mr-3"
-        :color="currentPage ? 'primary' : 'secondary'"
-        @click="$router.push({ name: 'projects' })"
+    <div v-if="user" class="ml-4">
+      <v-btn color="black" @click="$router.push({ name: 'projects' })"
         >projects</v-btn
       >
-      <v-btn
-        class="mr-3"
-        :color="currentPage === 'editor' ? 'primary' : 'transparent'"
-        @click="$router.push({ name: 'editor' })"
+      <v-btn color="black" @click="$router.push({ name: 'editor' })"
         >editor</v-btn
       >
-      <v-btn class="mr-3" variant="text" color="primary">documentation</v-btn>
+      <v-btn variant="text" color="black">documentation</v-btn>
     </div>
 
     <v-app-bar-title class="d-sm-flex d-none" v-if="!user"

@@ -1,10 +1,10 @@
 <template>
   <v-btn
-    block
-    color="primary"
+    color="black"
     rounded="0"
     elevation="0"
     class="mt-2"
+    variant="text"
     @click="handleClick"
     >download</v-btn
   >
