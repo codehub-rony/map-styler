@@ -52,6 +52,7 @@
           @click="handleBackClick"
           :loading="loadingData"
           variant="text"
+          v-if="!$route.name === 'new-project'"
           >back</v-btn
         >
         <v-btn
@@ -75,8 +76,10 @@ import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 import GeoJSONFeatures from "@/utils/datasources/GeoJSONFeatures";
 
+import { useAppStore } from "@/store/app.js";
+import { mapActions } from "pinia";
+
 export default {
-  emits: ["import-data"],
   components: { StyleNameInput, OGCTileInput, GeoJSONInput },
   computed: {
     dialogTitle() {
@@ -109,6 +112,7 @@ export default {
     ];
   },
   methods: {
+    ...mapActions(useAppStore, ["addStyleObject"]),
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
@@ -119,8 +123,7 @@ export default {
         if (this.selectedType === "geojson") {
           this.openFile().then((geojson) => {
             styleObject = new GeoJSONFeatures(this.inputs.styleName, geojson);
-
-            this.$emit("import-data", styleObject);
+            this.loadStyleJson(styleObject);
           });
         }
 
@@ -131,9 +134,14 @@ export default {
             this.inputs.styleName
           );
 
-          this.$emit("import-data", styleObject);
+          this.loadStyleJson(styleObject);
         }
       }
+    },
+
+    loadStyleJson: function (styleObject) {
+      this.addStyleObject(styleObject);
+      this.$router.push("/editor");
     },
 
     // Move this function to GeoJsoninput
