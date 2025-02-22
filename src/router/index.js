@@ -46,18 +46,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
-  console.log(
-    "to.path:",
-    to.path,
-    to.path === "/" && authStore.isAuthenticated()
-  );
-
   if (to.path === "/" && authStore.isAuthenticated()) {
-    console.log("ROUTING BACK TO PROJECTS");
     next("/projects");
   } else {
     if (to.meta.requiresAuth && authStore.isAuthenticated()) {
-      console.log("ROUTING BACK TO", to.path);
       next();
     } else {
       if (
