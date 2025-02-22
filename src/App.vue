@@ -24,10 +24,8 @@ export default {
   },
   mounted() {
     let mapstyler_user = localStorage.getItem("mapstyler_user");
-
     if (mapstyler_user) {
       this.setUser(JSON.parse(mapstyler_user));
-      this.$router.push("projects");
     }
   },
   methods: {

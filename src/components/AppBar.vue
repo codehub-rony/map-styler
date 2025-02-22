@@ -79,11 +79,7 @@ export default {
   methods: {
     ...mapActions(useAuthStore, ["logout", "isAuthenticated"]),
     refresh: function () {
-      if (this.isAuthenticated()) {
-        this.$router.push({ name: "projects" });
-      } else {
-        window.location.href = "/";
-      }
+      this.$router.push("/");
     },
     handleLogout: function () {
       this.logout();
