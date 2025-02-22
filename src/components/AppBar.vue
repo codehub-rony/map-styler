@@ -8,32 +8,86 @@
         @click="refresh"
       />
     </div>
+    <div v-if="isLoggedIn()" class="ml-4">
+      <v-btn
+        color="black"
+        size="small"
+        @click="$router.push({ name: 'projects' })"
+        >projects</v-btn
+      >
+      <v-btn
+        color="black"
+        size="small"
+        @click="$router.push({ name: 'editor' })"
+        >editor</v-btn
+      >
+      <v-btn variant="text" size="small" color="black">documentation</v-btn>
+    </div>
 
-    <v-app-bar-title class="d-sm-flex d-none">MapStyler</v-app-bar-title>
+    <v-app-bar-title class="d-sm-flex d-none" v-if="!isLoggedIn()"
+      >MapStyler</v-app-bar-title
+    >
 
     <v-spacer></v-spacer>
     <template v-slot:append>
-    <v-btn icon="mdi-github" href="https://github.com/codehub-rony/map-styler" target="_blank"></v-btn>
-    <v-btn
-      color="#FFDD00"
-      size="small"
-      variant="flat"
-      href="https://www.buymeacoffee.com/RonyNedkov"
-      target="_blank"
-      class="mr-4"
-      ><span> &#9749; </span>Buy me a coffee</v-btn
-    >
-
-  </template>
-
+      <v-btn
+        v-if="!isLoggedIn()"
+        icon="mdi-github"
+        href="https://github.com/codehub-rony/map-styler"
+        target="_blank"
+      ></v-btn>
+      <!-- <v-btn
+        color="#FFDD00"
+        size="small"
+        variant="flat"
+        href="https://www.buymeacoffee.com/RonyNedkov"
+        target="_blank"
+        class="mr-4"
+        ><span> &#9749; </span>Buy me a coffee</v-btn
+      > -->
+      <v-btn
+        v-if="!isLoggedIn()"
+        variant="flat"
+        rounded="0"
+        color="primary"
+        flat
+        @click="$router.push({ name: 'login' })"
+        >login</v-btn
+      >
+      <div v-if="isLoggedIn()" class="mr-3">
+        <span>{{ this.user_email }}</span>
+        <v-btn class="mr-3" size="small" variant="text" @click="handleLogout"
+          >logout</v-btn
+        >
+      </div>
+    </template>
   </v-app-bar>
 </template>
 
 <script>
+// store
+import { useAuthStore } from "@/store/auth.js";
+import { mapState, mapActions } from "pinia";
+
 export default {
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(useAuthStore, ["user_email"]),
+  },
   methods: {
+    ...mapActions(useAuthStore, ["logout", "isLoggedIn"]),
     refresh: function () {
-      window.location.href = "/";
+      if (this.isLoggedIn()) {
+        this.$router.push({ name: "projects" });
+      } else {
+        window.location.href = "/";
+      }
+    },
+    handleLogout: function () {
+      this.logout();
+      this.$router.push({ name: "home" });
     },
   },
 };

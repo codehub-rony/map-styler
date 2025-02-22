@@ -111,6 +111,7 @@ export default {
         source: new OGCVectorTile({
           url: styleObject.tilejson_url,
           format: new MVT(),
+          projection: "EPSG:3857",
         }),
       });
 
@@ -167,10 +168,12 @@ export default {
     },
 
     zoomToExtent: function (extent) {
-      let resolution = this.view.getResolutionForExtent(extent);
-      let zoom = this.view.getZoomForResolution(resolution) - 0.3;
-      let center = olExtent.getCenter(extent);
-      this.view.animate({ zoom: zoom, center: center, duration: 1000 });
+      if (extent) {
+        let resolution = this.view.getResolutionForExtent(extent);
+        let zoom = this.view.getZoomForResolution(resolution) - 0.3;
+        let center = olExtent.getCenter(extent);
+        this.view.animate({ zoom: zoom, center: center, duration: 1000 });
+      }
     },
 
     setHeight: function () {

@@ -5,9 +5,13 @@ export const useAppStore = defineStore("app", {
   state: () => ({
     styleObjects: [],
     styleObject: null,
+    currentPage: null,
   }),
 
   actions: {
+    setCurrentPage(page) {
+      this.currentPage = page;
+    },
     setStyleObject(styleObject) {
       this.styleObject = styleObject;
     },

@@ -78,7 +78,7 @@ export default {
     validateUrl: function (url) {
       this.errorMessages = [];
       this.showToggle = false;
-      fetch(url, {
+      fetch(`${url}?f=tilejson`, {
         headers: {
           "Content-Type": "application/json",
         },
