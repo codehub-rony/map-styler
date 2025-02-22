@@ -26,7 +26,7 @@ export const useAuthStore = defineStore("auth", {
         });
 
         if (!response.ok) {
-          throw new Error("Invalid username or password.");
+          throw new Error("Invalid email or password.");
         }
 
         const data = await response.json();
