@@ -7,7 +7,7 @@
         variant="text"
         @click="openDialogForNewSource"
         class="mt-2"
-        v-if="isLoggedIn"
+        v-if="isAuthenticated"
         >add new</v-btn
       >
     </div>
@@ -27,21 +27,21 @@
         rounded="0"
         elevation="0"
         class="mt-2"
-        v-if="isLoggedIn"
+        v-if="isAuthenticated"
         >save</v-btn
       >
       <v-btn
-        :color="isLoggedIn ? 'black' : 'primary'"
+        :color="isAuthenticated ? 'black' : 'primary'"
         rounded="0"
         elevation="0"
         class="mt-2"
-        :variant="isLoggedIn ? 'text' : 'flat'"
+        :variant="isAuthenticated ? 'text' : 'flat'"
         @click="handleClickDownload"
         >download</v-btn
       >
       <!-- <DownloadBtn :styleObjects="styleObjects" /> -->
     </div>
-    <NewTileJSONDialog v-if="isLoggedIn" ref="newdatasource" />
+    <NewTileJSONDialog v-if="isAuthenticated" ref="newdatasource" />
   </v-sheet>
 </template>
 
@@ -74,10 +74,10 @@ export default {
     };
   },
   mounted() {
-    console.log(this.isLoggedIn());
+    console.log(this.isAuthenticated());
   },
   methods: {
-    ...mapActions(useAuthStore, ["isLoggedIn"]),
+    ...mapActions(useAuthStore, ["isAuthenticated"]),
     openDialogForNewSource: function () {
       this.$refs.newdatasource.openDialog();
     },

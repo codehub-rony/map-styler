@@ -6,32 +6,35 @@ import LandingPage from "@/views/LandingPage.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import ProjectPage from "@/views/ProjectPage.vue";
 
-import { useAppStore } from "@/store/app.js";
-import { mapState, mapActions } from "pinia";
+import { useAuthStore } from "@/store/auth.js";
 
 const routes = [
   {
     path: "/editor",
     name: "editor",
     component: EditorPage,
-    props: true,
+
+    meta: { requiresAuth: false },
   },
   {
     path: "/login",
     name: "login",
     component: LoginPage,
     props: true,
+    meta: { requiresAuth: false },
   },
   {
     path: "/projects",
     name: "projects",
     component: ProjectPage,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: "/",
     name: "home",
     component: LandingPage,
+    meta: { requiresAuth: false },
   },
 ];
 
@@ -41,16 +44,25 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const appStore = useAppStore();
-  next();
+  const authStore = useAuthStore();
 
-  appStore.setCurrentPage(to.name);
-
-  // if (to.meta.requiresAuth && !yourStore.isAuthenticated) {
-  //   next('/'); // Redirect to home if not authenticated
-  // } else {
-  //   next(); // Proceed to the route
-  // }
+  if (to.path === "/" && authStore.isAuthenticated()) {
+    next("/projects");
+  } else {
+    if (to.meta.requiresAuth && authStore.isAuthenticated()) {
+      next();
+    } else {
+      if (
+        to.path !== "/login" &&
+        to.meta.requiresAuth &&
+        !authStore.isAuthenticated()
+      ) {
+        next("login");
+      } else {
+        next();
+      }
+    }
+  }
 });
 
 export default router;

@@ -70,11 +70,11 @@ export default {
     this.setHeight();
     this.initMap();
 
-    // Redirect to landingpage on page reload
+    // NEEDS REFACTORING!! Redirect to landingpage on page reload
     if (this.isStyleObjectLoaded()) {
       this.initVectorLayers();
     } else {
-      this.$router.push("/");
+      // this.$router.push("/");
     }
 
     this.map.on("click", (evt) => {
