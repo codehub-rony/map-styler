@@ -14,7 +14,7 @@ import AppBar from "@/components/AppBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 // store
-import { useAppStore } from "@/store/app.js";
+import { useAuthStore } from "@/store/auth.js";
 import { mapActions } from "pinia";
 
 export default {
@@ -24,14 +24,14 @@ export default {
   },
   mounted() {
     let mapstyler_user = localStorage.getItem("mapstyler_user");
-    console.log(mapstyler_user);
 
     if (mapstyler_user) {
       this.setUser(JSON.parse(mapstyler_user));
+      this.$router.push("projects");
     }
   },
   methods: {
-    ...mapActions(useAppStore, ["setUser"]),
+    ...mapActions(useAuthStore, ["setUser"]),
   },
 };
 </script>

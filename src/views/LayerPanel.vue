@@ -7,7 +7,7 @@
         variant="text"
         @click="openDialogForNewSource"
         class="mt-2"
-        v-if="user"
+        v-if="isLoggedIn"
         >add new</v-btn
       >
     </div>
@@ -27,21 +27,21 @@
         rounded="0"
         elevation="0"
         class="mt-2"
-        v-if="user"
+        v-if="isLoggedIn"
         >save</v-btn
       >
       <v-btn
-        :color="user ? 'black' : 'primary'"
+        :color="isLoggedIn ? 'black' : 'primary'"
         rounded="0"
         elevation="0"
         class="mt-2"
-        :variant="user ? 'text' : 'flat'"
+        :variant="isLoggedIn ? 'text' : 'flat'"
         @click="handleClickDownload"
         >download</v-btn
       >
       <!-- <DownloadBtn :styleObjects="styleObjects" /> -->
     </div>
-    <NewTileJSONDialog v-if="user" ref="newdatasource" />
+    <NewTileJSONDialog v-if="isLoggedIn" ref="newdatasource" />
   </v-sheet>
 </template>
 
@@ -56,7 +56,8 @@ import NewTileJSONDialog from "@/components//DataImport/NewTileJSONDialog.vue";
 
 // store
 import { useAppStore } from "@/store/app.js";
-import { mapState } from "pinia";
+import { useAuthStore } from "@/store/auth.js";
+import { mapState, mapActions } from "pinia";
 
 export default {
   components: {
@@ -65,7 +66,7 @@ export default {
     NewTileJSONDialog,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObjects", "user"]),
+    ...mapState(useAppStore, ["styleObjects"]),
   },
   data() {
     return {
@@ -73,9 +74,10 @@ export default {
     };
   },
   mounted() {
-    console.log(this.user);
+    console.log(this.isLoggedIn());
   },
   methods: {
+    ...mapActions(useAuthStore, ["isLoggedIn"]),
     openDialogForNewSource: function () {
       this.$refs.newdatasource.openDialog();
     },

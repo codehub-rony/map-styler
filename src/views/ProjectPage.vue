@@ -25,10 +25,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn
-              :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-              @click="show = !show"
-            ></v-btn>
+            <v-btn icon="'mdi-chevron-down'" @click="show = !show"></v-btn>
           </v-card-actions>
 
           <v-expand-transition>

@@ -8,24 +8,30 @@
         @click="refresh"
       />
     </div>
-    <div v-if="user" class="ml-4">
-      <v-btn color="black" @click="$router.push({ name: 'projects' })"
+    <div v-if="isLoggedIn()" class="ml-4">
+      <v-btn
+        color="black"
+        size="small"
+        @click="$router.push({ name: 'projects' })"
         >projects</v-btn
       >
-      <v-btn color="black" @click="$router.push({ name: 'editor' })"
+      <v-btn
+        color="black"
+        size="small"
+        @click="$router.push({ name: 'editor' })"
         >editor</v-btn
       >
-      <v-btn variant="text" color="black">documentation</v-btn>
+      <v-btn variant="text" size="small" color="black">documentation</v-btn>
     </div>
 
-    <v-app-bar-title class="d-sm-flex d-none" v-if="!user"
+    <v-app-bar-title class="d-sm-flex d-none" v-if="!isLoggedIn()"
       >MapStyler</v-app-bar-title
     >
 
     <v-spacer></v-spacer>
     <template v-slot:append>
       <v-btn
-        v-if="!user"
+        v-if="!isLoggedIn()"
         icon="mdi-github"
         href="https://github.com/codehub-rony/map-styler"
         target="_blank"
@@ -40,7 +46,7 @@
         ><span> &#9749; </span>Buy me a coffee</v-btn
       > -->
       <v-btn
-        v-if="!user"
+        v-if="!isLoggedIn()"
         variant="flat"
         rounded="0"
         color="primary"
@@ -48,8 +54,8 @@
         @click="$router.push({ name: 'login' })"
         >login</v-btn
       >
-      <div v-if="user" class="mr-3">
-        <span>{{ user.email }}</span>
+      <div v-if="isLoggedIn()" class="mr-3">
+        <span>{{ this.user_email }}</span>
         <v-btn class="mr-3" size="small" variant="text" @click="handleLogout"
           >logout</v-btn
         >
@@ -60,23 +66,20 @@
 
 <script>
 // store
-import { useAppStore } from "@/store/app.js";
+import { useAuthStore } from "@/store/auth.js";
 import { mapState, mapActions } from "pinia";
 
 export default {
   data() {
-    return {
-      currentPage: null,
-    };
+    return {};
   },
   computed: {
-    ...mapState(useAppStore, ["user", "currentPage"]),
+    ...mapState(useAuthStore, ["user_email"]),
   },
   methods: {
-    ...mapActions(useAppStore, ["logout"]),
+    ...mapActions(useAuthStore, ["logout", "isLoggedIn"]),
     refresh: function () {
-      console.log(this.currentPage, "---");
-      if (this.user) {
+      if (this.isLoggedIn()) {
         this.$router.push({ name: "projects" });
       } else {
         window.location.href = "/";
