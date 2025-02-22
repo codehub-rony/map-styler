@@ -63,7 +63,7 @@ export const useAuthStore = defineStore("auth", {
       this.user_email = user.email;
       this.user_token = user.user_token;
     },
-    isLoggedIn: function () {
+    isAuthenticated: function () {
       if (this.user_email && this.user_token) {
         return true;
       } else {

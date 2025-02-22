@@ -8,7 +8,7 @@
         @click="refresh"
       />
     </div>
-    <div v-if="isLoggedIn()" class="ml-4">
+    <div v-if="isAuthenticated()" class="ml-4">
       <v-btn
         color="black"
         size="small"
@@ -24,14 +24,14 @@
       <v-btn variant="text" size="small" color="black">documentation</v-btn>
     </div>
 
-    <v-app-bar-title class="d-sm-flex d-none" v-if="!isLoggedIn()"
+    <v-app-bar-title class="d-sm-flex d-none" v-if="!isAuthenticated()"
       >MapStyler</v-app-bar-title
     >
 
     <v-spacer></v-spacer>
     <template v-slot:append>
       <v-btn
-        v-if="!isLoggedIn()"
+        v-if="!isAuthenticated()"
         icon="mdi-github"
         href="https://github.com/codehub-rony/map-styler"
         target="_blank"
@@ -46,7 +46,7 @@
         ><span> &#9749; </span>Buy me a coffee</v-btn
       > -->
       <v-btn
-        v-if="!isLoggedIn()"
+        v-if="!isAuthenticated()"
         variant="flat"
         rounded="0"
         color="primary"
@@ -54,7 +54,7 @@
         @click="$router.push({ name: 'login' })"
         >login</v-btn
       >
-      <div v-if="isLoggedIn()" class="mr-3">
+      <div v-if="isAuthenticated()" class="mr-3">
         <span>{{ this.user_email }}</span>
         <v-btn class="mr-3" size="small" variant="text" @click="handleLogout"
           >logout</v-btn
@@ -77,9 +77,9 @@ export default {
     ...mapState(useAuthStore, ["user_email"]),
   },
   methods: {
-    ...mapActions(useAuthStore, ["logout", "isLoggedIn"]),
+    ...mapActions(useAuthStore, ["logout", "isAuthenticated"]),
     refresh: function () {
-      if (this.isLoggedIn()) {
+      if (this.isAuthenticated()) {
         this.$router.push({ name: "projects" });
       } else {
         window.location.href = "/";
