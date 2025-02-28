@@ -1,5 +1,5 @@
 <template>
-  <div v-for="item in items" :key="item.id">
+  <div v-for="item in items" :key="item.id" class="d-flex flex-row">
     <v-card
       rounded="2"
       hover
@@ -10,25 +10,41 @@
       <v-card-title>
         {{ item.name }}
       </v-card-title>
-      <v-card-subtitle> {{ item.description }}</v-card-subtitle>
+      <div class="d-flex justify-space-between">
+        <div>{{ item.description }}</div>
+      </div>
     </v-card>
+    <v-btn
+      icon="mdi-trash-can"
+      size="x-small"
+      @click="deleteProject(item.id)"
+    ></v-btn>
   </div>
 </template>
 <script>
-export default {
-  props: {
-    items: Array,
-  },
-  methods: {
-    openProject: function (item) {
-      console.log(item);
-      //fetch
-      //   api.Project.get(id).then(){
-      // set styleobjects to state
-      // this.$router.push({ name: "editor"});
+import apiService from "@/services/apiService";
 
-      // }
-      this.$router.push({ name: "editor", query: { id: item.id } });
+export default {
+  data() {
+    return {
+      items: null,
+    };
+  },
+  mounted() {
+    apiService.Project.getAll().then((res) => {
+      this.items = res;
+    });
+  },
+
+  methods: {
+    openProject: function (project_id) {
+      console.log(project_id);
+    },
+    deleteProject(project_id) {
+      apiService.Project.delete(project_id).then((res) => {
+        console.log("delete succesful");
+        this.items = this.items.filter((x) => x.id !== project_id);
+      });
     },
   },
 };
