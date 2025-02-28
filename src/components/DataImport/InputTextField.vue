@@ -1,13 +1,15 @@
 <template>
   <span><slot name="label">Style name</slot></span>
-  <v-text-field
-    variant="outlined"
-    :rules="rulesToApply"
-    density="comfortable"
-    :model-value="modelValue"
-    class="mb-2 mt-2"
-    @update:modelValue="emitUpdate"
-  ></v-text-field>
+  <v-form v-model="isFormValid">
+    <v-text-field
+      :model-value="modelValue"
+      variant="outlined"
+      :rules="rulesToApply"
+      density="comfortable"
+      class="mb-2 mt-2"
+      @update:modelValue="emitUpdate"
+    ></v-text-field>
+  </v-form>
 </template>
 
 <script>
@@ -19,10 +21,11 @@ export default {
   },
   data() {
     return {
+      isFormValid: false,
       ruleOptions: [
         {
           name: "not_empty",
-          rule: (v) => !!v || "A name for you style is required",
+          fn_rule: (v) => !!v || "A name for you style is required",
         },
         {
           name: "only_char",
@@ -34,14 +37,19 @@ export default {
     };
   },
   mounted() {
-    this.validationRules.forEach((requirement) => {
-      let rule_to_apply = this.ruleOptions.find((r) => r.name === requirement);
-      if (rule_to_apply) {
-        this.rulesToApply.push(rule_to_apply.fn_rule);
-      } else {
-        console.log(`rule not found: ${requirement}`);
-      }
-    });
+    if (this.validationRules) {
+      this.validationRules.forEach((requirement) => {
+        let rule_to_apply = this.ruleOptions.find(
+          (r) => r.name === requirement
+        );
+
+        if (rule_to_apply) {
+          this.rulesToApply.push(rule_to_apply.fn_rule);
+        } else {
+          console.log(`rule not found: ${requirement}`);
+        }
+      });
+    }
   },
   methods: {
     emitUpdate(value) {
