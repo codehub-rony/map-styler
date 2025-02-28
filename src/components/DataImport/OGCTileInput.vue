@@ -17,17 +17,18 @@
           </template> </v-tooltip
         ><span class="text-caption beta-text-label ml-1">beta</span></span
       >
-      <v-text-field
-        v-model="url"
-        variant="outlined"
-        density="comfortable"
-        validate-on="submit-lazy"
-        append-icon="mdi-web"
-        class="mt-2"
-        @update:modelValue="validateUrl"
-        :error-messages="errorMessages"
-        :rules="validationRules"
-      ></v-text-field>
+      <v-form>
+        <v-text-field
+          v-model="url"
+          variant="outlined"
+          density="comfortable"
+          append-icon="mdi-web"
+          class="mt-2"
+          @update:modelValue="validateUrl"
+          :error-messages="errorMessages"
+          :rules="validationRules"
+        ></v-text-field>
+      </v-form>
     </div>
 
     <div v-if="showToggle" class="mt-1 mb-3">
