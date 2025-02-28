@@ -73,9 +73,6 @@ export default {
       dialog: false,
     };
   },
-  mounted() {
-    console.log(this.isAuthenticated());
-  },
   methods: {
     ...mapActions(useAuthStore, ["isAuthenticated"]),
     openDialogForNewSource: function () {
