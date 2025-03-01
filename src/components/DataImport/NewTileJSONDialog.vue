@@ -12,9 +12,10 @@
         <v-row dense
           ><v-col cols="12">
             <div class="d-flex flex-column form-input-item-container">
-              <InputTextField
-                v-model="styleName"
-                :validationRules="['not_empty', 'only_char']"
+              <StyleNameInput
+                @update-input="
+                  (item) => (styleName = item.value.replace(' ', ''))
+                "
               />
               <OGCTileInput @set-tilejson="setTilejson" />
             </div>
@@ -33,7 +34,7 @@
 <script>
 import ButtonGroup from "@/components/DataImport/ButtonGroup.vue";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
-import InputTextField from "@/components/DataImport/InputTextField.vue";
+import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
 
 import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 
@@ -45,7 +46,7 @@ export default {
   components: {
     ButtonGroup,
     OGCTileInput,
-    InputTextField,
+    StyleNameInput,
   },
   data() {
     return {

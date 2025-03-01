@@ -4,23 +4,16 @@ import { createRouter, createWebHistory } from "vue-router";
 import EditorPage from "@/views/EditorPage.vue";
 import LandingPage from "@/views/LandingPage.vue";
 import LoginPage from "@/views/LoginPage.vue";
-import ProjectsPage from "@/views/projects/ProjectsPage.vue";
-import NewProjectPage from "@/views/projects/NewProjectPage.vue";
+import ProjectPage from "@/views/ProjectPage.vue";
 
 import { useAuthStore } from "@/store/auth.js";
 
 const routes = [
   {
-    path: "/",
-    name: "home",
-    component: LandingPage,
-    meta: { requiresAuth: false },
-  },
-  {
     path: "/editor",
     name: "editor",
     component: EditorPage,
-    props: true,
+
     meta: { requiresAuth: false },
   },
   {
@@ -33,16 +26,15 @@ const routes = [
   {
     path: "/projects",
     name: "projects",
-    component: ProjectsPage,
+    component: ProjectPage,
     props: true,
     meta: { requiresAuth: true },
   },
   {
-    path: "/projects/new",
-    name: "new-project",
-    component: NewProjectPage,
-    props: true,
-    meta: { requiresAuth: true },
+    path: "/",
+    name: "home",
+    component: LandingPage,
+    meta: { requiresAuth: false },
   },
 ];
 

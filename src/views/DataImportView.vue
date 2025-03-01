@@ -38,7 +38,10 @@
           ></v-row
         >
         <v-row v-if="customData" dense justify-content="center"
-          ><v-col cols="12"> <LoadData @go-back="customData = false" /></v-col
+          ><v-col cols="12">
+            <LoadData
+              @import-data="handleLoadData"
+              @go-back="customData = false" /></v-col
         ></v-row>
         <v-row v-if="!customData">
           <v-col>
@@ -83,9 +86,13 @@ export default {
       this.loading = true;
       setTimeout(() => {
         let styleObject = new GeoJSONFeatures("Municipalities", demo_data);
-        this.addStyleObject(styleObject);
-        this.$router.push("/editor");
+
+        this.handleLoadData(styleObject);
       }, 100);
+    },
+    handleLoadData: function (styleObject) {
+      this.addStyleObject(styleObject);
+      this.$router.push("/editor");
     },
   },
 };
