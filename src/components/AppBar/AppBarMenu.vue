@@ -3,8 +3,13 @@
     <v-menu open-on-hover density="compact">
       <template v-slot:activator="{ props }">
         <div>
-          <a>{{ this.user }}</a>
-          <v-btn icon="mdi-menu" v-bind="props" size="small" class="ml-2" />
+          <span class="text-body-1 font-weight-light">{{ this.user }}</span>
+          <v-btn
+            icon="mdi-menu"
+            v-bind="props"
+            size="small"
+            class="ml-2 text-grey"
+          />
         </div>
       </template>
       <v-list>

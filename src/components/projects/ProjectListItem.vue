@@ -19,6 +19,9 @@
         icon="mdi-delete-outline"
         size="x-small"
         flat
+        color="grey"
+        variant="text"
+        class="btn-delete-list-item"
         @click.stop="deleteProject()"
       ></v-btn>
     </div>
@@ -56,6 +59,10 @@ export default {
 }
 
 .container-project-list-item:hover {
-  background-color: rgba(173, 206, 210, 0.2);
+  background-color: rgba(173, 206, 210, 0.7);
+}
+
+.btn-delete-list-item {
+  background-color: white;
 }
 </style>

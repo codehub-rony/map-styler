@@ -7,7 +7,7 @@
         variant="text"
         @click="openDialogForNewSource"
         class="mt-2"
-        v-if="isAuthenticated"
+        v-if="isAuthenticated && styleObjects.length > 0"
         >add new</v-btn
       >
     </div>
@@ -20,7 +20,7 @@
         />
       </div>
     </v-scroll-y-transition>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column" v-if="styleObjects.length > 0">
       <v-btn
         block
         color="primary"
@@ -40,6 +40,23 @@
         >download</v-btn
       >
       <!-- <DownloadBtn :styleObjects="styleObjects" /> -->
+    </div>
+
+    <div v-else class="d-flex flex-column justify-center mt-5">
+      <span class="font-italic text-body-2 text-center mb-5"
+        >Welcome to the editor <br />
+        Currently it looks a bit empty. Let's fix that! <br />Add a VectorTile
+        layer to begin exploring.</span
+      >
+      <v-btn
+        size="small"
+        variant="outlined"
+        rounded="0"
+        color="black"
+        class="mt-4"
+        @click="openDialogForNewSource"
+        >Add VectorTile layer</v-btn
+      >
     </div>
     <NewTileJSONDialog v-if="isAuthenticated" ref="newdatasource" />
   </v-sheet>
