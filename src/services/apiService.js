@@ -49,9 +49,6 @@ const Project = {
   getAll: () => {
     return requests.get(`${api_baseUrl}project/project/`);
   },
-  get: (project_id) => {
-    return requests.get(`${api_baseUrl}project/project/${project_id}`);
-  },
   create: (data) => {
     return requests.post(`${api_baseUrl}project/project/`, data);
   },
