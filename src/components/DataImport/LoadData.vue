@@ -29,11 +29,11 @@
           class="d-flex flex-column form-input-item-container"
           v-if="selectedType"
         >
-          <StyleNameInput
-            @update-input="
-              (item) => (inputs[item.var] = item.value.replace(' ', ''))
-            "
+          <InputTextField
+            v-model="stylename"
+            :validationRules="['not_empty', 'only_char']"
           />
+
           <GeoJSONInput
             v-if="isGeoJsonSelected"
             @update-input="(item) => (inputs[item.var] = item.value)"
@@ -52,6 +52,7 @@
           @click="handleBackClick"
           :loading="loadingData"
           variant="text"
+          v-if="!$route.name === 'new-project'"
           >back</v-btn
         >
         <v-btn
@@ -70,14 +71,16 @@
 <script>
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
-import StyleNameInput from "@/components/DataImport/StyleNameInput.vue";
+import InputTextField from "@/components/DataImport/InputTextField.vue";
 
 import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 import GeoJSONFeatures from "@/utils/datasources/GeoJSONFeatures";
 
+import { useAppStore } from "@/store/app.js";
+import { mapActions } from "pinia";
+
 export default {
-  emits: ["import-data"],
-  components: { StyleNameInput, OGCTileInput, GeoJSONInput },
+  components: { InputTextField, OGCTileInput, GeoJSONInput },
   computed: {
     dialogTitle() {
       return this.selectedType ? "Import your data" : "Choose a data source";
@@ -86,6 +89,8 @@ export default {
   data() {
     return {
       inputs: { styleName: null, file: null },
+      stylename: null,
+
       selectedType: null,
       dataSources: null,
       loading: false,
@@ -95,7 +100,6 @@ export default {
   },
   computed: {
     isVectorTileSelected() {
-      console.log("yaya");
       return this.selectedType === "ogc_vectortile";
     },
     isGeoJsonSelected() {
@@ -110,6 +114,7 @@ export default {
     ];
   },
   methods: {
+    ...mapActions(useAppStore, ["addStyleObject"]),
     async validate() {
       this.loading = true;
       const { valid } = await this.$refs.form.validate();
@@ -120,8 +125,7 @@ export default {
         if (this.selectedType === "geojson") {
           this.openFile().then((geojson) => {
             styleObject = new GeoJSONFeatures(this.inputs.styleName, geojson);
-
-            this.$emit("import-data", styleObject);
+            this.loadStyleJson(styleObject);
           });
         }
 
@@ -129,12 +133,17 @@ export default {
           let styleObject = new OGCVectorTiles(
             this.tilejson.url,
             this.tilejson.tilejson,
-            this.inputs.styleName
+            this.stylename
           );
 
-          this.$emit("import-data", styleObject);
+          this.loadStyleJson(styleObject);
         }
       }
+    },
+
+    loadStyleJson: function (styleObject) {
+      this.addStyleObject(styleObject);
+      this.$router.push("/editor");
     },
 
     // Move this function to GeoJsoninput
