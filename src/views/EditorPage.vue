@@ -18,10 +18,22 @@
 import LayerPanel from "@/views/LayerPanel.vue";
 import MapViewer from "@/components/MapViewer.vue";
 
+// store
+import { useAppStore } from "@/store/app";
+import { mapActions } from "pinia";
+
 export default {
   components: {
     LayerPanel,
     MapViewer,
+  },
+  methods: {
+    ...mapActions(useAppStore, ["clearProject"]),
+  },
+
+  beforeRouteLeave(to, from, next) {
+    this.clearProject();
+    next();
   },
 };
 </script>
