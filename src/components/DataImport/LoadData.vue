@@ -100,6 +100,7 @@ export default {
   },
   computed: {
     isVectorTileSelected() {
+      console.log("yaya");
       return this.selectedType === "ogc_vectortile";
     },
     isGeoJsonSelected() {
