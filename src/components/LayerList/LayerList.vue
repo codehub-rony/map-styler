@@ -1,5 +1,4 @@
 <template>
-  <!-- <div :class="['dataset-container', isCollapsed ? 'mb-2' : 'mb-5']"> -->
   <div class="dataset-container mb-2">
     <LayerListControls
       :styleObject="styleObject"
@@ -23,19 +22,9 @@
               :styleObject="styleObject"
               @open-edit-dialog="handleEvent"
               class="mb-1"
-              :disabled="isHovered"
             />
-            <DeleteButton
-              :callback="deleteLayer"
-              :layer="layer"
-              class="mb-1"
-              :disabled="isHovered"
-            />
-            <VisibilityButton
-              :layer="layer"
-              class="mb-1"
-              :disabled="isHovered"
-            />
+            <DeleteButton :callback="deleteLayer" :layer="layer" class="mb-1" />
+            <VisibilityButton :layer="layer" class="mb-1" />
           </div>
         </div>
 
@@ -65,17 +54,6 @@
         mode="new"
         ref="filterDialog"
       />
-
-      <!-- <div class="d-flex flex-row mt-4">
-        <v-btn
-          elevation="0"
-          variant="outlined"
-          rounded="0"
-          size="small"
-          @click="openDialog"
-          >download
-        </v-btn>
-      </div> -->
     </div>
   </div>
 </template>
