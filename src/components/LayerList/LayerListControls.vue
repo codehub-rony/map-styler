@@ -80,7 +80,7 @@ import { mapActions } from "pinia";
 import utils from "@/utils/common.js";
 
 export default {
-  emist: ["collapse"],
+  emits: ["collapse"],
   props: {
     styleObject: Object,
   },
