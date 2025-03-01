@@ -3,10 +3,11 @@
     <v-row class="justify-center">
       <v-col cols="6">
         <div class="d-flex justify-space-between align-center">
-          <h2>Projects</h2>
+          <span class="text-h5 font-weight-light">Projects</span>
           <v-btn
             variant="outlined"
             size="small"
+            rounded="0"
             @click="$router.push({ name: 'new-project' })"
             >create new</v-btn
           >

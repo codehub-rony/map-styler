@@ -1,19 +1,28 @@
 <template>
   <v-card
-    rounded="2"
-    hover
-    class="pa-3 mb-2"
-    variant="outlined"
+    rounded="0"
+    elevation="0"
+    class="pa-1 container-project-list-item"
     @click="openProject"
+    :loading="loading"
   >
-    <v-card-title>
-      {{ project.name }}
-    </v-card-title>
-    <div class="d-flex justify-space-between">
-      <div>{{ project.description }}</div>
+    <div class="d-flex flex-row align-center justify-space-between">
+      <div class="d-flex flex-column">
+        <span class="text-subtitle-1 font-weight-medium">{{
+          project.name
+        }}</span>
+        <span class="text-body-1 font-weight-light">{{
+          project.description
+        }}</span>
+      </div>
+      <v-btn
+        icon="mdi-delete-outline"
+        size="x-small"
+        flat
+        @click.stop="deleteProject()"
+      ></v-btn>
     </div>
   </v-card>
-  <v-btn icon="mdi-trash-can" size="x-small" @click="deleteProject()"></v-btn>
 </template>
 <script>
 export default {
@@ -21,9 +30,18 @@ export default {
   props: {
     project: Object,
   },
+  data() {
+    return {
+      loading: false,
+    };
+  },
   methods: {
     openProject: function () {
-      this.$emit("open-project", this.project);
+      this.loading = true;
+      // this.$emit("open-project", this.project);
+      setTimeout(() => {
+        this.$emit("open-project", this.project);
+      }, 1000);
     },
     deleteProject() {
       this.$emit("delete-project", this.project);
@@ -31,4 +49,13 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.container-project-list-item {
+  width: 100%;
+  border-bottom: 1px rgb(169, 169, 169) solid;
+}
+
+.container-project-list-item:hover {
+  background-color: rgba(173, 206, 210, 0.2);
+}
+</style>

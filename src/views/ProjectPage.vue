@@ -2,7 +2,7 @@
   <v-container width="500">
     <v-row class="justify-center">
       <v-col cols="6">
-        <h3>Projects</h3>
+        <h3 class="font-weight-light">Projects</h3>
         <p>blalbalblal lblorem ipsum biusm</p>
       </v-col>
     </v-row>
