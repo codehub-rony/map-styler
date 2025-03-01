@@ -1,34 +1,33 @@
 <template>
-  <v-app-bar flat>
-    <div class="d-flex align-center">
+  <v-app-bar flat elevation="1">
+    <div>
       <v-img
-        src="../assets/logo.svg"
+        src="@/assets/logo.svg"
         width="50px"
         class="pa-2 ml-2 app-bar-logo"
         @click="refresh"
       />
     </div>
-    <v-app-bar-title v-if="currentProject">{{
-      currentProject.name
-    }}</v-app-bar-title>
-    <div v-if="isAuthenticated()" class="ml-4">
+
+    <v-app-bar-title v-if="!isAuthenticated()">MapStyler</v-app-bar-title>
+
+    <div v-if="isAuthenticated()" class="ml-4 d-flex flex-row">
       <v-btn
         color="black"
         size="small"
         @click="$router.push({ name: 'projects' })"
+        :variant="$route.name === 'projects' ? 'text' : 'plain'"
         >projects</v-btn
       >
       <v-btn
         color="black"
+        background
         size="small"
         @click="$router.push({ name: 'editor' })"
+        :variant="$route.name === 'editor' ? 'text' : 'plain'"
         >editor</v-btn
       >
     </div>
-
-    <v-app-bar-title class="d-sm-flex d-none" v-if="!isAuthenticated()"
-      >MapStyler</v-app-bar-title
-    >
 
     <v-spacer></v-spacer>
     <template v-slot:append>
@@ -57,26 +56,28 @@
         >login</v-btn
       >
 
-      <div v-if="isAuthenticated()" class="mr-3">
-        <span>{{ this.user_email }}</span>
-        <v-btn class="mr-3" size="small" variant="text" @click="handleLogout"
-          >logout</v-btn
-        >
-      </div>
+      <AppBarMenu
+        v-if="isAuthenticated()"
+        :user="user_email"
+        :logout="logout"
+      />
     </template>
   </v-app-bar>
 </template>
 
 <script>
+import AppBarMenu from "./AppBarMenu.vue";
+
 // store
 import { useAuthStore } from "@/store/auth.js";
 import { useAppStore } from "@/store/app.js";
 import { mapState, mapActions } from "pinia";
 
 export default {
-  data() {
-    return {};
+  components: {
+    AppBarMenu,
   },
+
   computed: {
     ...mapState(useAuthStore, ["user_email"]),
     ...mapState(useAppStore, ["currentProject"]),
@@ -85,10 +86,6 @@ export default {
     ...mapActions(useAuthStore, ["logout", "isAuthenticated"]),
     refresh: function () {
       this.$router.push("/");
-    },
-    handleLogout: function () {
-      this.logout();
-      this.$router.push({ name: "home" });
     },
   },
 };
