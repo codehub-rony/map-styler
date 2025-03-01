@@ -1,6 +1,7 @@
 <template>
   <v-app id="app_container">
     <AppBar />
+
     <!-- <v-main class="bg-grey-lighten-3"> -->
     <v-main>
       <router-view></router-view>
@@ -10,7 +11,7 @@
 </template>
 
 <script>
-import AppBar from "@/components/AppBar.vue";
+import AppBar from "@/components/AppBar/AppBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 // store
