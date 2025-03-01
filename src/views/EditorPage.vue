@@ -31,9 +31,12 @@ export default {
     ...mapActions(useAppStore, ["clearProject"]),
   },
 
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave: function (to, from, next) {
     this.clearProject();
-    next();
+
+    this.$nextTick(() => {
+      next();
+    });
   },
 };
 </script>

@@ -12,9 +12,9 @@ export const useAppStore = defineStore("app", {
     setCurrentProject(project) {
       this.currentProject = project;
     },
-    clearProject() {
+    async clearProject() {
       this.currentProject = null;
-      this.styleObject = [];
+      this.styleObjects = [];
     },
     setStyleObject(styleObject) {
       this.styleObject = styleObject;
