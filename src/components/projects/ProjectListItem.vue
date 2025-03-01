@@ -23,10 +23,10 @@ export default {
   },
   methods: {
     openProject: function () {
-      this.$emit("open-project", this.project.id);
+      this.$emit("open-project", this.project);
     },
     deleteProject() {
-      this.$emit("delete-project", this.project.id);
+      this.$emit("delete-project", this.project);
     },
   },
 };

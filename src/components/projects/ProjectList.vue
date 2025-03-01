@@ -11,6 +11,10 @@
 // Components
 import ProjectListItem from "./ProjectListItem.vue";
 
+// store
+import { useAppStore } from "@/store/app.js";
+import { mapActions } from "pinia";
+
 // ApiService
 import apiService from "@/services/apiService";
 
@@ -30,13 +34,17 @@ export default {
   },
 
   methods: {
-    openProject: function (project_id) {
-      console.log(project_id);
+    ...mapActions(useAppStore, ["setCurrentProject"]),
+    openProject: function (project) {
+      console.log(project.name);
+      this.setCurrentProject(project);
+      this.$router.push({ name: "editor" });
     },
-    deleteProject(project_id) {
-      apiService.Project.delete(project_id).then((res) => {
+    deleteProject(project) {
+      apiService.Project.delete(project.id).then((res) => {
         console.log("delete succesful");
-        this.projects = this.projects.filter((x) => x.id !== project_id);
+        // to do: add component for confirming deletion
+        this.projects = this.projects.filter((x) => x.id !== project.id);
       });
     },
   },

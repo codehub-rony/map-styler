@@ -8,6 +8,9 @@
         @click="refresh"
       />
     </div>
+    <v-app-bar-title v-if="currentProject">{{
+      currentProject.name
+    }}</v-app-bar-title>
     <div v-if="isAuthenticated()" class="ml-4">
       <v-btn
         color="black"
@@ -21,7 +24,6 @@
         @click="$router.push({ name: 'editor' })"
         >editor</v-btn
       >
-      <v-btn variant="text" size="small" color="black">documentation</v-btn>
     </div>
 
     <v-app-bar-title class="d-sm-flex d-none" v-if="!isAuthenticated()"
@@ -54,6 +56,7 @@
         @click="$router.push({ name: 'login' })"
         >login</v-btn
       >
+
       <div v-if="isAuthenticated()" class="mr-3">
         <span>{{ this.user_email }}</span>
         <v-btn class="mr-3" size="small" variant="text" @click="handleLogout"
@@ -67,6 +70,7 @@
 <script>
 // store
 import { useAuthStore } from "@/store/auth.js";
+import { useAppStore } from "@/store/app.js";
 import { mapState, mapActions } from "pinia";
 
 export default {
@@ -75,6 +79,7 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ["user_email"]),
+    ...mapState(useAppStore, ["currentProject"]),
   },
   methods: {
     ...mapActions(useAuthStore, ["logout", "isAuthenticated"]),
