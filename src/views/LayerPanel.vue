@@ -28,6 +28,7 @@
         elevation="0"
         class="mt-2"
         v-if="isAuthenticated"
+        @click="saveProject"
         >save</v-btn
       >
       <v-btn
@@ -68,6 +69,7 @@ import LayerList from "@/components/LayerList/LayerList.vue";
 
 import utils from "@/utils/common.js";
 
+import api from "@/services/apiService";
 //tmp
 import NewTileJSONDialog from "@/components//DataImport/NewTileJSONDialog.vue";
 
@@ -83,7 +85,7 @@ export default {
     NewTileJSONDialog,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObjects"]),
+    ...mapState(useAppStore, ["styleObjects", "currentProject"]),
   },
   data() {
     return {
@@ -98,6 +100,28 @@ export default {
     handleClickDownload: function () {
       this.styleObjects.forEach((styleObject) => {
         utils.download_stylejson(styleObject);
+      });
+    },
+    saveProject: function () {
+      this.styleObjects.forEach((item) => {
+        let payload = {
+          name: item.style_name,
+          description: "",
+          geometry_type: item.geometry_type,
+          source_id: item.source_id,
+          stylejson: JSON.parse(item.getStyleAsJSON()),
+        };
+
+        if (item.id) {
+          api.Project.saveStyleJSON(this.currentProject.id, item.id, payload);
+        } else {
+          let res = api.Project.createStyleJSON(
+            this.currentProject.id,
+            payload
+          ).then((res) => {
+            item.id = res.id;
+          });
+        }
       });
     },
   },

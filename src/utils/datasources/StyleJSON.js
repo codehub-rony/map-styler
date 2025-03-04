@@ -4,11 +4,13 @@ import CircleLayer from "../stylejson/layers/CircleLayer";
 
 class StyleJSON {
   constructor(
+    id = null,
     stylename = null,
     source = null,
     geometry_type = null,
     stylejson = null
   ) {
+    this._id = null;
     this._version = 8;
     this._name;
     this._center;
@@ -17,6 +19,7 @@ class StyleJSON {
     this._layers = [];
 
     if (stylejson) {
+      this._id = id;
       this._version = stylejson.version;
       this._name = stylejson.name;
       this._center = stylejson.center;
@@ -35,6 +38,14 @@ class StyleJSON {
       );
     }
   }
+  get id() {
+    return this._id;
+  }
+
+  set id(id) {
+    this._id = id;
+  }
+
   get name() {
     return this._name;
   }

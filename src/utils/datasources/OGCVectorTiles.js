@@ -34,7 +34,12 @@ class OGCVectorTiles extends BaseDataSource {
     let tiles_url = tilejson.tiles[0];
     let source = new TiledVectorSource(this._source_id, tiles_url);
 
-    this._stylejson = new StyleJSON(stylename, source, this._geometry_type);
+    this._stylejson = new StyleJSON(
+      null,
+      stylename,
+      source,
+      this._geometry_type
+    );
   }
 
   #initializeWithConfig(source_config) {
