@@ -43,6 +43,14 @@ const requests = {
         .catch((err) => reject(err));
     });
   },
+  put: (url, payload) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(url, payload)
+        .then((response) => resolve(response.data))
+        .catch((err) => reject(err));
+    });
+  },
 };
 
 const Project = {
@@ -54,6 +62,21 @@ const Project = {
   },
   delete: (project_id) => {
     return requests.delete(`${api_baseUrl}project/project/${project_id}/`);
+  },
+  getStylejsons: (project_id) => {
+    return reuqests.get(`${api_baseUrl}project/${project_id}/stylejsons/`);
+  },
+  saveStyleJSON: (project_id, stylejson_id, payload) => {
+    return requests.put(
+      `${api_baseUrl}project/${project_id}/stylejsons/${stylejson_id}/`,
+      payload
+    );
+  },
+  createStyleJSON: (project_id, payload) => {
+    return requests.post(
+      `${api_baseUrl}project/${project_id}/stylejsons/`,
+      payload
+    );
   },
 };
 
