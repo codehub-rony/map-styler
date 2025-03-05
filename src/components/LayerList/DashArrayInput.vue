@@ -1,5 +1,5 @@
 <template>
-  <span class="text-body-2">{{ attribute.component.label }}</span>
+  <span class="text-body-2">{{ property.component.label }}</span>
   <div>
     <input
       v-model="gap"
@@ -22,7 +22,7 @@
 <script>
 export default {
   props: {
-    attribute: Object,
+    property: Object,
   },
   data() {
     return {
@@ -31,15 +31,15 @@ export default {
     };
   },
   mounted() {
-    this.gap = this.attribute.value[0];
-    this.dash = this.attribute.value[1];
+    this.gap = this.property.value[0];
+    this.dash = this.property.value[1];
   },
   watch: {
     dash: function (newVal) {
-      this.attribute.set(0, newVal);
+      this.property.value[1] = newVal;
     },
     gap: function (newVal) {
-      this.attribute.set(1, newVal);
+      this.property.value[0] = newVal;
     },
   },
 };
