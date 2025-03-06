@@ -3,9 +3,13 @@ import LineLayer from "../stylejson/layers/LineLayer";
 import CircleLayer from "../stylejson/layers/CircleLayer";
 
 class StyleJSON {
-  constructor(source = null, geometry_type = null, stylejson = null) {
+  constructor(
+    stylename = null,
+    source = null,
+    geometry_type = null,
+    stylejson = null
+  ) {
     this._version = 8;
-    // this._name;
     this._center;
     this._zoom;
     this._sources = {};
@@ -21,7 +25,7 @@ class StyleJSON {
       this.#initSources(stylejson.sources);
     } else if (source && geometry_type) {
       this.addSource(source);
-      this.createDefaultLayers(source.id, geometry_type);
+      this.createDefaultLayers(stylename, source.id, geometry_type);
     } else {
       throw new Error(
         "Insufficient parameters provided for StyleJSON initialization."
@@ -73,16 +77,16 @@ class StyleJSON {
     this._sources = Object.assign({}, this._sources, source.getStyleAsObject());
   }
 
-  createDefaultLayers(source_id, geometry_type) {
+  createDefaultLayers(stylename, source_id, geometry_type) {
     if (!geometry_type) {
       throw new Error("Geometry type is required");
     } else if (geometry_type === "polygon") {
-      this._layers.push(new FillLayer(`${this._name}_fill`, source_id));
-      this._layers.push(new LineLayer(`${this._name}_line`, source_id));
+      this._layers.push(new FillLayer(`${stylename}_fill`, source_id));
+      this._layers.push(new LineLayer(`${stylename}_line`, source_id));
     } else if (geometry_type === "line") {
-      this._layers.push(new LineLayer(`${this._name}_line`, source_id));
+      this._layers.push(new LineLayer(`${stylename}_line`, source_id));
     } else if (geometry_type === "point") {
-      this._layers.push(new CircleLayer(`${this._name}_circle`, source_id));
+      this._layers.push(new CircleLayer(`${stylename}_circle`, source_id));
     } else {
       throw new Error("Unkown geometry type from geoJSON");
     }
