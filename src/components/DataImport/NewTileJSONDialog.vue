@@ -62,7 +62,8 @@ export default {
         let styleObject = new OGCVectorTiles(
           this.tilejson.url,
           this.tilejson.tilejson,
-          this.styleName
+          this.styleName,
+          null
         );
 
         this.addStyleObject(styleObject);

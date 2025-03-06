@@ -1,14 +1,20 @@
 class BaseDataSource {
   constructor() {
-    this._style_name = null;
+    this._id = null;
+    this._name = null;
+    this._description = null;
     this._source_id = null;
     this._projection = "EPSG:3857";
     this._geometry_type = null;
     this._stylejson;
     this._fields;
   }
-  get style_name() {
-    return this._style_name;
+  get id() {
+    return this._id;
+  }
+
+  get name() {
+    return this._name;
   }
   get source_id() {
     return this._source_id;

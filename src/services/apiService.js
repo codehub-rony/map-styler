@@ -64,7 +64,7 @@ const Project = {
     return requests.delete(`${api_baseUrl}project/project/${project_id}/`);
   },
   getStylejsons: (project_id) => {
-    return reuqests.get(`${api_baseUrl}project/${project_id}/stylejsons/`);
+    return requests.get(`${api_baseUrl}project/${project_id}/stylejsons/`);
   },
   saveStyleJSON: (project_id, stylejson_id, payload) => {
     return requests.put(
@@ -78,6 +78,9 @@ const Project = {
       payload
     );
   },
+  // getStyleJSONS: (project_id) => {
+  //   return requests.get(`${api_baseUrl}project/${project_id}/stylejsons/`);
+  // },
 };
 
 export default {
