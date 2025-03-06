@@ -74,26 +74,34 @@ import api from "@/services/apiService";
 import NewTileJSONDialog from "@/components//DataImport/NewTileJSONDialog.vue";
 
 // store
-import { useAppStore } from "@/store/app.js";
+
 import { useAuthStore } from "@/store/auth.js";
-import { mapState, mapActions } from "pinia";
+import { mapActions } from "pinia";
+import _ from "lodash";
 
 export default {
+  emits: ["save-project"],
   components: {
     DownloadBtn,
     LayerList,
     NewTileJSONDialog,
   },
-  computed: {
-    ...mapState(useAppStore, ["styleObjects", "currentProject"]),
+  props: {
+    styleObjects: Array,
+    currentProject: Object,
   },
+  // computed: {
+  //   ...mapState(useAppStore, ["styleObjects", "currentProject"]),
+  // },
   data() {
     return {
       dialog: false,
     };
   },
+
   methods: {
     ...mapActions(useAuthStore, ["isAuthenticated"]),
+
     openDialogForNewSource: function () {
       this.$refs.newdatasource.openDialog();
     },
@@ -103,31 +111,7 @@ export default {
       });
     },
     saveProject: function () {
-      this.styleObjects.forEach((styleObject) => {
-        let payload = {
-          name: styleObject.name,
-          description: styleObject.description,
-          geometry_type: styleObject.geometry_type,
-          source_id: styleObject.source_id,
-          tilejson_url: styleObject.tilejson_url,
-          stylejson: JSON.parse(styleObject.getStyleJSON()),
-        };
-
-        if (styleObject.id) {
-          api.Project.saveStyleJSON(
-            this.currentProject.id,
-            styleObject.id,
-            payload
-          );
-        } else {
-          let res = api.Project.createStyleJSON(
-            this.currentProject.id,
-            payload
-          ).then((res) => {
-            styleObject.id = res.id;
-          });
-        }
-      });
+      this.$emit("save-project");
     },
   },
 };
