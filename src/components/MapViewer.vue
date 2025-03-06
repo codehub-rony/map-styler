@@ -70,7 +70,7 @@ export default {
     this.setHeight();
     this.initMap();
 
-    if (this.currentProject) {
+    if (this.styleObjects.length > 0) {
       this.initVectorLayers();
     } else {
       this.$router.push("/projects");
@@ -146,7 +146,7 @@ export default {
 
           this.applyStyle(
             geojson_layer,
-            styleObject.styleObject.getStyleJSON(),
+            styleObject.getStyleJSON(),
             styleObject.source_id
           );
 
