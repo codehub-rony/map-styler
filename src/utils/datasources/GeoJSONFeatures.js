@@ -30,7 +30,7 @@ class GeoJSONFeatures extends BaseDataSource {
     this._geojson = geojson;
 
     let source = new GeoJsonSource(this._source_id);
-    this._stylejson = new StyleJSON(stylename, source, this._geometry_type);
+    this._stylejson = new StyleJSON(source, this._geometry_type);
   }
 
   #initializeWithConfig(source_config) {
@@ -45,7 +45,6 @@ class GeoJSONFeatures extends BaseDataSource {
     const styleObject = this._stylejson.getStyleAsObject();
 
     styleObject.layers = styleObject.layers.map((x) => x.getStyleAsObject());
-    // styleObject.layers = new_layers;
 
     return JSON.stringify(styleObject, null, 2);
   }

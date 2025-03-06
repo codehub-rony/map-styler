@@ -15,7 +15,7 @@
         <div
           class="d-flex flex-row align-center justify-space-between pl-2 pr-2"
         >
-          <span class="text-subtitle-2">{{ layer.label }}</span>
+          <span class="text-subtitle-2">{{ layer.name }}</span>
           <div class="d-flex flex-row">
             <EditButton
               :layer="layer"
@@ -29,23 +29,25 @@
         </div>
 
         <div
-          v-for="(attribute, h) in layer.attributes"
-          :id="h"
+          v-for="(property, key) in layer.paint"
+          :id="key"
           class="text-subtitle-2 test pr-4 pb-1 d-flex flex-row justify-space-between"
         >
           <ColorField
-            :attribute="attribute"
-            v-if="attribute.component.type === 'color_picker'"
+            v-if="property.component.type === 'color_picker'"
+            :key="key"
+            :property="property"
           />
 
           <InputField
-            :attribute="attribute"
-            v-if="attribute.component.type === 'input_field'"
+            v-if="property.component.type === 'input_field'"
+            :property="property"
           />
 
           <DashArrayInput
-            :attribute="attribute"
-            v-if="attribute.component.type === 'input_field_dasharray'"
+            v-if="property.component.type === 'input_field_dasharray'"
+            :property="property"
+            :key="key"
           />
         </div>
       </div>

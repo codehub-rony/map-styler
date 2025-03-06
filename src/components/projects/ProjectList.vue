@@ -36,13 +36,11 @@ export default {
   methods: {
     ...mapActions(useAppStore, ["setCurrentProject"]),
     openProject: function (project) {
-      console.log(project.name);
       this.setCurrentProject(project);
       this.$router.push({ name: "editor" });
     },
     deleteProject(project) {
       apiService.Project.delete(project.id).then((res) => {
-        console.log("delete succesful");
         // to do: add component for confirming deletion
         this.projects = this.projects.filter((x) => x.id !== project.id);
       });

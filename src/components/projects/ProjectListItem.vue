@@ -28,6 +28,12 @@
   </v-card>
 </template>
 <script>
+import apiService from "@/services/apiService";
+import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
+// store
+import { useAppStore } from "@/store/app.js";
+import { mapActions } from "pinia";
+
 export default {
   emits: ["open-project", "delete-project"],
   props: {
@@ -39,12 +45,19 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useAppStore, ["addStyleObject"]),
     openProject: function () {
       this.loading = true;
-      // this.$emit("open-project", this.project);
-      setTimeout(() => {
-        this.$emit("open-project", this.project);
-      }, 1000);
+
+      apiService.Project.getStylejsons(this.project.id).then((res) => {
+        res.forEach((stylejson) => {
+          let styleObject = new OGCVectorTiles(null, null, null, stylejson);
+          this.addStyleObject(styleObject);
+        });
+        setTimeout(() => {
+          this.$emit("open-project", this.project);
+        }, 800);
+      });
     },
     deleteProject() {
       this.$emit("delete-project", this.project);

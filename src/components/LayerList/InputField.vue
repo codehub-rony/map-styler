@@ -1,7 +1,7 @@
 <template>
-   <span class="text-body-2" >{{ attribute.component.label }}</span>
+  <span class="text-body-2">{{ property.component.label }}</span>
   <input
-    v-model="attribute.value"
+    v-model="property.value"
     type="number"
     id="name"
     name="name"
@@ -12,7 +12,7 @@
 <script>
 export default {
   props: {
-    attribute: Object,
+    property: Object,
   },
   data() {
     return {
@@ -20,7 +20,7 @@ export default {
     };
   },
   mounted() {
-    this.value = this.attribute.value;
+    this.value = this.property.value;
   },
 };
 </script>

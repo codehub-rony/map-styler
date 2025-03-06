@@ -1,7 +1,7 @@
 <template>
-  <span class="text-body-2">{{ attribute.component.label }}</span>
+  <span class="text-body-2">{{ property.component.label }}</span>
   <div
-    v-if="attribute.component.type === 'color_picker'"
+    v-if="property.component.type === 'color_picker'"
     class="layerlist-item-color"
     v-bind:style="{ backgroundColor: rgba }"
     @click="handleClick"
@@ -10,7 +10,7 @@
       <v-scroll-y-transition>
         <v-color-picker
           class="color-selector"
-          v-model="this.attribute.value"
+          v-model="color"
           show-swatches
           :modes="['rgba']"
           rounded="0"
@@ -28,15 +28,16 @@
 <script>
 export default {
   props: {
-    attribute: Object,
+    property: Object,
   },
   computed: {
     rgba() {
-      return `rgba(${this.attribute.value.r}, ${this.attribute.value.g}, ${this.attribute.value.b}, ${this.attribute.value.a})`;
+      return `rgba(${this.property.value.r}, ${this.property.value.g}, ${this.property.value.b}, ${this.property.value.a})`;
     },
   },
   data() {
     return {
+      color: { r: 0, g: 0, b: 0, a: 1 },
       swatches: [
         ["#a6611a", "#f5f5f5", "#c2a5cf"],
         ["#fdae61", "#d7191c", "#dfc27d"],
@@ -46,6 +47,10 @@ export default {
       colorPickerIsOpen: false,
     };
   },
+  mounted() {
+    this.color = this.property.value;
+  },
+
   methods: {
     handleClick: function (e) {
       // Prevent colorpicker from closing when the colorpicker itself is clicked
@@ -54,15 +59,21 @@ export default {
       }
     },
     handleColorSelection: function (e) {
-      if (!this.attribute.value.a) {
-        // selecting swatch sets a to undefined
-        this.attribute.value.a = 1;
-      }
+      this.property.value = { ...this.color };
     },
     closeColorPicker: function () {
       if (this.colorPickerIsOpen) {
         this.colorPickerIsOpen = false;
       }
+    },
+  },
+  watch: {
+    // This watcher is needed to trigger an update of the rgba prop
+    color: {
+      handler(newColor) {
+        this.property.value = { ...newColor };
+      },
+      deep: true,
     },
   },
 };

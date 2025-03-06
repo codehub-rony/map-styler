@@ -1,8 +1,8 @@
 import BaseLayer from "./BaseLayer.js";
 
 class CircleLayer extends BaseLayer {
-  constructor(layer_name, source_id) {
-    super(layer_name,  source_id, "circle");
+  constructor(label, source_id) {
+    super(label, source_id, "circle");
     this.attributes = [
       {
         name: "circle-color",
