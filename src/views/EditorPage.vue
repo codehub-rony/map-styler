@@ -24,6 +24,7 @@ import MapViewer from "@/components/MapViewer.vue";
 
 // store
 import { useAppStore } from "@/store/app";
+import { useAuthStore } from "@/store/auth";
 import { mapActions, mapState } from "pinia";
 
 import _ from "lodash";
@@ -50,6 +51,7 @@ export default {
       "setOriginalState",
       "hasUnsavedChanges",
     ]),
+    ...mapActions(useAuthStore, ["isAuthenticated"]),
     deleteStyleJSONS: function () {
       const missingObjects = this.originalState.filter(
         (obj1) => !this.styleObjects.some((obj2) => obj2.id === obj1.id)
@@ -102,11 +104,13 @@ export default {
   },
 
   beforeRouteLeave: function (to, from, next) {
-    if (this.hasUnsavedChanges()) {
-      const answer = window.confirm(
-        "You have unsaved changes. Are you sure you want to leave?"
-      );
-      if (!answer) return;
+    if (this.isAuthenticated()) {
+      if (this.hasUnsavedChanges()) {
+        const answer = window.confirm(
+          "You have unsaved changes. Are you sure you want to leave?"
+        );
+        if (!answer) return;
+      }
     }
     this.clearProject();
 
