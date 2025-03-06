@@ -93,7 +93,7 @@ export default {
       }
 
       if (this.mode === 2) {
-        this.label = this.layer.label;
+        this.label = this.layer.name;
       }
     },
     createCondition: function () {
@@ -126,7 +126,7 @@ export default {
     },
     save: function () {
       if (this.label) {
-        this.layer.label = this.label;
+        this.layer.name = this.label;
         this.conditionUpdates.forEach((update) => {
           this.filter.setConditions(update);
         });

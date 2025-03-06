@@ -5,7 +5,7 @@
       @click="handleCollapse"
       :style="{ cursor: 'pointer' }"
     >
-      {{ styleObject.style_name }}
+      {{ styleObject.name }}
     </div>
 
     <div class="d-flex flex-row">
