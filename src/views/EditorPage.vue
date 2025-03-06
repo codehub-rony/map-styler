@@ -26,6 +26,8 @@ import MapViewer from "@/components/MapViewer.vue";
 import { useAppStore } from "@/store/app";
 import { mapActions, mapState } from "pinia";
 
+import _ from "lodash";
+
 //API
 import api from "@/services/apiService";
 
@@ -35,24 +37,39 @@ export default {
     MapViewer,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObjects", "currentProject"]),
+    ...mapState(useAppStore, [
+      "styleObjects",
+      "currentProject",
+      "originalState",
+    ]),
   },
-  data() {
-    return {
-      originalState: [],
-    };
-  },
-  created() {
-    this.setOriginalState();
-  },
+
   methods: {
     ...mapActions(useAppStore, [
       "clearProject",
       "setOriginalState",
       "hasUnsavedChanges",
     ]),
+    deleteStyleJSONS: function () {
+      const missingObjects = this.originalState.filter(
+        (obj1) => !this.styleObjects.some((obj2) => obj2.id === obj1.id)
+      );
+
+      if (missingObjects.length > 0) {
+        missingObjects.forEach((stylejson) => {
+          api.Project.deleteStyleJSON(
+            this.currentProject.id,
+            stylejson.id
+          ).then((res) => {
+            console.log("succesfully deleted");
+          });
+        });
+      }
+    },
 
     saveProject: function () {
+      this.deleteStyleJSONS();
+
       this.styleObjects.forEach((styleObject) => {
         let payload = {
           name: styleObject.name,
@@ -68,17 +85,19 @@ export default {
             this.currentProject.id,
             styleObject.id,
             payload
-          );
+          ).then((res) => {
+            this.setOriginalState();
+          });
         } else {
           let res = api.Project.createStyleJSON(
             this.currentProject.id,
             payload
           ).then((res) => {
             styleObject.id = res.id;
+            this.setOriginalState();
           });
         }
       });
-      this.setOriginalState();
     },
   },
 

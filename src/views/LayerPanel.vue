@@ -40,7 +40,6 @@
         @click="handleClickDownload"
         >download</v-btn
       >
-      <!-- <DownloadBtn :styleObjects="styleObjects" /> -->
     </div>
 
     <div v-else class="d-flex flex-column justify-center mt-5">
@@ -69,7 +68,6 @@ import LayerList from "@/components/LayerList/LayerList.vue";
 
 import utils from "@/utils/common.js";
 
-import api from "@/services/apiService";
 //tmp
 import NewTileJSONDialog from "@/components//DataImport/NewTileJSONDialog.vue";
 
@@ -90,9 +88,6 @@ export default {
     styleObjects: Array,
     currentProject: Object,
   },
-  // computed: {
-  //   ...mapState(useAppStore, ["styleObjects", "currentProject"]),
-  // },
   data() {
     return {
       dialog: false,

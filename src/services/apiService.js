@@ -78,9 +78,11 @@ const Project = {
       payload
     );
   },
-  // getStyleJSONS: (project_id) => {
-  //   return requests.get(`${api_baseUrl}project/${project_id}/stylejsons/`);
-  // },
+  deleteStyleJSON: (project_id, stylejson_id) => {
+    return requests.delete(
+      `${api_baseUrl}project/${project_id}/stylejsons/${stylejson_id}/`
+    );
+  },
 };
 
 export default {
