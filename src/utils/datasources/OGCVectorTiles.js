@@ -81,7 +81,11 @@ class OGCVectorTiles extends BaseDataSource {
   getStyleJSON() {
     let json = this._stylejson.getStyleJSON();
 
-    return json;
+    json.layers.forEach((layer) => {
+      layer["source-layer"] = Object.keys(json.sources)[0];
+    });
+
+    return JSON.stringify(json, null, 2);
   }
 }
 
