@@ -2,7 +2,7 @@ class BaseDataSource {
   constructor() {
     this._id = null;
     this._name = null;
-    this._description = null;
+    this._description = "";
     this._source_id = null;
     this._projection = "EPSG:3857";
     this._geometry_type = null;

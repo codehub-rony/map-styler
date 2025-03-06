@@ -36,7 +36,7 @@
 
           <GeoJSONInput
             v-if="isGeoJsonSelected"
-            @update-input="(item) => (inputs[item.var] = item.value)"
+            @update-input="(item) => (fileInput = item.value)"
             ref="geoJSONInput"
           />
 
@@ -88,9 +88,8 @@ export default {
   },
   data() {
     return {
-      inputs: { styleName: null, file: null },
+      fileInput: null,
       stylename: null,
-
       selectedType: null,
       dataSources: null,
       loading: false,
@@ -124,7 +123,7 @@ export default {
 
         if (this.selectedType === "geojson") {
           this.openFile().then((geojson) => {
-            styleObject = new GeoJSONFeatures(this.inputs.styleName, geojson);
+            styleObject = new GeoJSONFeatures(this.stylename, geojson);
             this.loadStyleJson(styleObject);
           });
         }
@@ -159,7 +158,7 @@ export default {
     openFile: async function (e) {
       let reader = new FileReader();
       const promise = new Promise((resolve, reject) => {
-        reader.readAsText(this.inputs.file["0"]);
+        reader.readAsText(this.fileInput["0"]);
         reader.onload = () => {
           if (this.isValidJSON(reader.result)) {
             this.loading = false;

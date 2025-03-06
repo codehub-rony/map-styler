@@ -23,7 +23,7 @@ class StyleJSON {
       this.#loadLayerFromStyleJSON(stylejson.layers);
 
       this.#initSources(stylejson.sources);
-    } else if (source && geometry_type) {
+    } else if (stylename && source && geometry_type) {
       this.addSource(source);
       this.createDefaultLayers(stylename, source.id, geometry_type);
     } else {
@@ -74,7 +74,11 @@ class StyleJSON {
   }
 
   addSource(source) {
-    this._sources = Object.assign({}, this._sources, source.getStyleAsObject());
+    this._sources = Object.assign(
+      {},
+      this._sources,
+      source.getSourceAsObject()
+    );
   }
 
   createDefaultLayers(stylename, source_id, geometry_type) {
@@ -137,10 +141,9 @@ class StyleJSON {
       if (layer.paint) {
         layer.paint = this.processPaintAttributes(layer.paint);
       }
-      layer["source-layer"] = Object.keys(json.sources)[0];
     });
 
-    return JSON.stringify(json, null, 2);
+    return json;
   }
 
   setVisibilityAllLayers(isVisible) {

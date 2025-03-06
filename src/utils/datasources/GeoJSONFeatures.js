@@ -13,13 +13,13 @@ class GeoJSONFeatures extends BaseDataSource {
       this.#initializeWithGeoJSON(stylename, geojson);
     } else {
       throw new Error(
-        "Insufficient parameters provided for OGCVectorTiles initialization."
+        "Insufficient parameters provided for GeoJSONFeatures initialization."
       );
     }
   }
 
   #initializeWithGeoJSON(stylename, geojson) {
-    this._style_name = stylename;
+    this._name = stylename;
     if (typeof geojson === "string") {
       geojson = JSON.parse(geojson);
     }
@@ -30,7 +30,7 @@ class GeoJSONFeatures extends BaseDataSource {
     this._geojson = geojson;
 
     let source = new GeoJsonSource(this._source_id);
-    this._stylejson = new StyleJSON(source, this._geometry_type);
+    this._stylejson = new StyleJSON(stylename, source, this._geometry_type);
   }
 
   #initializeWithConfig(source_config) {
@@ -41,12 +41,10 @@ class GeoJSONFeatures extends BaseDataSource {
     return this._geojson;
   }
 
-  getStyleAsJSON() {
-    const styleObject = this._stylejson.getStyleAsObject();
+  getStyleJSON() {
+    let json = this._stylejson.getStyleJSON();
 
-    styleObject.layers = styleObject.layers.map((x) => x.getStyleAsObject());
-
-    return JSON.stringify(styleObject, null, 2);
+    return JSON.stringify(json, null, 2);
   }
 }
 
