@@ -45,7 +45,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAppStore, ["addStyleObject"]),
+    ...mapActions(useAppStore, ["addStyleObject", "setOriginalState"]),
     openProject: function () {
       this.loading = true;
 
@@ -54,6 +54,7 @@ export default {
           let styleObject = new OGCVectorTiles(null, null, null, stylejson);
           this.addStyleObject(styleObject);
         });
+        this.setOriginalState();
         setTimeout(() => {
           this.$emit("open-project", this.project);
         }, 800);

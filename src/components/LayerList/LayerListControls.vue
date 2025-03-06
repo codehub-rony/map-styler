@@ -116,7 +116,7 @@ export default {
   methods: {
     ...mapActions(useAppStore, ["deleteStyleObject"]),
     deleteDataSet: function () {
-      this.deleteStyleObject(this.styleObject.source_id);
+      this.deleteStyleObject(this.styleObject.id);
     },
     handleCollapse: function () {
       this.isCollapsed = this.isCollapsed ? false : true;

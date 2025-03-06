@@ -16,7 +16,6 @@ export const useAppStore = defineStore("app", {
     },
     setOriginalState() {
       this.originalState = [];
-
       if (this.styleObjects) {
         this.styleObjects.forEach((styleobject) => {
           this.originalState.push(_.cloneDeep(styleobject));
@@ -24,13 +23,18 @@ export const useAppStore = defineStore("app", {
       }
     },
     hasUnsavedChanges() {
-      return this.originalState.some((original_styleObject) => {
+      let unsaved_edits = this.originalState.some((original_styleObject) => {
         let styleObject = this.styleObjects.find(
           (x) => x.id === original_styleObject.id
         );
 
         return !_.isEqual(original_styleObject, styleObject);
       });
+
+      let new_datasources =
+        this.styleObjects.length - this.originalState.length > 0;
+
+      return unsaved_edits || new_datasources;
     },
     async clearProject() {
       this.currentProject = null;
@@ -42,9 +46,9 @@ export const useAppStore = defineStore("app", {
     addStyleObject(styleObject) {
       this.styleObjects.push(styleObject);
     },
-    deleteStyleObject(source_id) {
+    deleteStyleObject(style_id) {
       this.styleObjects = this.styleObjects.filter(
-        (style) => style.source_id !== source_id
+        (style) => style.id !== style_id
       );
     },
     isStyleObjectLoaded() {
