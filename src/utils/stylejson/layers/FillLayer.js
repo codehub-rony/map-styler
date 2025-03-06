@@ -5,7 +5,7 @@ class FillLayer extends BaseLayer {
 
     this.paint = {
       "fill-color": {
-        value: this.generateRGBAColor(),
+        value: { r: 245, g: 245, b: 245, a: 0.27 },
         component: { label: "fill color", type: "color_picker" },
       },
     };
