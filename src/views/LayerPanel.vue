@@ -7,7 +7,7 @@
         variant="text"
         @click="openDialogForNewSource"
         class="mt-2"
-        v-if="isAuthenticated && styleObjects.length > 0"
+        v-if="isAuthenticated() && styleObjects.length > 0"
         >add new</v-btn
       >
     </div>
@@ -27,16 +27,16 @@
         rounded="0"
         elevation="0"
         class="mt-2"
-        v-if="isAuthenticated"
+        v-if="isAuthenticated()"
         @click="saveProject"
         >save</v-btn
       >
       <v-btn
-        :color="isAuthenticated ? 'black' : 'primary'"
+        :color="isAuthenticated() ? 'black' : 'primary'"
         rounded="0"
         elevation="0"
         class="mt-2"
-        :variant="isAuthenticated ? 'text' : 'flat'"
+        :variant="isAuthenticated() ? 'text' : 'flat'"
         @click="handleClickDownload"
         >download</v-btn
       >
