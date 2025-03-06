@@ -53,7 +53,7 @@ export default {
     geodataSource: Object,
   },
   computed: {
-    ...mapState(useAppStore, ["styleObjects"]),
+    ...mapState(useAppStore, ["styleObjects", "currentProject"]),
   },
   data() {
     return {
@@ -70,11 +70,10 @@ export default {
     this.setHeight();
     this.initMap();
 
-    // NEEDS REFACTORING!! Redirect to landingpage on page reload
-    if (this.isStyleObjectLoaded()) {
+    if (this.currentProject) {
       this.initVectorLayers();
     } else {
-      // this.$router.push("/");
+      this.$router.push("/projects");
     }
 
     this.map.on("click", (evt) => {
@@ -119,11 +118,7 @@ export default {
 
       this.map.addLayer(layer);
 
-      this.applyStyle(
-        layer,
-        styleObject.getStyleAsJSON(),
-        styleObject.source_id
-      );
+      this.applyStyle(layer, styleObject.getStyleJSON(), styleObject.source_id);
 
       let layer_source = layer.getSource();
       const key = layer_source.on("change", () => {
@@ -151,7 +146,7 @@ export default {
 
           this.applyStyle(
             geojson_layer,
-            styleObject.getStyleAsJSON(),
+            styleObject.styleObject.getStyleJSON(),
             styleObject.source_id
           );
 
@@ -226,9 +221,10 @@ export default {
             let layer_to_style = map_layers.find(
               (layer) => layer.get("source_id") === styleObject.source_id
             );
+
             this.applyStyle(
               layer_to_style,
-              styleObject.getStyleAsJSON(),
+              styleObject.getStyleJSON(),
               styleObject.source_id
             );
           });
