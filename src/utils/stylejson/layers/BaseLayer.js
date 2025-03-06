@@ -6,10 +6,10 @@ class BaseLayer {
       throw new Error("Missing parameter: source_id");
     }
     this.id = this.generateUniqueId();
-    this._label = layer_label
+    this.name = layer_label
       ? layer_label.replace("_", " ").toLowerCase()
       : `new ${type}`;
-    this._source = source_id;
+    this.source = source_id;
     this.type = type;
     this.filter = null;
     // consider setting the visibility param as true or false rather then strings.
@@ -17,14 +17,8 @@ class BaseLayer {
     this.layout = { visibility: "visible" };
   }
 
-  get label() {
-    return this._label;
-  }
-
-  set label(new_label) {
-    this._label = new_label;
-  }
-  getPaint(attributes) {
+  //bosolete
+  getPaint() {
     let paint = {};
     attributes.forEach((attribute) => {
       if (attribute.component.type === "color_picker") {
@@ -42,10 +36,6 @@ class BaseLayer {
 
   hasFilter() {
     return this.filter ? true : false;
-  }
-
-  get source() {
-    return this._source;
   }
 
   createFilter() {
@@ -95,12 +85,13 @@ class BaseLayer {
     return this.id;
   }
 
-  getStyleObject(attributes) {
+  getStyleObject() {
     let styleObject = {
       id: this.id,
-      source: this._source,
+      label: this.label,
+      source: this.source,
       type: this.type,
-      paint: this.getPaint(attributes),
+      paint: this.paint,
       layout: this.layout,
     };
 

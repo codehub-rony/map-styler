@@ -47,6 +47,9 @@ export default {
       colorPickerIsOpen: false,
     };
   },
+  mounted() {
+    this.color = this.property.value;
+  },
 
   methods: {
     handleClick: function (e) {
@@ -56,12 +59,21 @@ export default {
       }
     },
     handleColorSelection: function (e) {
-      this.property.value = this.color;
+      this.property.value = { ...this.color };
     },
     closeColorPicker: function () {
       if (this.colorPickerIsOpen) {
         this.colorPickerIsOpen = false;
       }
+    },
+  },
+  watch: {
+    // This watcher is needed to trigger an update of the rgba prop
+    color: {
+      handler(newColor) {
+        this.property.value = { ...newColor };
+      },
+      deep: true,
     },
   },
 };

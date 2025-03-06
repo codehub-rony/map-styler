@@ -103,23 +103,28 @@ export default {
       });
     },
     saveProject: function () {
-      this.styleObjects.forEach((item) => {
+      this.styleObjects.forEach((styleObject) => {
         let payload = {
-          name: item.style_name,
-          description: "",
-          geometry_type: item.geometry_type,
-          source_id: item.source_id,
-          stylejson: JSON.parse(item.getStyleAsJSON()),
+          name: styleObject.name,
+          description: styleObject.description,
+          geometry_type: styleObject.geometry_type,
+          source_id: styleObject.source_id,
+          tilejson_url: styleObject.tilejson_url,
+          stylejson: JSON.parse(styleObject.getStyleJSON()),
         };
 
-        if (item.id) {
-          api.Project.saveStyleJSON(this.currentProject.id, item.id, payload);
+        if (styleObject.id) {
+          api.Project.saveStyleJSON(
+            this.currentProject.id,
+            styleObject.id,
+            payload
+          );
         } else {
           let res = api.Project.createStyleJSON(
             this.currentProject.id,
             payload
           ).then((res) => {
-            item.id = res.id;
+            styleObject.id = res.id;
           });
         }
       });

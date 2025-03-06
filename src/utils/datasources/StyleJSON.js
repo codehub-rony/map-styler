@@ -3,33 +3,23 @@ import LineLayer from "../stylejson/layers/LineLayer";
 import CircleLayer from "../stylejson/layers/CircleLayer";
 
 class StyleJSON {
-  constructor(
-    id = null,
-    stylename = null,
-    source = null,
-    geometry_type = null,
-    stylejson = null
-  ) {
-    this._id = null;
+  constructor(source = null, geometry_type = null, stylejson = null) {
     this._version = 8;
-    this._name;
+    // this._name;
     this._center;
     this._zoom;
     this._sources = {};
     this._layers = [];
 
     if (stylejson) {
-      this._id = id;
       this._version = stylejson.version;
-      this._name = stylejson.name;
       this._center = stylejson.center;
       this._zoom = stylejson.zoom;
-      // this._layer
+
+      this.#loadLayerFromStyleJSON(stylejson.layers);
 
       this.#initSources(stylejson.sources);
-    } else if (stylename && source && geometry_type) {
-      this._name = stylename;
-
+    } else if (source && geometry_type) {
       this.addSource(source);
       this.createDefaultLayers(source.id, geometry_type);
     } else {
@@ -37,13 +27,6 @@ class StyleJSON {
         "Insufficient parameters provided for StyleJSON initialization."
       );
     }
-  }
-  get id() {
-    return this._id;
-  }
-
-  set id(id) {
-    this._id = id;
   }
 
   get name() {
@@ -64,6 +47,28 @@ class StyleJSON {
     this._sources = Object.assign({}, this._sources, style_sources);
   }
 
+  #loadLayerFromStyleJSON(layers) {
+    layers.forEach((layer_config) => {
+      if (layer_config.type === "line") {
+        let layer = new LineLayer(
+          layer_config.label,
+          layer_config.source,
+          layer_config
+        );
+        this._layers.push(layer);
+      }
+
+      if (layer_config.type === "fill") {
+        let layer = new FillLayer(
+          layer_config.label,
+          layer_config.source,
+          layer_config
+        );
+        this._layers.push(layer);
+      }
+    });
+  }
+
   addSource(source) {
     this._sources = Object.assign({}, this._sources, source.getStyleAsObject());
   }
@@ -72,7 +77,7 @@ class StyleJSON {
     if (!geometry_type) {
       throw new Error("Geometry type is required");
     } else if (geometry_type === "polygon") {
-      this._layers.push(new FillLayer(`${this._name}_fill`, source_id, true));
+      this._layers.push(new FillLayer(`${this._name}_fill`, source_id));
       this._layers.push(new LineLayer(`${this._name}_line`, source_id));
     } else if (geometry_type === "line") {
       this._layers.push(new LineLayer(`${this._name}_line`, source_id));
@@ -91,6 +96,47 @@ class StyleJSON {
     }, {});
 
     return styleObject;
+  }
+
+  processPaintAttributes(paint) {
+    const result = {};
+
+    for (const key in paint) {
+      if (paint.hasOwnProperty(key)) {
+        const attribute = paint[key];
+
+        if (key === "line-color" || key === "fill-color") {
+          const rgba_color = attribute.value;
+          const { r, g, b, a } = rgba_color;
+          result[key] = `rgb(${r},${g},${b})`;
+          result[key.replace("color", "opacity")] = a;
+        } else {
+          result[key] = attribute.value;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  getStyleJSON() {
+    let json = {
+      version: this._version,
+      name: this._name,
+      center: this._center,
+      zoom: this._zoom,
+      sources: this._sources,
+      layers: JSON.parse(JSON.stringify(this._layers)),
+    };
+
+    json.layers.forEach((layer) => {
+      if (layer.paint) {
+        layer.paint = this.processPaintAttributes(layer.paint);
+      }
+      layer["source-layer"] = Object.keys(json.sources)[0];
+    });
+
+    return JSON.stringify(json, null, 2);
   }
 
   setVisibilityAllLayers(isVisible) {

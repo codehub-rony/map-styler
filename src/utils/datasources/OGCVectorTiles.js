@@ -2,17 +2,12 @@ import BaseDataSource from "./BaseDataSource";
 import StyleJSON from "./StyleJSON";
 import { TiledVectorSource } from "./StyleDataSources";
 class OGCVectorTiles extends BaseDataSource {
-  constructor(
-    tilejson_url = null,
-    tilejson = null,
-    stylename = null,
-    source_config = null
-  ) {
+  constructor(tilejson_url, tilejson, stylename, stylejson) {
     super();
     this._tilejson_url = null;
 
-    if (source_config) {
-      this.#initializeWithConfig(source_config);
+    if (stylejson) {
+      this.#loadFromStyleJson(stylejson);
     } else if (tilejson_url && tilejson && stylename) {
       this.#initializeWithTileJSON(tilejson_url, tilejson, stylename);
     } else {
@@ -23,7 +18,7 @@ class OGCVectorTiles extends BaseDataSource {
   }
 
   #initializeWithTileJSON(tilejson_url, tilejson, stylename) {
-    this._style_name = stylename;
+    this._name = stylename;
     this._geometry_type = this.standarizeGeometryType(
       tilejson.vector_layers[0].geometry_type
     );
@@ -34,31 +29,39 @@ class OGCVectorTiles extends BaseDataSource {
     let tiles_url = tilejson.tiles[0];
     let source = new TiledVectorSource(this._source_id, tiles_url);
 
-    this._stylejson = new StyleJSON(
-      null,
-      stylename,
-      source,
-      this._geometry_type
-    );
+    this._stylejson = new StyleJSON(source, this._geometry_type);
   }
 
-  #initializeWithConfig(source_config) {
-    let config = source_config;
+  #loadFromStyleJson(stylejson) {
+    const required_attributes = [
+      "id",
+      "source_id",
+      "geometry_type",
+      "tilejson_url",
+      "stylejson",
+    ];
 
-    if (typeof config === "string") {
-      config = JSON.parse(source_config);
+    for (const attr of required_attributes) {
+      if (!(attr in stylejson)) {
+        throw new Error(`Missing required attribute: ${attr}`);
+      }
     }
 
-    this._projection = config.projection;
-    this._geometry_type = config.geometry_type;
-    this._stylejson = new StyleJSON(null, null, config.stylejson);
+    this._id = stylejson.id;
+    this._name = stylejson.name;
+    this._description = stylejson.description;
+    this._source_id = stylejson.source_id;
+    this._projection = stylejson.projection;
+    this._geometry_type = stylejson.geometry_type;
+    this._tilejson_url = stylejson.tilejson_url;
+    this._stylejson = new StyleJSON(null, null, stylejson.stylejson);
   }
 
   get tilejson_url() {
     return this._tilejson_url;
   }
 
-  getStyleAsJSON() {
+  getStyleAsObject() {
     const styleObject = this._stylejson.getStyleAsObject();
 
     styleObject.layers = styleObject.layers.map((x) => x.getStyleAsObject());
@@ -67,7 +70,13 @@ class OGCVectorTiles extends BaseDataSource {
       layer["source-layer"] = Object.keys(styleObject.sources)[0];
     });
 
-    return JSON.stringify(styleObject, null, 2);
+    return styleObject;
+  }
+
+  getStyleJSON() {
+    let json = this._stylejson.getStyleJSON();
+
+    return json;
   }
 }
 

@@ -35,7 +35,6 @@
 import DefaultButton from "@/components/DefaultButton.vue";
 import InputTextField from "@/components/DataImport/InputTextField.vue";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
-import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 import apiService from "@/services/apiService";
 
 import { useAppStore } from "@/store/app.js";
@@ -55,7 +54,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAppStore, ["addStyleObject"]),
+    ...mapActions(useAppStore, ["setCurrentProject"]),
     handleTilejsonUpdate(tilejson) {
       this.tilejson = tilejson;
     },
@@ -64,11 +63,12 @@ export default {
         apiService.Project.create({
           name: this.projectName,
           description: this.description,
+        }).then((res) => {
+          this.setCurrentProject(res);
+          this.projectName = this.description = null;
+
+          this.$router.push("/editor");
         });
-
-        this.projectName = this.description = null;
-
-        this.$router.push("/editor");
       }
     },
   },

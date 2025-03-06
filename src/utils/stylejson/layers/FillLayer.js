@@ -1,28 +1,40 @@
 import BaseLayer from "./BaseLayer.js";
 class FillLayer extends BaseLayer {
-  constructor(layer_label, source_id, default_style) {
+  constructor(layer_label, source_id, stylejson) {
     super(layer_label, source_id, "fill");
-    this.attributes = [
-      {
-        name: "fill-color",
 
-        value: default_style
-          ? { r: 255, g: 255, b: 255, a: 0.5 }
-          : this.generateRGBAColor(),
-        component: { label: "color", type: "color_picker" },
+    this.paint = {
+      "fill-color": {
+        value: this.generateRGBAColor(),
+        component: { label: "fill color", type: "color_picker" },
       },
-    ];
+    };
+
+    if (stylejson) {
+      this.id = stylejson.id;
+      this.name = stylejson.name;
+      this.#loadFromStyleJSON(stylejson);
+    }
+  }
+
+  #parseRGB(colorString, opacity) {
+    const match = colorString.match(/rgb\((\d+),(\d+),(\d+)\)/);
+    if (!match) {
+      throw new Error("Invalid RGB format");
+    }
+    const [_, r, g, b] = match.map(Number);
+    return { r: r, g: g, b: b, a: opacity };
+  }
+
+  #loadFromStyleJSON(stylejson) {
+    this.paint["fill-color"].value = this.#parseRGB(
+      stylejson.paint["fill-color"],
+      stylejson.paint["fill-opacity"]
+    );
   }
 
   getStyleAsObject() {
     return this.getStyleObject(this.attributes);
-  }
-
-  setFromObject(styleobject) {
-    console.log(styleobject.type !== "fill");
-    if (styleobject.type !== "fill") {
-      throw new Error("layer is not of type 'fill'");
-    }
   }
 }
 
