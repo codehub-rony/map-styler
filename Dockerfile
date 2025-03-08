@@ -19,7 +19,7 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Install serve
-RUN yarn global add serve
+RUN npm install -g serve
 
 # Copy built files from builder
 COPY --from=builder /app/dist /app
