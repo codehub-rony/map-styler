@@ -21,6 +21,9 @@ export default defineConfig({
     "process.env.VITE_MAPTILER_KEY": JSON.stringify(
       process.env.VITE_MAPTILER_KEY
     ),
+    "process.env.VITE_BACKEND_URL": JSON.stringify(
+      process.env.VITE_BACKEND_URL
+    ),
   },
   resolve: {
     alias: {
