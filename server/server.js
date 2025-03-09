@@ -12,7 +12,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist", "index.html"));
 });
 
-// Start the server
+// Start tnpm he server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
