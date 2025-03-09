@@ -4,14 +4,14 @@ FROM node:18 AS builder
 WORKDIR /app
 
 # Copy package.json and install dependencies
-COPY package.json yarn.lock ./
-RUN yarn install
+COPY package.json package-lock.json ./
+RUN npm install
 
 # Copy the rest of the application code
 COPY . .
 
 # Build the application
-RUN yarn build
+RUN npm run build
 
 # Use a lightweight static file server
 FROM node:18-alpine
