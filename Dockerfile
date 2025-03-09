@@ -4,12 +4,6 @@ FROM node:lts
 # Set working directory
 WORKDIR /app
 
-#Define build-time argument
-ARG VITE_MAPTILER_KEY
-
-# Set the environment variable that will be available during build
-ENV VITE_MAPTILER_KEY=$VITE_MAPTILER_KEY
-
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
