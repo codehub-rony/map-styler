@@ -55,32 +55,32 @@ const requests = {
 
 const Project = {
   getAll: () => {
-    return requests.get(`${api_baseUrl}project/project/`);
+    return requests.get(`${api_baseUrl}/project/project/`);
   },
   create: (data) => {
-    return requests.post(`${api_baseUrl}project/project/`, data);
+    return requests.post(`${api_baseUrl}/project/project/`, data);
   },
   delete: (project_id) => {
-    return requests.delete(`${api_baseUrl}project/project/${project_id}/`);
+    return requests.delete(`${api_baseUrl}/project/project/${project_id}/`);
   },
   getStylejsons: (project_id) => {
-    return requests.get(`${api_baseUrl}project/${project_id}/stylejsons/`);
+    return requests.get(`${api_baseUrl}/project/${project_id}/stylejsons/`);
   },
   saveStyleJSON: (project_id, stylejson_id, payload) => {
     return requests.put(
-      `${api_baseUrl}project/${project_id}/stylejsons/${stylejson_id}/`,
+      `${api_baseUrl}/project/${project_id}/stylejsons/${stylejson_id}/`,
       payload
     );
   },
   createStyleJSON: (project_id, payload) => {
     return requests.post(
-      `${api_baseUrl}project/${project_id}/stylejsons/`,
+      `${api_baseUrl}/project/${project_id}/stylejsons/`,
       payload
     );
   },
   deleteStyleJSON: (project_id, stylejson_id) => {
     return requests.delete(
-      `${api_baseUrl}project/${project_id}/stylejsons/${stylejson_id}/`
+      `${api_baseUrl}/project/${project_id}/stylejsons/${stylejson_id}/`
     );
   },
 };
