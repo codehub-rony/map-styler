@@ -8,13 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm install --omit=dev
+# RUN npm install --omit=dev
 
 # Copy all source code
 COPY . .
 
-# Build the Vue app
-RUN npm run build
+# # Build the Vue app
+# RUN npm run build
 
 # Install Express server
 RUN npm install express
