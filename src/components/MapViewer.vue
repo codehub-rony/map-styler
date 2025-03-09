@@ -70,11 +70,11 @@ export default {
     this.setHeight();
     this.initMap();
 
-    if (this.styleObjects.length > 0) {
-      this.initVectorLayers();
-    } else {
-      this.$router.push("/projects");
-    }
+    // if (this.styleObjects.length > 0) {
+    //   this.initVectorLayers();
+    // } else {
+    //   this.$router.push("/projects");
+    // }
 
     this.map.on("click", (evt) => {
       console.log(evt.coordinate, evt.map.getView().getZoom());
