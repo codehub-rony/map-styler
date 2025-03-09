@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const api_baseUrl = "http://localhost:8000/api/";
-
+// const api_baseUrl = "http://localhost:8000/api/";
+const api_baseUrl = import.meta.env.VITE_BACKEND_URL;
 axios.interceptors.request.use(
   function (config) {
     const mapstyler_user = localStorage.getItem("mapstyler_user");
