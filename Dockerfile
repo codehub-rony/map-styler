@@ -23,4 +23,4 @@ RUN npm install express
 EXPOSE 3000
 
 # Run the Express server
-CMD ["node", "server.js"]
+CMD ["node", "server/server.js"]
