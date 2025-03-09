@@ -1,22 +1,26 @@
-FROM node:lts-alpine
+# Use Node.js LTS (not Alpine, to avoid memory issues)
+FROM node:lts
 
-# install simple http server for serving static content
-RUN npm install -g http-server
-
-# make the 'app' folder the current working directory
+# Set working directory
 WORKDIR /app
 
-# copy both 'package.json' and 'package-lock.json' (if available)
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# install project dependencies
-RUN npm install --network-concurrency 1
+# Install only production dependencies
+RUN npm install --production
 
-# copy project files and folders to the current working directory (i.e. 'app' folder)
+# Copy all source code
 COPY . .
 
-# build app for production with minification
+# Build the Vue app
 RUN npm run build
 
+# Install Express server
+RUN npm install express
+
+# Expose the correct port
 EXPOSE 3000
-CMD [ "http-server", "dist" ]
+
+# Run the Express server
+CMD ["node", "server.js"]
