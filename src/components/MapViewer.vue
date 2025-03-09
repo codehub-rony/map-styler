@@ -70,9 +70,10 @@ export default {
     this.setHeight();
     this.initMap();
 
-    // if (this.styleObjects.length > 0) {
-    //   this.initVectorLayers();
-    // } else {
+    if (this.styleObjects.length > 0) {
+      this.initVectorLayers();
+    }
+    // else {
     //   this.$router.push("/projects");
     // }
 
