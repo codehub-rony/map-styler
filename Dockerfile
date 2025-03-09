@@ -1,31 +1,22 @@
-FROM node:18 AS builder
+FROM node:lts-alpine
 
-# Set working directory
+# install simple http server for serving static content
+RUN npm install -g http-server
+
+# make the 'app' folder the current working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json ./
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY package*.json ./
+
+# install project dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 
-# Build the application
+# build app for production with minification
 RUN npm run build
 
-# Use a lightweight static file server
-FROM node:18-alpine
-
-WORKDIR /app
-
-# Install serve
-RUN npm install -g serve
-
-# Copy built files from builder
-COPY --from=builder /app/dist /app
-
-# Expose port 3000 (Coolify will map this)
 EXPOSE 3000
-
-# Start the app
-CMD ["serve", "-s", "/app", "-l", "3000"]
+CMD [ "http-server", "dist" ]
