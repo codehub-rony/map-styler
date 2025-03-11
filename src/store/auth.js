@@ -15,7 +15,7 @@ export const useAuthStore = defineStore("auth", {
 
       try {
         const api_baseUrl = import.meta.env.VITE_BACKEND_URL;
-        const response = await fetch(`${api_baseUrl}/api/user/token/`, {
+        const response = await fetch(`${api_baseUrl}/user/token/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
