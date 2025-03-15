@@ -14,7 +14,8 @@ export const useAuthStore = defineStore("auth", {
       this.loading = true;
 
       try {
-        const response = await fetch("http://localhost:8000/api/user/token/", {
+        const api_baseUrl = import.meta.env.VITE_BACKEND_URL;
+        const response = await fetch(`${api_baseUrl}/user/token/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

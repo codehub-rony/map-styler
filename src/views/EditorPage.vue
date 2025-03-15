@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <v-row dense
-      ><v-col cols="0" xl="1"></v-col>
+    <v-row dense>
       <v-col cols="12" xl="2" lg="3" md="3" sm="3">
         <LayerPanel
           :styleObjects="styleObjects"
@@ -10,7 +9,7 @@
         />
       </v-col>
 
-      <v-col cols="12" lg="8" md="9" sm="9">
+      <v-col cols="12" xl="10" lg="8" md="9" sm="9">
         <MapViewer ref="map" />
       </v-col>
     </v-row>
