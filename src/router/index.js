@@ -6,6 +6,7 @@ import LandingPage from "@/views/LandingPage.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import ProjectsPage from "@/views/projects/ProjectsPage.vue";
 import NewProjectPage from "@/views/projects/NewProjectPage.vue";
+import UserManagerPage from "@/views/UserManagerPage.vue";
 
 import { useAuthStore } from "@/store/auth.js";
 
@@ -41,6 +42,13 @@ const routes = [
     path: "/projects/new",
     name: "new-project",
     component: NewProjectPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/me",
+    name: "me",
+    component: UserManagerPage,
     props: true,
     meta: { requiresAuth: true },
   },

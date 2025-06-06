@@ -1,6 +1,6 @@
 <template>
   <div class="mr-3">
-    <v-menu open-on-hover density="compact">
+    <v-menu density="compact">
       <template v-slot:activator="{ props }">
         <div>
           <span class="text-body-1 font-weight-light">{{ this.user }}</span>
@@ -34,15 +34,18 @@ export default {
   },
   data() {
     return {
-      items: [{ title: "logout" }],
+      items: [
+        { title: "My account", route_name: "me" },
+        { title: "logout", route_name: "home" },
+      ],
     };
   },
   methods: {
     handleItemClick(item) {
       if (item.title === "logout") {
         this.logout();
-        this.$router.push({ name: "home" });
       }
+      this.$router.push({ name: item.route_name });
     },
   },
 };

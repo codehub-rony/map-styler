@@ -7,6 +7,7 @@
       :rules="rulesToApply"
       density="comfortable"
       class="mb-2 mt-2"
+      :disabled="disabled"
       @update:modelValue="emitUpdate"
     ></v-text-field>
   </v-form>
@@ -18,6 +19,10 @@ export default {
   props: {
     modelValue: String,
     validationRules: Array,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
