@@ -28,9 +28,5 @@ export default {
   components: {
     ProjectList,
   },
-
-  methods: {
-    handleCreateNew: function () {},
-  },
 };
 </script>
