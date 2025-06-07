@@ -17,18 +17,16 @@
 </template>
 
 <script>
+import { useNotificationStore } from "@/store/notification.js";
+import { mapState, mapActions } from "pinia";
+
 export default {
   data() {
-    return {
-      type: "error",
-      msg: "Password updated succesfully",
-      visible: false,
-      timoutInstance: null,
-      alertOptions: ["success", "info", "warning", "error"],
-    };
+    return {};
   },
 
   computed: {
+    ...mapState(useNotificationStore, ["visible", "msg", "type"]),
     bannerIcon: function () {
       switch (this.type) {
         case "error":
@@ -44,27 +42,11 @@ export default {
   },
 
   methods: {
-    show(msg, type) {
-      if (!this.alertOptions.includes(type)) {
-        throw new Error(`Invalid alert type: ${type}`);
-      }
-      if (this.timoutInstance) {
-        clearTimeout(this.timoutInstance);
-        this.visible = false;
-        this.timoutInstance = null;
-      }
-      this.type = type;
-      this.msg = msg;
-      this.visible = true;
-
-      this.timoutInstance = setTimeout(() => {
-        this.visible = false;
-      }, 4000);
-    },
     closeAlert() {
       this.visible = false;
     },
     onAfterLeave() {
+      console.log("doieoeo");
       this.message = null;
     },
   },
@@ -77,6 +59,8 @@ export default {
   position: absolute;
   right: 0px;
   top: 80px;
+
+  z-index: 9999;
 }
 .fade-enter-active,
 .fade-leave-active {
