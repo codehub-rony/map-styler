@@ -1,4 +1,5 @@
 <template>
+  <NotificationBar ref="notification" />
   <v-container width="500">
     <v-row class="justify-center">
       <v-col cols="6">
@@ -97,16 +98,17 @@
 
 <script>
 import InputTextField from "@/components/GenericComponents/InputTextField.vue";
+import NotificationBar from "@/components/GenericComponents/NotificationBar.vue";
 
 // store
 import { useAuthStore } from "@/store/auth.js";
-import { update } from "lodash";
 import { mapActions, mapState } from "pinia";
 import apiService from "@/services/apiService";
 
 export default {
   components: {
     InputTextField,
+    NotificationBar,
   },
 
   data() {
@@ -118,8 +120,6 @@ export default {
       newPassword: null,
       repeatPassword: null,
       loading: false,
-      errorMessage: null,
-      errorTimeout: null,
     };
   },
   computed: {
@@ -127,9 +127,9 @@ export default {
   },
   mounted() {
     this.email = this.user_email;
-
     apiService.User.get().then((res) => {
       this.name = res.name;
+      this.notify("succes", "Succesfully updated credentions and stuff");
     });
   },
   methods: {
@@ -148,22 +148,17 @@ export default {
         apiService.User.update(payload)
           .then((res) => {
             this.clearPasswordUpdate();
+            this.$refs.notification.show(
+              "Password updated succesfully",
+              "success"
+            );
           })
           .catch((err) => {
             this.loading = false;
-            if (this.errorTimeout) {
-              clearTimeout(this.errorTimeout);
-              this.errorMessage = null;
-            }
 
             if (err.response && err.response.data) {
               const error = err.response.data;
-
-              this.errorMessage = error.error_msg;
-
-              this.errorTimeout = setTimeout(() => {
-                this.errorMessage = null;
-              }, 4000);
+              this.$refs.notification.show(error.error_msg, "error");
             }
           });
       }
@@ -176,10 +171,3 @@ export default {
   handleDelete: function () {},
 };
 </script>
-
-<style>
-.error-message {
-  min-height: 1.3rem;
-  color: #b71734;
-}
-</style>
