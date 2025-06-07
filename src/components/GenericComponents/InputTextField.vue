@@ -1,16 +1,19 @@
 <template>
   <span><slot name="label">Style name</slot></span>
-  <v-form v-model="isFormValid">
-    <v-text-field
-      :model-value="modelValue"
-      variant="outlined"
-      :rules="rulesToApply"
-      density="comfortable"
-      class="mb-2 mt-2"
-      :disabled="disabled"
-      @update:modelValue="emitUpdate"
-    ></v-text-field>
-  </v-form>
+  <v-text-field
+    :model-value="modelValue"
+    variant="outlined"
+    :rules="rulesToApply"
+    density="comfortable"
+    class="mb-2 mt-2"
+    :type="type === 'password' ? (showPassword ? 'text' : 'password') : 'text'"
+    :disabled="disabled"
+    @update:modelValue="emitUpdate"
+    :append-inner-icon="
+      type === 'password' ? (showPassword ? 'mdi-eye-off' : 'mdi-eye') : ''
+    "
+    @click:append-inner="showPassword = !showPassword"
+  ></v-text-field>
 </template>
 
 <script>
@@ -23,14 +26,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+    },
   },
   data() {
     return {
-      isFormValid: false,
+      showPassword: false,
       ruleOptions: [
         {
           name: "not_empty",
-          fn_rule: (v) => !!v || "A name for you style is required",
+          fn_rule: (v) => !!v || "Required field",
         },
         {
           name: "only_char",
