@@ -1,6 +1,6 @@
 <template>
   <v-form ref="projectform">
-    <v-container width="500">
+    <v-container>
       <v-row class="justify-center">
         <v-col cols="4">
           <h2>Create a new project</h2>

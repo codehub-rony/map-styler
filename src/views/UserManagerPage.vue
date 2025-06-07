@@ -1,6 +1,6 @@
 <template>
   <NotificationBar />
-  <v-container width="500">
+  <v-container>
     <v-row class="justify-center">
       <v-col cols="6">
         <div class="d-flex justify-space-between align-center">
