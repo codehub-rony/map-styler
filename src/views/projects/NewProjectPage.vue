@@ -33,7 +33,7 @@
 </template>
 <script>
 import DefaultButton from "@/components/DefaultButton.vue";
-import InputTextField from "@/components/DataImport/InputTextField.vue";
+import InputTextField from "@/components/GenericComponents/InputTextField.vue";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import apiService from "@/services/apiService";
 
