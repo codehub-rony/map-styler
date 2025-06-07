@@ -85,6 +85,16 @@ const Project = {
   },
 };
 
+const User = {
+  get: () => {
+    return requests.get(`${api_baseUrl}/user/me/`);
+  },
+  update: (payload) => {
+    return requests.put(`${api_baseUrl}/user/me/`, payload);
+  },
+};
+
 export default {
   Project,
+  User,
 };

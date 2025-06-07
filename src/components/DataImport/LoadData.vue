@@ -71,7 +71,7 @@
 <script>
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
 import GeoJSONInput from "@/components/DataImport/GeoJSONInput.vue";
-import InputTextField from "@/components/DataImport/InputTextField.vue";
+import InputTextField from "@/components/GenericComponents/InputTextField.vue";
 
 import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
 import GeoJSONFeatures from "@/utils/datasources/GeoJSONFeatures";
