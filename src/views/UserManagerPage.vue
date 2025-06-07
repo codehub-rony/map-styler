@@ -1,5 +1,5 @@
 <template>
-  <NotificationBar ref="notification" />
+  <NotificationBar />
   <v-container width="500">
     <v-row class="justify-center">
       <v-col cols="6">
@@ -102,7 +102,9 @@ import NotificationBar from "@/components/GenericComponents/NotificationBar.vue"
 
 // store
 import { useAuthStore } from "@/store/auth.js";
+import { useNotificationStore } from "@/store/notification.js";
 import { mapActions, mapState } from "pinia";
+
 import apiService from "@/services/apiService";
 
 export default {
@@ -129,10 +131,10 @@ export default {
     this.email = this.user_email;
     apiService.User.get().then((res) => {
       this.name = res.name;
-      this.notify("succes", "Succesfully updated credentions and stuff");
     });
   },
   methods: {
+    ...mapActions(useNotificationStore, ["showNotification"]),
     handleUpdatePassword: async function () {
       const { valid } = await this.$refs.passform.validate();
 
@@ -148,17 +150,14 @@ export default {
         apiService.User.update(payload)
           .then((res) => {
             this.clearPasswordUpdate();
-            this.$refs.notification.show(
-              "Password updated succesfully",
-              "success"
-            );
+            this.showNotification("Password updated succesfully", "success");
           })
           .catch((err) => {
             this.loading = false;
 
             if (err.response && err.response.data) {
               const error = err.response.data;
-              this.$refs.notification.show(error.error_msg, "error");
+              this.showNotification(error.error_msg, "error");
             }
           });
       }

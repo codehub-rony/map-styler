@@ -1,5 +1,5 @@
 <template>
-  <v-form>
+  <v-form ref="projectform">
     <v-container width="500">
       <v-row class="justify-center">
         <v-col cols="4">
@@ -22,7 +22,7 @@
       <v-row class="justify-center"
         ><v-col cols="4">
           <div class="d-flex justify-end">
-            <DefaultButton @click="saveProject"
+            <DefaultButton @click="saveProject" :loading="loading"
               ><template #label>create</template></DefaultButton
             >
           </div></v-col
@@ -49,26 +49,29 @@ export default {
     return {
       projectName: null,
       description: null,
-      stylename: "trest",
-      tilejson: null,
+
+      loading: false,
     };
   },
   methods: {
     ...mapActions(useAppStore, ["setCurrentProject"]),
-    handleTilejsonUpdate(tilejson) {
-      this.tilejson = tilejson;
-    },
-    saveProject() {
-      if (this.$refs.projectname.isFormValid) {
+
+    async saveProject() {
+      this.loading = true;
+      const { valid } = await this.$refs.projectform.validate();
+      if (valid) {
         apiService.Project.create({
           name: this.projectName,
           description: this.description,
-        }).then((res) => {
-          this.setCurrentProject(res);
-          this.projectName = this.description = null;
-
-          this.$router.push("/editor");
-        });
+        })
+          .then((res) => {
+            this.setCurrentProject(res);
+            this.projectName = this.description = null;
+            this.$router.push("/editor");
+          })
+          .catch((err) => {
+            this.loading = false;
+          });
       }
     },
   },

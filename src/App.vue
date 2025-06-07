@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app_container">
+  <v-app>
     <AppBar />
 
     <!-- <v-main class="bg-grey-lighten-3"> -->
