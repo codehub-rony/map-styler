@@ -26,7 +26,8 @@ export default {
       validationRules: [
         (v) => !!v || "Select a file",
         (v) =>
-          v[0].name.includes(".geojson") || "Currently we only support GeoJSON",
+          (v && v.name.endsWith(".geojson")) ||
+          "Currently we only support GeoJSON",
       ],
     };
   },

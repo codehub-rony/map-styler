@@ -113,7 +113,12 @@ class StyleJSON {
       if (paint.hasOwnProperty(key)) {
         const attribute = paint[key];
 
-        if (key === "line-color" || key === "fill-color") {
+        if (
+          key === "line-color" ||
+          key === "fill-color" ||
+          key === "circle-stroke-color" ||
+          key === "circle-color"
+        ) {
           const rgba_color = attribute.value;
           const { r, g, b, a } = rgba_color;
           result[key] = `rgb(${r},${g},${b})`;

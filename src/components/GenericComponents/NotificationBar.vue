@@ -46,7 +46,6 @@ export default {
       this.visible = false;
     },
     onAfterLeave() {
-      console.log("doieoeo");
       this.message = null;
     },
   },

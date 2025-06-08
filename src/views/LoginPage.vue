@@ -1,8 +1,5 @@
 <template>
-  <v-container
-    class="d-flex flex-column justify-center align-center"
-    max-width="700"
-  >
+  <v-container class="d-flex flex-column justify-center align-center">
     <div class="best align-center mSx-auto mt-">
       <v-row class="justify-center">
         <v-col cols="4">
@@ -12,7 +9,7 @@
         </v-col>
       </v-row>
       <v-row class="justify-center">
-        <v-col cols="4">
+        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
           <v-form @submit.prevent v-model="valid">
             <span class="mb-2">Email</span>
             <v-text-field
