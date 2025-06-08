@@ -125,7 +125,6 @@ export default {
           this.openFile().then((geojson) => {
             styleObject = new GeoJSONFeatures(this.stylename, geojson);
             this.loadStyleJson(styleObject);
-            console.log(styleObject);
           });
         }
 
