@@ -28,18 +28,12 @@ import { Fill, Stroke, Style } from "ol/style.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import VectorTileLayer from "ol/layer/VectorTile.js";
 
-// import { GeojsonDataSource } from "@/utils/datasources/DataSourceTypes"; --obsolete
-
-import OGCVectorTiles from "@/utils/datasources/OGCVectorTiles";
-
 export default {
   components: {
     DeleteButton,
   },
   props: {
     map: Object,
-    vectorLayer: Object,
-    styleObject: Object,
   },
   data() {
     return {
@@ -55,36 +49,12 @@ export default {
           lineDashOffset: 3,
         }),
       }),
-      selection: {},
-      selectionLayer: null,
       properties: [],
+      selection: {},
+      selectionLayers: {},
     };
   },
   mounted() {
-    let styleFunction = (feature) => {
-      if (feature.getId() in this.selection) {
-        return this.selectStyle;
-      }
-    };
-
-    if (this.styleObject.datasource_type instanceof OGCVectorTiles) {
-      this.selectionLayer = new VectorTileLayer({
-        map: this.map,
-        source: this.vectorLayer.getSource(),
-        style: styleFunction,
-      });
-    } else if (this.styleObject.datasource_type instanceof GeojsonDataSource) {
-      this.selectionLayer = new VectorLayer({
-        map: this.map,
-        source: this.vectorLayer.getSource(),
-        style: styleFunction,
-      });
-    } else {
-      throw Error(
-        `SelectInteraction does not support ${source_type} data source`
-      );
-    }
-
     const container = document.getElementById("popup");
     this.popupOverlay = new Overlay({
       element: container,
@@ -124,37 +94,62 @@ export default {
         )
       );
     },
-    selectFeature: function (event) {
-      this.vectorLayer.getFeatures(event.pixel).then((features) => {
-        this.selection = {};
-        if (!features.length) {
-          this.closePopup();
+    selectFeature(event) {
+      let found = false;
 
-          return;
-        }
+      this.selection = {};
+      this.setProperties({}); // clear
 
-        const feature = features[0];
+      this.map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+        if (!layer || !layer.getSource) return;
 
-        if (!feature) {
-          this.closePopup();
-          return;
-        }
-        this.setProperties(feature.getProperties());
-
-        this.popupOverlay.setPosition(event.coordinate);
-
+        const layerId = layer.ol_uid; // or use a custom `layer.id`
         const fid = feature.getId();
 
-        this.selection[fid] = feature;
-        this.selectionLayer.changed();
+        if (!fid) return;
+
+        if (!this.selection[layerId]) this.selection[layerId] = {};
+        this.selection[layerId][fid] = feature;
+
+        // popup info (first match only)
+        if (!found) {
+          this.setProperties(feature.getProperties());
+          this.popupOverlay.setPosition(event.coordinate);
+          found = true;
+        }
+
+        // setup selection layer if missing
+        if (!this.selectionLayers[layerId]) {
+          const Constructor =
+            layer instanceof VectorTileLayer ? VectorTileLayer : VectorLayer;
+
+          const selectionLayer = new Constructor({
+            map: this.map,
+            source: layer.getSource(),
+            style: (feat) => {
+              return this.selection[layerId] &&
+                this.selection[layerId][feat.getId()]
+                ? this.selectStyle
+                : null;
+            },
+          });
+
+          this.selectionLayers[layerId] = selectionLayer;
+        } else {
+          this.selectionLayers[layerId].changed();
+        }
+
+        return true;
       });
+
+      if (!found) this.closePopup();
     },
     closePopup: function () {
       this.popupOverlay.setPosition(undefined);
       this.selection = {};
-      this.selectionLayer.changed();
-
-      return false;
+      for (const layerId in this.selectionLayers) {
+        this.selectionLayers[layerId].changed();
+      }
     },
   },
 };
