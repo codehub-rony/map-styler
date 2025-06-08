@@ -8,10 +8,22 @@
         @click="refresh"
       />
     </div>
+    <div class="d-flex flex-row justify-end" v-if="!isAuthenticated()">
+      <v-app-bar-title>MapStyler</v-app-bar-title>
 
-    <v-app-bar-title v-if="!isAuthenticated()">MapStyler</v-app-bar-title>
+      <v-btn
+        color="black"
+        size="small"
+        href="https://www.oneprojectatatime.nl/tag/mapstyler/"
+        target="_blank"
+        variant="plain"
+        rel="noopener"
+        class="ml-5"
+        >blog</v-btn
+      >
+    </div>
 
-    <div v-if="isAuthenticated()" class="ml-4 d-flex flex-row">
+    <div v-else class="ml-4 d-flex flex-row">
       <v-btn
         color="black"
         size="small"

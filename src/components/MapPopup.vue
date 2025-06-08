@@ -7,7 +7,15 @@
   >
     <div class="d-flex justify-space-between pa-4 pr-2">
       <span class="text-h6 font-weight-light">Feature properties</span>
-      <DeleteButton @click="closePopup" class="mb-1" />
+      <v-btn
+        icon
+        @click="closePopup"
+        class="mb-1"
+        variant="text"
+        size="x-small"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </div>
     <div class="map-popup-content">
       <div
@@ -22,16 +30,12 @@
 </template>
 
 <script>
-import DeleteButton from "./DeleteButton.vue";
 import Overlay from "ol/Overlay.js";
 import { Fill, Stroke, Style } from "ol/style.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import VectorTileLayer from "ol/layer/VectorTile.js";
 
 export default {
-  components: {
-    DeleteButton,
-  },
   props: {
     map: Object,
   },
