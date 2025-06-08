@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="6">
+      <v-col cols="12" sm="12" md="12" lg="8" xl="6">
         <div class="d-flex justify-space-between align-center">
           <span class="text-h5 font-weight-light">Projects</span>
           <v-btn
@@ -15,7 +15,7 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="6">
+      <v-col cols="12" sm="12" md="12" lg="8" xl="6">
         <ProjectList />
       </v-col>
     </v-row>

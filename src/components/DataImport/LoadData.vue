@@ -158,7 +158,7 @@ export default {
     openFile: async function (e) {
       let reader = new FileReader();
       const promise = new Promise((resolve, reject) => {
-        reader.readAsText(this.fileInput["0"]);
+        reader.readAsText(this.fileInput);
         reader.onload = () => {
           if (this.isValidJSON(reader.result)) {
             this.loading = false;

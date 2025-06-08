@@ -1,4 +1,5 @@
 <template>
+  <NotificationBar />
   <v-form ref="projectform">
     <v-container>
       <v-row class="justify-center">
@@ -35,15 +36,22 @@
 import DefaultButton from "@/components/DefaultButton.vue";
 import InputTextField from "@/components/GenericComponents/InputTextField.vue";
 import OGCTileInput from "@/components/DataImport/OGCTileInput.vue";
+import NotificationBar from "@/components/GenericComponents/NotificationBar.vue";
+
+// ApiService
 import apiService from "@/services/apiService";
 
+// store
+import { useNotificationStore } from "@/store/notification.js";
 import { useAppStore } from "@/store/app.js";
 import { mapActions } from "pinia";
+
 export default {
   components: {
     DefaultButton,
     OGCTileInput,
     InputTextField,
+    NotificationBar,
   },
   data() {
     return {
@@ -55,11 +63,12 @@ export default {
   },
   methods: {
     ...mapActions(useAppStore, ["setCurrentProject"]),
+    ...mapActions(useNotificationStore, ["showNotification"]),
 
     async saveProject() {
-      this.loading = true;
       const { valid } = await this.$refs.projectform.validate();
       if (valid) {
+        this.loading = true;
         apiService.Project.create({
           name: this.projectName,
           description: this.description,
@@ -70,6 +79,7 @@ export default {
             this.$router.push("/editor");
           })
           .catch((err) => {
+            this.showNotification("Failed to create a project", "error");
             this.loading = false;
           });
       }
