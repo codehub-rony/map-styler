@@ -1,12 +1,7 @@
 <template>
   <div>
     <v-sheet :height="height" id="map_container"> </v-sheet>
-    <!-- <MapPopup
-      :map="map"
-      :vectorLayer="vectorLayer"
-      :styleObject="styleObject"
-      v-if="map && styleObject"
-    /> -->
+    <MapPopup :map="map" v-if="map && styleObjects.length > 0" />
   </div>
 </template>
 
@@ -58,11 +53,9 @@ export default {
   data() {
     return {
       feature_attributes: [],
-
       map: null,
       view: null,
       height: null,
-      vectorLayer: null,
     };
   },
 
