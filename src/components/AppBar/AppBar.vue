@@ -51,6 +51,7 @@
         variant="flat"
         rounded="0"
         color="primary"
+        class="mr-4"
         flat
         @click="$router.push({ name: 'login' })"
         >login</v-btn
