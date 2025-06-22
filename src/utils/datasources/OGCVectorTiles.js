@@ -60,10 +60,37 @@ class OGCVectorTiles extends BaseDataSource {
       null,
       stylejson.stylejson
     );
+
+    this.fetchFields();
   }
 
   get tilejson_url() {
     return this._tilejson_url;
+  }
+
+  async fetchFields() {
+    if (!this._fields && this._tilejson_url) {
+      return fetch(this._tilejson_url)
+        .then((resp) => {
+          if (!resp.ok) {
+            throw new Error(
+              `Failed to fetch tilejson from ${this._tilejson_url}`
+            );
+          }
+          return resp.json();
+        })
+        .then((tilejson) => {
+          const layer = tilejson.vector_layers.find(
+            (l) => l.id === this._source_id
+          );
+          if (!layer) {
+            throw new Error(`Layer ${this._source_id} not found in tilejson`);
+          }
+          this._fields = layer.fields;
+          return this._fields;
+        });
+    }
+    return this._fields;
   }
 
   getStyleAsObject() {

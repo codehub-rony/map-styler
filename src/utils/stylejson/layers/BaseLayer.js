@@ -1,37 +1,50 @@
 import Filter from "../Filter.js";
 
 class BaseLayer {
-  constructor(layer_label, source_id, type) {
+  constructor(layer_name, source_id, layer_type) {
     if (!source_id) {
       throw new Error("Missing parameter: source_id");
     }
     this.id = this.generateUniqueId();
-    this.name = layer_label
-      ? layer_label.replace("_", " ").toLowerCase()
-      : `new ${type}`;
+    this._name = layer_name
+      ? layer_name.replace("_", " ")
+      : `new ${layer_type}`;
     this.source = source_id;
-    this.type = type;
+    this.type = layer_type;
     this.filter = null;
     // consider setting the visibility param as true or false rather then strings.
     // Add conversio to string in export function
     this.layout = { visibility: "visible" };
   }
 
-  //bosolete
-  getPaint() {
-    let paint = {};
-    attributes.forEach((attribute) => {
-      if (attribute.component.type === "color_picker") {
-        let op = attribute.name.slice(0, attribute.name.lastIndexOf("-"));
-        paint[
-          attribute.name
-        ] = `rgb(${attribute.value.r}, ${attribute.value.g}, ${attribute.value.b})`;
-        paint[`${op}-opacity`] = attribute.value.a;
+  get name() {
+    return this._name;
+  }
+
+  set name(new_name) {
+    this._name = new_name;
+  }
+
+  formatPaintAsStyleJSON() {
+    let formatted_paint = {};
+
+    Object.keys(this.paint).forEach((key) => {
+      if (this.paint[key].component.type === "color_picker") {
+        formatted_paint[
+          key
+        ] = `rgb(${this.paint[key].value.r}, ${this.paint[key].value.g}, ${this.paint[key].value.b})`;
+
+        if (this.paint[key].value.a) {
+          let layer_type = key.split("-")[0];
+
+          formatted_paint[`${layer_type}-opacity`] = this.paint[key].value.a;
+        }
       } else {
-        paint[attribute.name] = attribute.value;
+        formatted_paint[key] = this.paint[key].value;
       }
     });
-    return paint;
+
+    return formatted_paint;
   }
 
   hasFilter() {
@@ -44,6 +57,22 @@ class BaseLayer {
 
   setFilter(filter) {
     this.filter = filter;
+  }
+
+  createFilterFromJSON(json) {
+    let filter = new Filter();
+
+    json.forEach((filter_properties, i) => {
+      if (i > 0) {
+        filter.createCondition(
+          filter_properties[0],
+          filter_properties[1],
+          filter_properties[2]
+        );
+      }
+    });
+
+    this.setFilter(filter);
   }
 
   generateUniqueId() {
@@ -70,6 +99,9 @@ class BaseLayer {
   }
 
   setVisibility(isVisible) {
+    if (typeof isVisible !== "boolean") {
+      throw new Error("Input must be a boolean value");
+    }
     this.layout.visibility = isVisible ? "visible" : "none";
   }
 
@@ -88,7 +120,7 @@ class BaseLayer {
   getStyleObject() {
     let styleObject = {
       id: this.id,
-      label: this.label,
+      name: this._name,
       source: this.source,
       type: this.type,
       paint: this.paint,
@@ -100,6 +132,23 @@ class BaseLayer {
     }
 
     return styleObject;
+  }
+
+  getStyleAsJSON() {
+    let stylejson = {
+      id: this.id,
+      name: this._name,
+      source: this.source,
+      type: this.type,
+      paint: this.formatPaintAsStyleJSON(),
+      layout: this.layout,
+    };
+
+    if (this.filter) {
+      stylejson["filter"] = this.filter.getFilterAsArray();
+    }
+
+    return stylejson;
   }
 }
 
