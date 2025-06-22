@@ -42,6 +42,14 @@ class GeoJSONFeatures extends BaseDataSource {
     return this._geojson;
   }
 
+  fetchFields() {
+    if (!this._fields) {
+      this._fields = this._geojson.features[0].properties;
+    }
+
+    return this._fields;
+  }
+
   getStyleJSON() {
     let json = this._stylejson.getStyleJSON();
 
