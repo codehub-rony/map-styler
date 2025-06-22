@@ -48,7 +48,10 @@ export default {
     };
   },
   mounted() {
-    this.color = this.property.value;
+    this.color.r = this.property.value.r;
+    this.color.g = this.property.value.g;
+    this.color.b = this.property.value.b;
+    this.color.a = this.property.value.a;
   },
 
   methods: {
@@ -69,9 +72,13 @@ export default {
   },
   watch: {
     // This watcher is needed to trigger an update of the rgba prop
+
     color: {
       handler(newColor) {
-        this.property.value = { ...newColor };
+        this.property.value.r = newColor.r;
+        this.property.value.g = newColor.g;
+        this.property.value.b = newColor.b;
+        this.property.value.a = Math.round(newColor.a * 100) / 100;
       },
       deep: true,
     },
