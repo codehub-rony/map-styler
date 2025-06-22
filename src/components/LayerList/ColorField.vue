@@ -78,7 +78,9 @@ export default {
         this.property.value.r = newColor.r;
         this.property.value.g = newColor.g;
         this.property.value.b = newColor.b;
-        this.property.value.a = Math.round(newColor.a * 100) / 100;
+        this.property.value.a = newColor.a
+          ? Math.round(newColor.a * 100) / 100
+          : 1;
       },
       deep: true,
     },
