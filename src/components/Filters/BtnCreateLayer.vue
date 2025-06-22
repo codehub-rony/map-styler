@@ -32,7 +32,12 @@ export default {
   },
   methods: {
     openDialog: async function () {
-      let fields = this.styleObject.fields;
+      let fields;
+      if (this.styleObject.fields) {
+        fields = this.styleObject.fields;
+      } else {
+        fields = await this.styleObject.fetchFields();
+      }
       let new_layer = this.styleObject.stylejson.createLayer(
         this.styleObject.source_id,
         this.styleObject.geometry_type

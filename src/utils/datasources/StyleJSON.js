@@ -10,8 +10,8 @@ class StyleJSON {
     stylejson = null
   ) {
     this._version = 8;
-    this._center;
-    this._zoom;
+    this._center = [0, 0];
+    this._zoom = 9;
     this._sources = {};
     this._layers = [];
 
@@ -33,18 +33,20 @@ class StyleJSON {
     }
   }
 
-  get name() {
-    return this._name;
+  get version() {
+    return this._version;
   }
-  set name(name) {
-    this._name = name;
-  }
+
   get sources() {
     return this._sources;
   }
 
   get layers() {
     return this._layers;
+  }
+
+  get center() {
+    return this._center;
   }
 
   #initSources(style_sources) {
@@ -106,46 +108,20 @@ class StyleJSON {
     return styleObject;
   }
 
-  processPaintAttributes(paint) {
-    const result = {};
-
-    for (const key in paint) {
-      if (paint.hasOwnProperty(key)) {
-        const attribute = paint[key];
-
-        if (
-          key === "line-color" ||
-          key === "fill-color" ||
-          key === "circle-stroke-color" ||
-          key === "circle-color"
-        ) {
-          const rgba_color = attribute.value;
-          const { r, g, b, a } = rgba_color;
-          result[key] = `rgb(${r},${g},${b})`;
-          result[key.replace("color", "opacity")] = a;
-        } else {
-          result[key] = attribute.value;
-        }
-      }
-    }
-
-    return result;
-  }
-
   getStyleJSON() {
     let json = {
       version: this._version,
-      name: this._name,
       center: this._center,
       zoom: this._zoom,
       sources: this._sources,
-      layers: JSON.parse(JSON.stringify(this._layers)),
+      layers: [],
     };
 
-    json.layers.forEach((layer) => {
-      if (layer.paint) {
-        layer.paint = this.processPaintAttributes(layer.paint);
-      }
+    this._layers.forEach((layer) => {
+      let new_layer;
+      new_layer = layer.getStyleAsJSON();
+
+      json.layers.push(new_layer);
     });
 
     return json;
@@ -160,27 +136,26 @@ class StyleJSON {
   createLayer(source_id, geometry_type) {
     switch (geometry_type) {
       case "point":
-        return new CircleLayer(null, source_id, source_id);
+        return new CircleLayer(null, source_id, null);
       case "line":
-        return new LineLayer(null, source_id, source_id);
+        return new LineLayer(null, source_id, null);
       case "polygon":
-        return new FillLayer(null, source_id, source_id);
+        return new FillLayer(null, source_id, null);
       default:
         return null;
     }
   }
 
+  addLayer(new_layer) {
+    let position_last_element = this._layers.length - 1;
+    this._layers.splice(position_last_element, 0, new_layer);
+  }
   deleteLayer(id_to_remove) {
     this._layers.forEach((layer, i) => {
       if (layer.id === id_to_remove) {
         this._layers.splice(i, 1);
       }
     });
-  }
-
-  addLayer(new_layer) {
-    let position_last_element = this._layers.length - 1;
-    this._layers.splice(position_last_element, 0, new_layer);
   }
 }
 
