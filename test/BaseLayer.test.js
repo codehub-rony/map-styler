@@ -25,7 +25,7 @@ describe("BaseLayer", function () {
       expect(base_layer).toHaveProperty("name");
     });
 
-    it("should have auto genreated label if not provided", () => {
+    it("should have auto generated label if not provided", () => {
       let baselayer_nolabel = (base_layer = new BaseLayer(
         null,
         source_id,
@@ -63,6 +63,7 @@ describe("BaseLayer", function () {
         expect(fill_layer.getVisibility()).toBe(false);
       });
     });
+
     describe("Filter", () => {
       let base_layer;
       let new_filter;
