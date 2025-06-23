@@ -1,4 +1,9 @@
-## MapStyler
+
+## DEPRECATED PROJECT
+This project has been moved to a new repository [mapstyler](https://github.com/codehub-rony/mapstyler)
+
+
+#### MapStyler
 
 A web application for designing vector data styles and interactive webmaps based on the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/). Simply add your data, customize the styling to your preferences and export it as a JSON file.
 
