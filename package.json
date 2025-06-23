@@ -9,7 +9,7 @@
     "test": "jest"
   },
   "engines": {
-    "node": "18.x"
+    "node": "21.x"
   },
   "dependencies": {
     "@babel/preset-env": "^7.26.0",

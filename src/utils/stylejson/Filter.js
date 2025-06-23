@@ -4,12 +4,10 @@ class Filter {
   constructor() {
     this.operator = "all";
     this.conditions = [];
-
-    this.createCondition();
   }
 
   createCondition(operator, attribute, value) {
-    // consider returnign empty condition object and not pushing it conidtions array.
+    // consider returnign empty condition object and not pushing it conditions array.
     // I think that introduces an error when rendering the style
     let id = this.getMaxId();
     let condition = new Condition(id, operator, attribute, value);

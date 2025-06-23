@@ -6,6 +6,7 @@ class GeoJSONFeatures extends BaseDataSource {
   constructor(stylename = null, geojson = null, source_config = null) {
     super();
     this._geojson = null;
+    this._name;
 
     if (source_config) {
       this.#initializeWithConfig(source_config);
@@ -39,6 +40,14 @@ class GeoJSONFeatures extends BaseDataSource {
 
   get geojson() {
     return this._geojson;
+  }
+
+  fetchFields() {
+    if (!this._fields) {
+      this._fields = this._geojson.features[0].properties;
+    }
+
+    return this._fields;
   }
 
   getStyleJSON() {

@@ -14,11 +14,17 @@ class FillLayer extends BaseLayer {
       this.id = stylejson.id;
       this.name = stylejson.name;
       this.#loadFromStyleJSON(stylejson);
+
+      if (stylejson.filter) {
+        this.createFilterFromJSON(stylejson.filter);
+      }
     }
   }
 
   #parseRGB(colorString, opacity) {
-    const match = colorString.match(/rgb\((\d+),(\d+),(\d+)\)/);
+    const match = colorString.match(
+      /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/
+    );
     if (!match) {
       throw new Error("Invalid RGB format");
     }

@@ -9,7 +9,7 @@
           <div class="d-flex flex-column">
             <span class="text-body-2 font-weight-bold pb-1">Label</span>
             <v-text-field
-              v-model="label"
+              v-model="name"
               :error-messages="messages"
               variant="outlined"
               density="compact"
@@ -64,7 +64,7 @@ export default {
       dialogIsOpen: false,
       mode: "new",
       modes: { new: 1, edit: 2 },
-      label: null,
+      name: null,
       messages: [],
       filter: null,
       attributes: [],
@@ -88,12 +88,12 @@ export default {
       this.dialogIsOpen = true;
 
       if (this.mode === 1) {
-        this.label = null;
+        this.name = null;
         this.filter = this.layer.createFilter();
       }
 
       if (this.mode === 2) {
-        this.label = this.layer.name;
+        this.name = this.layer.name;
       }
     },
     createCondition: function () {
@@ -125,8 +125,8 @@ export default {
       }
     },
     save: function () {
-      if (this.label) {
-        this.layer.name = this.label;
+      if (this.name) {
+        this.layer.name = this.name;
         this.conditionUpdates.forEach((update) => {
           this.filter.setConditions(update);
         });
@@ -139,7 +139,7 @@ export default {
       }
     },
     unmounted() {
-      this.label = "";
+      this.name = "";
     },
   },
 };
