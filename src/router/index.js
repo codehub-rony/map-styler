@@ -1,12 +1,12 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
 
-import EditorPage from "@/views/EditorPage.vue";
-import LandingPage from "@/views/LandingPage.vue";
-import LoginPage from "@/views/LoginPage.vue";
-import ProjectsPage from "@/views/projects/ProjectsPage.vue";
-import NewProjectPage from "@/views/projects/NewProjectPage.vue";
-import UserManagerPage from "@/views/UserManagerPage.vue";
+import EditorPage from "@/Pages/EditorPage.vue";
+import LandingPage from "@/pages/LandingPage.vue";
+import LoginPage from "@/pages/LoginPage.vue";
+import ProjectsPage from "@/pages/ProjectsPage.vue";
+import NewProjectPage from "@/pages/NewProjectPage.vue";
+import UserManagerPage from "@/pages/UserManagerPage.vue";
 
 import { useAuthStore } from "@/store/auth.js";
 

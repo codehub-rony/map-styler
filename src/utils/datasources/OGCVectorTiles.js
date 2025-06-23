@@ -98,9 +98,9 @@ class OGCVectorTiles extends BaseDataSource {
 
     styleObject.layers = styleObject.layers.map((x) => x.getStyleAsObject());
 
-    styleObject.layers.forEach((layer) => {
-      layer["source-layer"] = Object.keys(styleObject.sources)[0];
-    });
+    // styleObject.layers.forEach((layer) => {
+    //   layer["source-layer"] = Object.keys(styleObject.sources)[0];
+    // });
 
     return styleObject;
   }
@@ -108,9 +108,9 @@ class OGCVectorTiles extends BaseDataSource {
   getStyleJSON() {
     let json = this._stylejson.getStyleJSON();
 
-    json.layers.forEach((layer) => {
-      layer["source-layer"] = Object.keys(json.sources)[0];
-    });
+    // json.layers.forEach((layer) => {
+    //   layer["source-layer"] = Object.keys(json.sources)[0];
+    // });
 
     return JSON.stringify(json, null, 2);
   }
