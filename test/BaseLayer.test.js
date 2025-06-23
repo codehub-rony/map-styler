@@ -49,6 +49,26 @@ describe("BaseLayer", function () {
       fill_layer = new FillLayer(layer_label, source_id);
     });
 
+    describe("setColor", () => {
+      it("should throw an error if the component type is not a color picker", () => {
+        const validColor = { r: 255, g: 255, b: 255, a: 0.27 };
+
+        fill_layer.paint["fill-color"].component.type = "fake_component";
+
+        expect(() => fill_layer.setColor(validColor, "fill-color")).toThrow(
+          "Color can only be set on color_picker component type"
+        );
+      });
+
+      it("should set the new color correctly", () => {
+        const validColor = { r: 1, g: 1, b: 1, a: 1 };
+        let property_key = "fill-color";
+        fill_layer.setColor(validColor, property_key);
+
+        expect(fill_layer.paint[property_key].value).toStrictEqual(validColor);
+      });
+    });
+
     describe("Visibility", () => {
       it("throws error if input not boolean", function () {
         expect(() => {

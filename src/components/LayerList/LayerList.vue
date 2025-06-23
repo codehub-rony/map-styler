@@ -37,6 +37,7 @@
             v-if="property.component.type === 'color_picker'"
             :key="key"
             :property="property"
+            @color-updated="layer.setColor($event.color, key)"
           />
 
           <InputField

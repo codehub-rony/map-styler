@@ -1,4 +1,5 @@
 import Filter from "../Filter.js";
+import { isColorValid } from "../validators.js";
 
 class BaseLayer {
   constructor(layer_name, source_id, layer_type) {
@@ -149,6 +150,18 @@ class BaseLayer {
     }
 
     return stylejson;
+  }
+
+  setColor(color, key) {
+    if (isColorValid(color)) {
+      if (this.paint[key].component.type !== "color_picker") {
+        throw new Error("Color can only be set on color_picker component type");
+      }
+      this.paint[key].value.r = color.r;
+      this.paint[key].value.g = color.g;
+      this.paint[key].value.b = color.b;
+      this.paint[key].value.a = color.a;
+    }
   }
 }
 

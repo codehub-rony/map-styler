@@ -27,6 +27,7 @@
 
 <script>
 export default {
+  emits: ["color-updated"],
   props: {
     property: Object,
   },
@@ -62,27 +63,13 @@ export default {
       }
     },
     handleColorSelection: function (e) {
-      this.property.value = { ...this.color };
+      this.color.a = this.color.a ? Math.round(this.color.a * 100) / 100 : 1;
+      this.$emit("color-updated", { color: this.color });
     },
     closeColorPicker: function () {
       if (this.colorPickerIsOpen) {
         this.colorPickerIsOpen = false;
       }
-    },
-  },
-  watch: {
-    // This watcher is needed to trigger an update of the rgba prop
-
-    color: {
-      handler(newColor) {
-        this.property.value.r = newColor.r;
-        this.property.value.g = newColor.g;
-        this.property.value.b = newColor.b;
-        this.property.value.a = newColor.a
-          ? Math.round(newColor.a * 100) / 100
-          : 1;
-      },
-      deep: true,
     },
   },
 };
